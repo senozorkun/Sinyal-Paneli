@@ -969,30 +969,38 @@ async function veriYukle() {
 
 
 function renderHaberler(haberler, guncelleme) {
-  // Ticker
+  if (!haberler || haberler.length === 0) return;
+
+  // ── Ticker ──
   var track = document.getElementById('ticker-track');
   var wrap  = document.getElementById('ticker-wrap');
-  if (track && haberler.length > 0) {
-    var items = haberler.map(function(h) {
-      return '<span class="ticker-item" onclick="window.open(\'' + h.link.replace(/'/g, '') + '\', \'_blank\')">' +
-             '<span class="ticker-dot"></span>' + h.baslik + '</span>';
+  if (track && wrap) {
+    var tickerItems = haberler.map(function(h) {
+      var safeLink = (h.link || '').replace(/"/g, '');
+      var safeTitle = (h.baslik || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return '<span class="ticker-item" onclick="window.open(\"' + safeLink + '\", \"_blank\")">' +
+             '<span class="ticker-dot"></span>' + safeTitle + '</span>';
     }).join('');
-    // İkiye katla - smooth loop için
-    track.innerHTML = items + items;
+    track.innerHTML = tickerItems + tickerItems;
     wrap.style.display = 'block';
   }
 
-  // Haber listesi
+  // ── Haber listesi ──
   var liste = document.getElementById('haberler-liste');
   var panel = document.getElementById('haberler-panel');
   var gunEl = document.getElementById('haber-guncelleme');
-  if (liste && haberler.length > 0) {
+
+  if (liste && panel) {
     if (gunEl) gunEl.textContent = guncelleme;
     liste.innerHTML = haberler.map(function(h) {
-      return '<a class="haber-item" href="' + h.link + '" target="_blank" rel="noopener">' +
-             '<div><div class="haber-kategori">' + h.kategori + '</div></div>' +
-             '<div><div class="haber-baslik">' + h.baslik + '</div>' +
-             '<div class="haber-kaynak">' + h.kaynak + '</div></div>' +
+      var safeLink  = (h.link  || '#').replace(/"/g, '');
+      var safeTitle = (h.baslik || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      var safeKaynak = (h.kaynak || h.kategori || '').replace(/</g, '&lt;');
+      var safeKategori = (h.kategori || '').replace(/</g, '&lt;');
+      return '<a class="haber-item" href="' + safeLink + '" target="_blank" rel="noopener noreferrer">' +
+             '<div style="min-width:90px"><div class="haber-kategori">' + safeKategori + '</div></div>' +
+             '<div style="flex:1"><div class="haber-baslik">' + safeTitle + '</div>' +
+             '<div class="haber-kaynak">' + safeKaynak + '</div></div>' +
              '</a>';
     }).join('');
     panel.style.display = 'block';

@@ -56,11 +56,21 @@ def sp500_ma200():
 
 def yield_spread_bps():
     try:
+        # ^TNX = 10Y (değer /10 normalize gerekir, örn 43.4 = %4.34)
+        # ^TYX = 30Y, ^FVX = 5Y, ^IRX = 13-week
+        # 2Y için doğrudan yfinance ticker: "^IRX" değil "2YY=F" veya TNX normalize
         h10 = yf.Ticker("^TNX").history(period="5d")
         h2  = yf.Ticker("^IRX").history(period="5d")
         if h10.empty or h2.empty:
             return None
-        return round((float(h10["Close"].iloc[-1]) - float(h2["Close"].iloc[-1])) * 100, 1)
+        y10 = float(h10["Close"].iloc[-1])
+        y2  = float(h2["Close"].iloc[-1])
+        # TNX ve IRX yfinance'dan *10 büyük gelir (ör. 43.4 = %4.34)
+        # Normalize et
+        if y10 > 20: y10 = y10 / 10
+        if y2  > 20: y2  = y2  / 10
+        spread_bps = round((y10 - y2) * 100, 1)
+        return spread_bps
     except:
         return None
 
