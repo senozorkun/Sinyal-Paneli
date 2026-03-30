@@ -207,49 +207,86 @@ def abd_issizlik():
 
 
 def haber_cek():
-    """Google News RSS üzerinden piyasa haberlerini çeker."""
+    """
+    Piyasa haberlerini RSS kaynaklardan çeker.
+    Birden fazla kaynak denenir, ilk çalışan kullanılır.
+    """
     haberler = []
+
     feeds = [
-        ("Global Piyasa", "https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGQyTVhZU0FtVnVHZ0pWVXlBQVAB?hl=en-US&gl=US&ceid=US:en"),
-        ("Piyasa Haberleri", "https://news.google.com/rss/search?q=stock+market+economy+fed&hl=en-US&gl=US&ceid=US:en"),
-        ("Turkiye Ekonomi", "https://news.google.com/rss/search?q=borsa+ekonomi+merkez+bankas%C4%B1&hl=tr&gl=TR&ceid=TR:tr"),
-        ("Altin Emtia", "https://news.google.com/rss/search?q=gold+oil+commodities&hl=en-US&gl=US&ceid=US:en"),
+        # Yahoo Finance RSS (en güvenilir)
+        ("Piyasa", "https://finance.yahoo.com/rss/topfinstories"),
+        ("ABD Piyasa", "https://finance.yahoo.com/news/rssindex"),
+        # Reuters alternatif endpoint
+        ("Reuters", "https://feeds.reuters.com/reuters/businessNews"),
+        ("Reuters Markets", "https://feeds.reuters.com/reuters/financials"),
+        # CNBC
+        ("CNBC Markets", "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10000664"),
+        ("CNBC Economy", "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=20910258"),
+        # MarketWatch
+        ("MarketWatch", "https://feeds.marketwatch.com/marketwatch/topstories/"),
+        # Investing.com
+        ("Investing", "https://www.investing.com/rss/news.rss"),
+        ("Investing Emtia", "https://www.investing.com/rss/news_14.rss"),
+        # Seekingalpha ücretsiz
+        ("SeekingAlpha", "https://seekingalpha.com/market_currents.xml"),
     ]
+
     for kategori, url in feeds:
+        if len(haberler) >= 20:
+            break
         try:
             r = requests.get(url, headers=HEADERS, timeout=10)
             if r.status_code != 200:
+                print(f"  [{kategori}] HTTP {r.status_code}")
                 continue
             soup = BeautifulSoup(r.text, "xml")
-            items = soup.find_all("item")[:5]
-            for item in items:
+            items = soup.find_all("item")
+            if not items:
+                # html.parser ile tekrar dene
+                soup = BeautifulSoup(r.text, "html.parser")
+                items = soup.find_all("item")
+            print(f"  [{kategori}] {len(items)} haber bulundu")
+            for item in items[:5]:
                 title = item.find("title")
                 link  = item.find("link")
                 pub   = item.find("pubDate")
                 source = item.find("source")
-                if title and link:
+                if not title:
+                    continue
+                baslik = title.text.strip()
+                if not baslik or len(baslik) < 10:
+                    continue
+                link_url = ""
+                if link:
                     link_url = link.text.strip()
                     if not link_url.startswith("http"):
+                        # Atom format - link next sibling olabilir
                         sib = link.next_sibling
-                        link_url = str(sib).strip() if sib else ""
-                    haberler.append({
-                        "baslik":   title.text.strip(),
-                        "link":     link_url,
-                        "kaynak":   source.text.strip() if source else kategori,
-                        "kategori": kategori,
-                        "tarih":    pub.text.strip() if pub else "",
-                    })
+                        if sib:
+                            link_url = str(sib).strip()
+                haberler.append({
+                    "baslik":   baslik,
+                    "link":     link_url,
+                    "kaynak":   source.text.strip() if source else kategori,
+                    "kategori": kategori,
+                    "tarih":    pub.text.strip() if pub else "",
+                })
         except Exception as e:
-            print(f"  Haber [{kategori}]: hata - {e}")
+            print(f"  [{kategori}] hata: {e}")
+
+    # Duplikat temizle
     gorulen = set()
     temiz = []
     for h in haberler:
-        key = h["baslik"][:50]
+        key = h["baslik"][:50].lower()
         if key not in gorulen:
             gorulen.add(key)
             temiz.append(h)
-    print(f"  haberler       {len(temiz)} haber cekildi")
+
+    print(f"  haberler: toplam {len(temiz)} tekil haber")
     return temiz[:20]
+
 
 def fetch_all():
     print("Veri çekiliyor...")
