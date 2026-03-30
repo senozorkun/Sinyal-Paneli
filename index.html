@@ -208,6 +208,63 @@
   .doc-btn-green { background:var(--green-dim); border-color:var(--green)44; color:var(--green); }
   .doc-btn-green:hover { background:var(--green)22; border-color:var(--green)88; box-shadow:0 4px 14px var(--green)22; }
 
+
+  /* HABER TICKER */
+  .ticker-wrap {
+    width:100%; background:var(--surface); border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border); overflow:hidden;
+    padding:8px 0; position:relative; margin-bottom:18px;
+  }
+  .ticker-track {
+    display:flex; gap:60px; white-space:nowrap;
+    animation: ticker-scroll 60s linear infinite;
+  }
+  .ticker-wrap:hover .ticker-track { animation-play-state: paused; }
+  @keyframes ticker-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .ticker-item {
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--mono); font-size:11px; color:var(--text2);
+    cursor:pointer; transition:color .2s; flex-shrink:0;
+  }
+  .ticker-item:hover { color:var(--green); }
+  .ticker-dot { width:4px; height:4px; border-radius:50%; background:var(--green); flex-shrink:0; }
+
+  /* HABER LİSTESİ */
+  .haberler-panel {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:13px; overflow:hidden; margin-top:14px;
+  }
+  .haberler-header {
+    padding:12px 18px; border-bottom:1px solid var(--border);
+    font-size:10px; font-family:var(--mono); letter-spacing:0.8px;
+    text-transform:uppercase; color:var(--text3);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .haberler-liste { padding:8px 0; }
+  .haber-item {
+    display:flex; align-items:flex-start; gap:12px;
+    padding:10px 18px; border-bottom:1px solid var(--border);
+    text-decoration:none; transition:background .2s; cursor:pointer;
+  }
+  .haber-item:last-child { border-bottom:none; }
+  .haber-item:hover { background:var(--surface2); }
+  .haber-kategori {
+    font-size:8px; font-family:var(--mono); letter-spacing:1px;
+    text-transform:uppercase; color:var(--blue);
+    white-space:nowrap; margin-top:2px; flex-shrink:0; min-width:80px;
+  }
+  .haber-baslik {
+    font-size:12px; color:var(--text); line-height:1.5;
+    flex:1;
+  }
+  .haber-kaynak {
+    font-size:9px; font-family:var(--mono); color:var(--text3);
+    margin-top:3px;
+  }
+
 </style>
 </head>
 <body>
@@ -228,6 +285,12 @@
       <span id="status-text" style="font-family:var(--mono);font-size:10px;color:var(--text3)">yükleniyor...</span>
     </div>
   </header>
+
+  
+  <!-- HABER TICKER -->
+  <div class="ticker-wrap" id="ticker-wrap" style="display:none;">
+    <div class="ticker-track" id="ticker-track"></div>
+  </div>
 
   <div class="main-grid">
 
@@ -454,7 +517,17 @@
     </div>
   </div>
 
-</div>
+
+      <!-- HABER LİSTESİ -->
+      <div class="haberler-panel" id="haberler-panel" style="display:none;">
+        <div class="haberler-header">
+          <span>📰 PİYASA HABERLERİ</span>
+          <span id="haber-guncelleme" style="color:var(--text3);font-size:9px;"></span>
+        </div>
+        <div class="haberler-liste" id="haberler-liste"></div>
+      </div>
+
+  </div>
 </div>
 
 <script>
@@ -881,11 +954,48 @@ async function veriYukle() {
 
     setStatus('🤖 ' + (v.guncelleme || ''), 'var(--green)');
 
+    // Haberleri render et
+    if (v.haberler && v.haberler.length > 0) {
+      renderHaberler(v.haberler, v.guncelleme || '');
+    }
+
     setTimeout(function() {
       if (typeof analyze === 'function') analyze();
     }, 400);
   } catch(e) {
     setStatus('bağlantı hatası', 'var(--red)');
+  }
+}
+
+
+function renderHaberler(haberler, guncelleme) {
+  // Ticker
+  var track = document.getElementById('ticker-track');
+  var wrap  = document.getElementById('ticker-wrap');
+  if (track && haberler.length > 0) {
+    var items = haberler.map(function(h) {
+      return '<span class="ticker-item" onclick="window.open(\'' + h.link.replace(/'/g, '') + '\', \'_blank\')">' +
+             '<span class="ticker-dot"></span>' + h.baslik + '</span>';
+    }).join('');
+    // İkiye katla - smooth loop için
+    track.innerHTML = items + items;
+    wrap.style.display = 'block';
+  }
+
+  // Haber listesi
+  var liste = document.getElementById('haberler-liste');
+  var panel = document.getElementById('haberler-panel');
+  var gunEl = document.getElementById('haber-guncelleme');
+  if (liste && haberler.length > 0) {
+    if (gunEl) gunEl.textContent = guncelleme;
+    liste.innerHTML = haberler.map(function(h) {
+      return '<a class="haber-item" href="' + h.link + '" target="_blank" rel="noopener">' +
+             '<div><div class="haber-kategori">' + h.kategori + '</div></div>' +
+             '<div><div class="haber-baslik">' + h.baslik + '</div>' +
+             '<div class="haber-kaynak">' + h.kaynak + '</div></div>' +
+             '</a>';
+    }).join('');
+    panel.style.display = 'block';
   }
 }
 

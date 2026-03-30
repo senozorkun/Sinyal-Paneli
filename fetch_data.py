@@ -205,6 +205,52 @@ def abd_issizlik():
         pass
     return None
 
+
+def haber_cek():
+    """Google News RSS üzerinden piyasa haberlerini çeker."""
+    haberler = []
+    feeds = [
+        ("Global Piyasa", "https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGQyTVhZU0FtVnVHZ0pWVXlBQVAB?hl=en-US&gl=US&ceid=US:en"),
+        ("Piyasa Haberleri", "https://news.google.com/rss/search?q=stock+market+economy+fed&hl=en-US&gl=US&ceid=US:en"),
+        ("Turkiye Ekonomi", "https://news.google.com/rss/search?q=borsa+ekonomi+merkez+bankas%C4%B1&hl=tr&gl=TR&ceid=TR:tr"),
+        ("Altin Emtia", "https://news.google.com/rss/search?q=gold+oil+commodities&hl=en-US&gl=US&ceid=US:en"),
+    ]
+    for kategori, url in feeds:
+        try:
+            r = requests.get(url, headers=HEADERS, timeout=10)
+            if r.status_code != 200:
+                continue
+            soup = BeautifulSoup(r.text, "xml")
+            items = soup.find_all("item")[:5]
+            for item in items:
+                title = item.find("title")
+                link  = item.find("link")
+                pub   = item.find("pubDate")
+                source = item.find("source")
+                if title and link:
+                    link_url = link.text.strip()
+                    if not link_url.startswith("http"):
+                        sib = link.next_sibling
+                        link_url = str(sib).strip() if sib else ""
+                    haberler.append({
+                        "baslik":   title.text.strip(),
+                        "link":     link_url,
+                        "kaynak":   source.text.strip() if source else kategori,
+                        "kategori": kategori,
+                        "tarih":    pub.text.strip() if pub else "",
+                    })
+        except Exception as e:
+            print(f"  Haber [{kategori}]: hata - {e}")
+    gorulen = set()
+    temiz = []
+    for h in haberler:
+        key = h["baslik"][:50]
+        if key not in gorulen:
+            gorulen.add(key)
+            temiz.append(h)
+    print(f"  haberler       {len(temiz)} haber cekildi")
+    return temiz[:20]
+
 def fetch_all():
     print("Veri çekiliyor...")
     now_tr = datetime.now(TR_TZ)
@@ -241,6 +287,8 @@ def fetch_all():
             veriler[anahtar] = None
             print(f"  {anahtar:<15} ✗ hata: {e}")
 
+    # Haberleri çek
+    veriler["haberler"] = haber_cek()
     veriler["guncelleme"] = now_tr.strftime("%d.%m.%Y %H:%M")
     veriler["timestamp"]  = now_tr.isoformat()
     return veriler
