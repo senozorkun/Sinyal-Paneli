@@ -9,15 +9,15 @@
   "cds": null,
   "tcmb": null,
   "tcmb_dir": "sabit",
-  "gold": 4518.0,
+  "gold": 4519.8,
   "brent": 108.0,
-  "cuau": 0.001218,
+  "cuau": 0.001217,
   "msci_dir": "dusus",
   "sp500_dir": "dusus",
   "sp500_ma": "altinda",
   "unemployment": 4.4,
-  "us_cpi": 2.4,
+  "us_cpi": 2.7,
   "haberler": [],
-  "guncelleme": "30.03.2026 07:58",
-  "timestamp": "2026-03-30T07:58:54.852677+03:00"
+  "guncelleme": "30.03.2026 08:00",
+  "timestamp": "2026-03-30T08:00:44.303149+03:00"
 }
