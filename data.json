@@ -9,9 +9,9 @@
   "cds": null,
   "tcmb": null,
   "tcmb_dir": "sabit",
-  "gold": 4538.8,
-  "brent": 108.8,
-  "cuau": 0.00121,
+  "gold": 4535.1,
+  "brent": 108.7,
+  "cuau": 0.001211,
   "msci_dir": "dusus",
   "sp500_dir": "dusus",
   "sp500_ma": "altinda",
@@ -19,132 +19,146 @@
   "us_cpi": 2.4,
   "haberler": [
     {
-      "baslik": "Stocks making the biggest moves midday: Fannie Mae, Boston Scientific, Blackstone, Palo Alto Networks and more",
-      "link": "https://www.cnbc.com/2026/03/30/stocks-making-the-biggest-moves-midday-fnma-bsx-bx-panw.html",
-      "kaynak": "CNBC Markets",
-      "kategori": "CNBC Markets",
+      "baslik": "<![CDATA[Resmi Gazete'de bugÃ¼n (31.03.2026)]]>",
+      "link": "https://www.bloomberght.com/resmi-gazete-de-bugun-31032026-3773229",
+      "kaynak": "Ekonomi",
+      "kategori": "Ekonomi",
       "tarih": ""
     },
     {
-      "baslik": "Powell sees inflation outlook in check, no need to hike rates because of oil shock",
-      "link": "https://www.cnbc.com/2026/03/30/powell-sees-inflation-outlook-in-check-no-wider-crisis-yet-in-private-credit.html",
-      "kaynak": "CNBC Markets",
-      "kategori": "CNBC Markets",
+      "baslik": "<![CDATA[Ä°ran'dan Trump'Ä±n Harg AdasÄ± planÄ±na sert yanÄ±t]]>",
+      "link": "https://www.bloomberght.com/iran-dan-trump-in-harg-adasi-planina-sert-yanit-3773228",
+      "kaynak": "Ekonomi",
+      "kategori": "Ekonomi",
       "tarih": ""
     },
     {
-      "baslik": "Bill Ackman says it’s one of the best times in a long time to buy quality stocks",
-      "link": "https://www.cnbc.com/2026/03/30/bill-ackman-says-its-one-of-the-best-times-in-a-long-time-to-buy-quality-stocks.html",
-      "kaynak": "CNBC Markets",
-      "kategori": "CNBC Markets",
+      "baslik": "<![CDATA[AB gÃ¼bre krizine karÅÄ± harekete geÃ§iyor]]>",
+      "link": "https://www.bloomberght.com/ab-gubre-krizine-karsi-harekete-geciyor-3773227",
+      "kaynak": "Ekonomi",
+      "kategori": "Ekonomi",
       "tarih": ""
     },
     {
-      "baslik": "Fed Governor Miran still backs cuts, says interest rates could be 'about a point' lower this year",
-      "link": "https://www.cnbc.com/2026/03/30/fed-governor-miran-still-backs-cuts-says-interest-rates-could-be-about-a-point-lower-this-year.html",
-      "kaynak": "CNBC Markets",
-      "kategori": "CNBC Markets",
+      "baslik": "<![CDATA[Mistral AI veri merkezi iÃ§in 830 milyon dolar kredi aldÄ±]]>",
+      "link": "https://www.bloomberght.com/mistral-ai-veri-merkezi-icin-830-milyon-dolar-kredi-aldi-3773225",
+      "kaynak": "Ekonomi",
+      "kategori": "Ekonomi",
       "tarih": ""
     },
     {
-      "baslik": "Watch Fed Chair Jerome Powell speak live to an economics class at Harvard",
-      "link": "https://www.cnbc.com/2026/03/30/watch-fed-chair-jerome-powell-speak-live-to-an-economics-class-at-harvard.html",
-      "kaynak": "CNBC Markets",
-      "kategori": "CNBC Markets",
+      "baslik": "<![CDATA[Beyaz Saray: Ä°ran Ã¶zel gÃ¶rÃ¼Åmelerde bazÄ± talepleri kabul etti]]>",
+      "link": "https://www.bloomberght.com/beyaz-saray-iran-ozel-gorusmelerde-bazi-talepleri-kabul-etti-3773224",
+      "kaynak": "Ekonomi",
+      "kategori": "Ekonomi",
       "tarih": ""
     },
     {
-      "baslik": "China suppliers warn of higher prices for Americans due to Strait of Hormuz closure",
-      "link": "https://www.cnbc.com/2026/03/30/china-suppliers-warn-higher-us-prices-hormuz-closure.html",
-      "kaynak": "CNBC Economy",
-      "kategori": "CNBC Economy",
+      "baslik": "Uzayda milli imza: FGN-100-D3 görevine başladı",
+      "link": "https://www.haberturk.com/uzayda-milli-imza-fgn-100-d3-gorevine-basladi-3873569-teknoloji",
+      "kaynak": "Ekonomi2",
+      "kategori": "Ekonomi2",
       "tarih": ""
     },
     {
-      "baslik": "New fees, fewer flights: Higher fuel prices pinch consumer budgets beyond the gas pump",
-      "link": "https://www.cnbc.com/2026/03/28/oil-doordash-lyft-usps-united.html",
-      "kaynak": "CNBC Economy",
-      "kategori": "CNBC Economy",
+      "baslik": "LUNA 2 görevde",
+      "link": "https://www.haberturk.com/aselsan-in-luna-2-uydusu-basariyla-firlatildi-3873551-teknoloji",
+      "kaynak": "Ekonomi2",
+      "kategori": "Ekonomi2",
       "tarih": ""
     },
     {
-      "baslik": "Markets now see the Fed's next move as a potential rate hike as inflation fears mount",
-      "link": "https://www.cnbc.com/2026/03/27/markets-see-the-feds-next-move-as-a-potential-hike-as-oil-prices-inflation-fears-rise.html",
-      "kaynak": "CNBC Economy",
-      "kategori": "CNBC Economy",
+      "baslik": "1+1 dairelere yoğun talep var",
+      "link": "https://www.haberturk.com/son-zamanlarda-emlak-sektorunde-11-dairelere-cok-yogun-bir-talep-var-3873549-ekonomi",
+      "kaynak": "Ekonomi2",
+      "kategori": "Ekonomi2",
       "tarih": ""
     },
     {
-      "baslik": "China industrial profits surge 15% to start year, but oil price shock threatens outlook",
-      "link": "https://www.cnbc.com/2026/03/27/china-industrial-profits-jan-feb-surge-oil-price-shock-threatens-outlook.html",
-      "kaynak": "CNBC Economy",
-      "kategori": "CNBC Economy",
+      "baslik": "Şantiyede usta sorunu",
+      "link": "https://www.haberturk.com/turkiye-de-yuksek-maasa-ragmen-santiyelerde-usta-acigi-buyuyor-3873546-ekonomi",
+      "kaynak": "Ekonomi2",
+      "kategori": "Ekonomi2",
       "tarih": ""
     },
     {
-      "baslik": "Global forecasting group sees U.S. inflation at 4.2% this year, much higher than Fed estimate",
-      "link": "https://www.cnbc.com/2026/03/26/global-forecasting-group-sees-us-inflation-at-4point2percent-this-year-much-higher-than-fed-estimate.html",
-      "kaynak": "CNBC Economy",
-      "kategori": "CNBC Economy",
+      "baslik": "81 il ve 922 ilçede 5G sinyali",
+      "link": "https://www.haberturk.com/81-il-ve-922-ilcede-5g-sinyali-vodafone-engin-aksoy-5gde-almanyanin-5-yilda-geldigi-noktaya-ilk-gunden-ulasacagiz-3873439-teknoloji",
+      "kaynak": "Ekonomi2",
+      "kategori": "Ekonomi2",
       "tarih": ""
     },
     {
-      "baslik": "Brent oil heads for record monthly surge, WTI settles above $100 for first time since 2022",
-      "link": "https://www.cnbc.com/2026/03/30/oil-price-today-wti-brent-yemen-houthis-israel-iran-war.html",
-      "kaynak": "CNBC World",
-      "kategori": "CNBC World",
+      "baslik": "<![CDATA[Türkiye, Mısır, Endonezya, Ürdün, Pakistan, Katar, Suudi Arabistan ve BAE'den ortak 'Kudüs' açıklaması]]>",
+      "link": "",
+      "kaynak": "Ekonomi3",
+      "kategori": "Ekonomi3",
       "tarih": ""
     },
     {
-      "baslik": "401(k) alternative asset rule proposed by Labor Department",
-      "link": "https://www.cnbc.com/2026/03/30/401ks-alternative-investments.html",
-      "kaynak": "CNBC World",
-      "kategori": "CNBC World",
+      "baslik": "<![CDATA[Filistinli esirlere idam yasası İsrail meclisinden geçti! Ben-Gvir’den provokatif kutlama]]>",
+      "link": "",
+      "kaynak": "Ekonomi3",
+      "kategori": "Ekonomi3",
       "tarih": ""
     },
     {
-      "baslik": "Morgan Stanley says to watch rates as stock correction is almost over",
-      "link": "https://www.cnbc.com/2026/03/30/morgan-stanley-says-to-watch-rates-as-stock-correction-is-almost-over.html",
-      "kaynak": "CNBC World",
-      "kategori": "CNBC World",
+      "baslik": "<![CDATA[Beyaz Saray'dan İran açıklaması: Görüşmeler devam ediyor ve iyi gidiyor]]>",
+      "link": "",
+      "kaynak": "Ekonomi3",
+      "kategori": "Ekonomi3",
       "tarih": ""
     },
     {
-      "baslik": "U.S. stocks are faring worse than during past geopolitical shocks — and there’s plenty of room for them to fall further",
-      "link": "https://www.marketwatch.com/story/u-s-stocks-are-faring-worse-than-during-past-geopolitical-shocks-and-theres-plenty-of-room-for-them-to-fall-further-30a17285?mod=mw_rss_topstories",
-      "kaynak": "MarketWatch",
-      "kategori": "MarketWatch",
+      "baslik": "<![CDATA[Saldırılar devam ederken Tahran sokaklarında tekbir sesleri yükseldi]]>",
+      "link": "",
+      "kaynak": "Ekonomi3",
+      "kategori": "Ekonomi3",
       "tarih": ""
     },
     {
-      "baslik": "This AI power company’s Trump-named power project still has no customers in sight",
-      "link": "https://www.marketwatch.com/story/this-ai-power-companys-trump-named-power-project-still-has-no-customers-in-sight-8ad766b3?mod=mw_rss_topstories",
-      "kaynak": "MarketWatch",
-      "kategori": "MarketWatch",
+      "baslik": "<![CDATA[İsrail Meclisi, Filistinli esirleri hedef alacak idam cezası yasasını onayladı]]>",
+      "link": "",
+      "kaynak": "Ekonomi3",
+      "kategori": "Ekonomi3",
       "tarih": ""
     },
     {
-      "baslik": "Sysco goes all in on the ‘cash and carry’ food-service business with a $29 billion buyout",
-      "link": "https://www.marketwatch.com/story/sysco-goes-all-in-on-the-cash-and-carry-food-service-business-with-a-29-billion-buyout-5e06c72c?mod=mw_rss_topstories",
-      "kaynak": "MarketWatch",
-      "kategori": "MarketWatch",
+      "baslik": "<![CDATA[WEF: Türkiye, küresel değer zincirlerinde rolünü güçlendirmek için elverişli konumda]]>",
+      "link": "https://www.sabah.com.tr/ekonomi/wef-turkiye-kuresel-deger-zincirlerinde-rolunu-guclendirmek-icin-elverisli-konumda-7553600",
+      "kaynak": "Ekonomi4",
+      "kategori": "Ekonomi4",
       "tarih": ""
     },
     {
-      "baslik": "Microsoft’s stock may extend a record stretch of lagging performance that’s ignited fierce debate",
-      "link": "https://www.marketwatch.com/story/microsofts-stock-may-extend-a-record-stretch-of-lagging-performance-thats-ignited-fierce-debate-ff1a2576?mod=mw_rss_topstories",
-      "kaynak": "MarketWatch",
-      "kategori": "MarketWatch",
+      "baslik": "<![CDATA[Bakan Ersoy'dan kritik toplantı: Küresel risklere karşı Türkiye hazırlıklarını güçlendiriyor]]>",
+      "link": "https://www.sabah.com.tr/ekonomi/bakan-ersoydan-kritik-toplanti-kuresel-risklere-karsi-turkiye-hazirliklarini-guclendiriyor-7553517",
+      "kaynak": "Ekonomi4",
+      "kategori": "Ekonomi4",
       "tarih": ""
     },
     {
-      "baslik": "This is a reason the Middle East’s major oil-producing countries have been selling their U.S. Treasurys",
-      "link": "https://www.marketwatch.com/story/this-is-a-reason-the-middle-easts-major-oil-producing-countries-have-been-selling-their-u-s-treasurys-e5df841c?mod=mw_rss_topstories",
-      "kaynak": "MarketWatch",
-      "kategori": "MarketWatch",
+      "baslik": "<![CDATA[Ekmek ve un yönetmeliğinde değişiklik! Hangi maddeler yasaklandı?]]>",
+      "link": "https://www.sabah.com.tr/ekonomi/ekmek-ve-un-yonetmeliginde-degisiklik-hangi-maddeler-yasaklandi-7553500",
+      "kaynak": "Ekonomi4",
+      "kategori": "Ekonomi4",
+      "tarih": ""
+    },
+    {
+      "baslik": "<![CDATA[Turkcell Yönetim Kurulu Başkanı Şenol Kazancı’dan 5G Mesajı]]>",
+      "link": "https://www.sabah.com.tr/ekonomi/turkcell-yonetim-kurulu-baskani-senol-kazancidan-5g-mesaji-7553498",
+      "kaynak": "Ekonomi4",
+      "kategori": "Ekonomi4",
+      "tarih": ""
+    },
+    {
+      "baslik": "<![CDATA[Türkiye’den Kanada ile nükleer enerjide yeni işbirliği adımı: CANDU teknolojisi masada]]>",
+      "link": "https://www.sabah.com.tr/ekonomi/turkiyeden-kanada-ile-nukleer-enerjide-yeni-isbirligi-adimi-candu-teknolojisi-masada-7553481",
+      "kaynak": "Ekonomi4",
+      "kategori": "Ekonomi4",
       "tarih": ""
     }
   ],
-  "guncelleme": "31.03.2026 01:26",
-  "timestamp": "2026-03-31T01:26:12.508236+03:00"
+  "guncelleme": "31.03.2026 01:34",
+  "timestamp": "2026-03-31T01:34:26.274273+03:00"
 }
