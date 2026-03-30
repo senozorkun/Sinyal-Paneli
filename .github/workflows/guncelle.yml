@@ -3,6 +3,9 @@ name: Sinyal Paneli Güncelle
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   guncelle:
     runs-on: ubuntu-latest
