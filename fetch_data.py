@@ -214,22 +214,21 @@ def haber_cek():
     haberler = []
 
     feeds = [
-        # Yahoo Finance RSS (en güvenilir)
-        ("Piyasa", "https://finance.yahoo.com/rss/topfinstories"),
-        ("ABD Piyasa", "https://finance.yahoo.com/news/rssindex"),
-        # Reuters alternatif endpoint
-        ("Reuters", "https://feeds.reuters.com/reuters/businessNews"),
-        ("Reuters Markets", "https://feeds.reuters.com/reuters/financials"),
-        # CNBC
-        ("CNBC Markets", "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10000664"),
-        ("CNBC Economy", "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=20910258"),
+        # CNBC - lxml ile çalışır
+        ("CNBC Markets",  "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10000664"),
+        ("CNBC Economy",  "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=20910258"),
+        ("CNBC World",    "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114"),
         # MarketWatch
-        ("MarketWatch", "https://feeds.marketwatch.com/marketwatch/topstories/"),
+        ("MarketWatch",   "https://feeds.marketwatch.com/marketwatch/topstories/"),
+        ("MarketWatch FX","https://feeds.marketwatch.com/marketwatch/marketpulse/"),
+        # FT
+        ("FT Markets",    "https://www.ft.com/rss/home/uk"),
         # Investing.com
-        ("Investing", "https://www.investing.com/rss/news.rss"),
-        ("Investing Emtia", "https://www.investing.com/rss/news_14.rss"),
-        # Seekingalpha ücretsiz
-        ("SeekingAlpha", "https://seekingalpha.com/market_currents.xml"),
+        ("Investing",     "https://www.investing.com/rss/news.rss"),
+        ("Investing EM",  "https://www.investing.com/rss/news_285.rss"),
+        ("Investing Emtia","https://www.investing.com/rss/news_14.rss"),
+        # Yahoo Finance
+        ("Yahoo Finance", "https://finance.yahoo.com/news/rssindex"),
     ]
 
     for kategori, url in feeds:
@@ -240,10 +239,16 @@ def haber_cek():
             if r.status_code != 200:
                 print(f"  [{kategori}] HTTP {r.status_code}")
                 continue
-            soup = BeautifulSoup(r.text, "xml")
+            # Önce lxml-xml dene, yoksa html.parser
+            try:
+                soup = BeautifulSoup(r.text, "lxml-xml")
+            except Exception:
+                try:
+                    soup = BeautifulSoup(r.text, "xml")
+                except Exception:
+                    soup = BeautifulSoup(r.text, "html.parser")
             items = soup.find_all("item")
             if not items:
-                # html.parser ile tekrar dene
                 soup = BeautifulSoup(r.text, "html.parser")
                 items = soup.find_all("item")
             print(f"  [{kategori}] {len(items)} haber bulundu")
