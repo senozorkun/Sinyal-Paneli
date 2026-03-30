@@ -2,16 +2,16 @@
   "vix": 30.61,
   "move": 108.3,
   "dxy": 100.49,
-  "usdtl_change": 1.17,
+  "usdtl_change": 1.15,
   "us10y": 4.34,
   "spread": 74.4,
   "fed_cut": null,
   "cds": null,
   "tcmb": null,
   "tcmb_dir": "sabit",
-  "gold": 4546.7,
-  "brent": 108.7,
-  "cuau": 0.001208,
+  "gold": 4536.3,
+  "brent": 108.9,
+  "cuau": 0.00121,
   "msci_dir": "dusus",
   "sp500_dir": "dusus",
   "sp500_ma": "altinda",
@@ -145,6 +145,6 @@
       "tarih": ""
     }
   ],
-  "guncelleme": "31.03.2026 01:14",
-  "timestamp": "2026-03-31T01:14:36.269455+03:00"
+  "guncelleme": "31.03.2026 01:22",
+  "timestamp": "2026-03-31T01:22:46.001096+03:00"
 }
