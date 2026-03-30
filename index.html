@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yatırım Sinyal Paneli v3</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0a0d12; --surface:#111520; --surface2:#181d2a;
+    --border:#1e2535; --border2:#252d40;
+    --text:#e2e8f0; --text2:#8b95a8; --text3:#4a5568;
+    --green:#00d97e; --green-dim:#00d97e22;
+    --red:#ff4d6d; --red-dim:#ff4d6d22;
+    --amber:#f5a623; --amber-dim:#f5a62322;
+    --blue:#4da6ff; --blue-dim:#4da6ff18;
+    --purple:#b388ff; --purple-dim:#b388ff18;
+    --mono:'Space Mono',monospace; --sans:'DM Sans',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.4;}
+  .container{position:relative;z-index:1;max-width:1440px;margin:0 auto;padding:28px 24px 60px;}
+
+  header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:32px;padding-bottom:22px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:12px;}
+  .header-left h1{font-family:var(--mono);font-size:20px;font-weight:700;letter-spacing:-0.5px;margin-bottom:3px;}
+  .header-left h1 span{color:var(--green);}
+  .header-left p{font-size:11px;color:var(--text3);font-family:var(--mono);}
+  .header-right{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--text3);}
+  .pulse{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.85)}}
+
+  .main-grid{display:grid;grid-template-columns:400px 1fr;gap:18px;align-items:start;}
+
+  /* INPUT PANEL */
+  .input-panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;position:sticky;top:20px;max-height:calc(100vh - 40px);overflow-y:auto;}
+  .input-panel::-webkit-scrollbar{width:3px;}
+  .input-panel::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+
+  .panel-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px;position:sticky;top:0;background:var(--surface);z-index:2;}
+  .panel-header-icon{width:26px;height:26px;background:var(--blue-dim);border:1px solid var(--blue)33;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;}
+  .panel-header h2{font-size:13px;font-weight:600;}
+  .panel-header p{font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:1px;}
+
+  .inputs-grid{padding:14px 18px;display:flex;flex-direction:column;gap:9px;}
+
+  .input-section-label{font-size:9px;font-family:var(--mono);letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);padding:5px 0 1px;border-top:1px solid var(--border);margin-top:3px;}
+
+  .input-group{display:flex;flex-direction:column;gap:3px;}
+  .input-group label{font-size:9px;font-family:var(--mono);color:var(--text3);letter-spacing:0.5px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;}
+  .input-hint{font-size:9px;color:var(--text3);opacity:0.5;}
+  .input-row{display:flex;gap:7px;align-items:center;}
+  .input-row input,.input-row select{flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:7px 10px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;transition:border-color .2s,box-shadow .2s;}
+  .input-row input{-moz-appearance:textfield;}
+  .input-row input::-webkit-outer-spin-button,.input-row input::-webkit-inner-spin-button{-webkit-appearance:none;}
+  .input-row input:focus,.input-row select:focus{border-color:var(--blue)88;box-shadow:0 0 0 3px var(--blue)12;}
+  .input-row input::placeholder{color:var(--text3);opacity:0.4;}
+  .input-indicator{width:28px;height:28px;border-radius:7px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;transition:all .3s;background:var(--surface2);}
+  .ind-green{background:var(--green-dim)!important;border-color:var(--green)55!important;}
+  .ind-red{background:var(--red-dim)!important;border-color:var(--red)55!important;}
+  .ind-amber{background:var(--amber-dim)!important;border-color:var(--amber)55!important;}
+
+  .analyze-btn{margin:6px 18px 18px;width:calc(100% - 36px);padding:12px;background:var(--green);border:none;border-radius:9px;color:#000;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:0.5px;cursor:pointer;transition:all .2s;text-transform:uppercase;}
+  .analyze-btn:hover{background:#00f590;transform:translateY(-1px);box-shadow:0 8px 24px var(--green)44;}
+
+  /* RESULTS */
+  .results-panel{display:flex;flex-direction:column;gap:14px;}
+
+  /* Bölüm başlıkları */
+  .section-title{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);padding:4px 0 8px;border-bottom:1px solid var(--border);margin-bottom:2px;}
+  .section-title span{color:var(--text2);}
+
+  /* Özet skor bar */
+  .score-bar{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;display:grid;gap:10px;}
+  .score-bar-tr{grid-template-columns:repeat(4,1fr);}
+  .score-bar-us{grid-template-columns:repeat(2,1fr);}
+  .score-item{text-align:center;padding:12px 8px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);transition:all .4s;}
+  .score-item .score-label{font-size:9px;font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:5px;}
+  .score-item .score-signal{font-size:13px;font-weight:700;font-family:var(--mono);}
+  .score-item .score-action{font-size:10px;color:var(--text2);margin-top:3px;font-family:var(--mono);}
+  .score-green{background:var(--green-dim)!important;border-color:var(--green)33!important;} .score-green .score-signal{color:var(--green);}
+  .score-red{background:var(--red-dim)!important;border-color:var(--red)33!important;} .score-red .score-signal{color:var(--red);}
+  .score-amber{background:var(--amber-dim)!important;border-color:var(--amber)33!important;} .score-amber .score-signal{color:var(--amber);}
+  .score-purple{background:var(--purple-dim)!important;border-color:var(--purple)33!important;} .score-purple .score-signal{color:var(--purple);}
+
+  /* Asset kartlar */
+  .asset-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .asset-card{background:var(--surface);border:1px solid var(--border);border-radius:13px;overflow:hidden;transition:border-color .4s,box-shadow .4s;}
+  .asset-card.card-green{border-color:var(--green)44;box-shadow:0 0 0 1px var(--green)12;}
+  .asset-card.card-red{border-color:var(--red)44;box-shadow:0 0 0 1px var(--red)12;}
+  .asset-card.card-amber{border-color:var(--amber)44;box-shadow:0 0 0 1px var(--amber)12;}
+  .asset-card.card-purple{border-color:var(--purple)44;box-shadow:0 0 0 1px var(--purple)12;}
+  .card-top{padding:14px 16px 10px;display:flex;justify-content:space-between;align-items:flex-start;}
+  .card-asset-name{font-size:15px;font-weight:600;font-family:var(--mono);letter-spacing:-0.5px;}
+  .card-asset-sub{font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:2px;}
+  .card-badge{padding:4px 10px;border-radius:100px;font-size:10px;font-family:var(--mono);font-weight:700;letter-spacing:0.5px;text-transform:uppercase;}
+  .badge-green{background:var(--green-dim);color:var(--green);border:1px solid var(--green)44;}
+  .badge-red{background:var(--red-dim);color:var(--red);border:1px solid var(--red)44;}
+  .badge-amber{background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber)44;}
+  .badge-purple{background:var(--purple-dim);color:var(--purple);border:1px solid var(--purple)44;}
+  .card-score-bar{margin:0 16px 10px;height:3px;background:var(--border2);border-radius:2px;overflow:hidden;}
+  .card-score-fill{height:100%;border-radius:2px;transition:width .6s cubic-bezier(.4,0,.2,1);}
+  .fill-green{background:var(--green);} .fill-red{background:var(--red);} .fill-amber{background:var(--amber);} .fill-purple{background:var(--purple);}
+  .card-reasons{padding:0 16px 14px;display:flex;flex-direction:column;gap:4px;}
+  .reason-row{display:flex;align-items:flex-start;gap:7px;font-size:11px;color:var(--text2);line-height:1.5;}
+  .reason-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+  .dot-green{background:var(--green);} .dot-red{background:var(--red);} .dot-amber{background:var(--amber);} .dot-purple{background:var(--purple);}
+
+  /* Resesyon metre */
+  .recession-meter{background:var(--surface);border:1px solid var(--border);border-radius:13px;overflow:hidden;}
+  .recession-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+  .recession-header h3{font-family:var(--mono);font-size:11px;letter-spacing:0.8px;text-transform:uppercase;color:var(--text3);}
+  .recession-score-badge{padding:5px 14px;border-radius:100px;font-family:var(--mono);font-size:12px;font-weight:700;}
+  .recession-body{padding:16px 18px;}
+  .meter-bar{height:8px;background:var(--border2);border-radius:4px;overflow:hidden;margin-bottom:10px;}
+  .meter-fill{height:100%;border-radius:4px;transition:width .8s cubic-bezier(.4,0,.2,1);}
+  .meter-labels{display:flex;justify-content:space-between;font-size:9px;font-family:var(--mono);color:var(--text3);margin-bottom:14px;}
+  .recession-signals{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .rsig{padding:8px 11px;border-radius:8px;border:1px solid var(--border2);background:var(--surface2);font-size:11px;}
+  .rsig .rsig-label{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:3px;}
+  .rsig .rsig-val{font-weight:600;font-family:var(--mono);}
+  .rsig-ok{border-color:var(--green)33;background:var(--green-dim);} .rsig-ok .rsig-val{color:var(--green);}
+  .rsig-warn{border-color:var(--amber)33;background:var(--amber-dim);} .rsig-warn .rsig-val{color:var(--amber);}
+  .rsig-danger{border-color:var(--red)33;background:var(--red-dim);} .rsig-danger .rsig-val{color:var(--red);}
+  .recession-verdict{margin-top:12px;padding:10px 14px;border-radius:8px;font-size:12px;line-height:1.6;border:1px solid var(--border2);background:var(--surface2);}
+
+  /* Uyarı paneli */
+  .warnings-panel{background:var(--surface);border:1px solid var(--border);border-radius:13px;overflow:hidden;}
+  .warnings-header{padding:12px 18px;border-bottom:1px solid var(--border);font-size:10px;font-family:var(--mono);letter-spacing:0.8px;text-transform:uppercase;color:var(--text3);}
+  .warnings-list{padding:12px 18px;display:flex;flex-direction:column;gap:8px;}
+  .warning-item{display:flex;align-items:flex-start;gap:10px;padding:9px 13px;border-radius:9px;border:1px solid var(--border2);background:var(--surface2);font-size:11px;line-height:1.5;color:var(--text2);}
+  .warning-icon{font-size:13px;flex-shrink:0;margin-top:1px;}
+  .warning-item strong{color:var(--text);font-weight:600;}
+  .warning-amber{border-color:var(--amber)33;background:var(--amber-dim);}
+  .warning-red{border-color:var(--red)33;background:var(--red-dim);}
+  .warning-purple{border-color:var(--purple)33;background:var(--purple-dim);}
+
+  .no-data-state{text-align:center;padding:60px 20px;color:var(--text3);font-family:var(--mono);font-size:12px;}
+  .no-data-state .big-icon{font-size:36px;margin-bottom:14px;opacity:0.3;}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .animate-in{animation:fadeUp 0.3s ease forwards;}
+
+  @media(max-width:960px){.main-grid{grid-template-columns:1fr;}.input-panel{position:static;max-height:none;}.asset-cards{grid-template-columns:1fr;}.score-bar-tr,.score-bar-us{grid-template-columns:1fr 1fr;}.recession-signals{grid-template-columns:1fr 1fr;}}
+
+  /* MODAL */
+  .modal-overlay {
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75);
+    z-index:1000; align-items:flex-start; justify-content:center;
+    padding:20px; overflow-y:auto;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display:flex; }
+  .modal-box {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:16px; width:100%; max-width:900px;
+    margin:auto; overflow:hidden;
+    animation: modalIn 0.25s ease;
+  }
+  @keyframes modalIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  .modal-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 22px; border-bottom:1px solid var(--border);
+    position:sticky; top:0; background:var(--surface); z-index:2;
+  }
+  .modal-header h2 { font-family:var(--mono); font-size:14px; font-weight:700; }
+  .modal-header h2 span { color:var(--green); }
+  .modal-close {
+    width:30px; height:30px; background:var(--surface2); border:1px solid var(--border2);
+    border-radius:7px; color:var(--text2); cursor:pointer; font-size:16px;
+    display:flex; align-items:center; justify-content:center;
+    transition:all .2s;
+  }
+  .modal-close:hover { background:var(--red-dim); border-color:var(--red)44; color:var(--red); }
+  .modal-body { padding:22px 26px; overflow-y:auto; max-height:80vh; }
+
+  /* Doc content styles */
+  .dh1 { font-family:var(--mono); font-size:14px; font-weight:700; color:var(--green);
+    margin:22px 0 8px; padding-bottom:6px; border-bottom:1px solid var(--border); }
+  .dh2 { font-family:var(--mono); font-size:12px; font-weight:700; color:var(--amber);
+    margin:16px 0 6px; }
+  .dpara { font-size:13px; color:var(--text2); line-height:1.7; margin-bottom:8px; }
+  .dnote { font-size:12px; color:var(--text3); line-height:1.6; margin:8px 0 14px;
+    padding:8px 12px; background:var(--surface2); border-left:3px solid var(--blue);
+    border-radius:0 6px 6px 0; }
+  .dlist { font-size:13px; color:var(--text2); line-height:1.7; margin-bottom:5px; padding-left:8px; }
+  .dtable { width:100%; border-collapse:collapse; margin:10px 0 16px; font-size:12px; }
+  .dtable th { padding:8px 10px; text-align:left; background:var(--surface2);
+    font-family:var(--mono); font-size:10px; letter-spacing:0.8px; text-transform:uppercase;
+    color:var(--text3); border-bottom:1px solid var(--border); }
+  .dtable td { padding:8px 10px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+  .dtable tr:last-child td { border-bottom:none; }
+  .dtable tr:nth-child(even) td { background:var(--surface2); }
+  .dcell-key  { font-family:var(--mono); font-size:11px; color:var(--blue); font-weight:600; min-width:100px; }
+  .dcell-val  { font-size:12px; color:var(--amber); font-weight:500; min-width:120px; }
+  .dcell-desc { font-size:12px; color:var(--text2); }
+
+  /* DOC buttons in header */
+  .doc-btns { display:flex; gap:8px; align-items:center; }
+  .doc-btn {
+    display:flex; align-items:center; gap:6px; padding:8px 14px;
+    border-radius:9px; font-family:var(--mono); font-size:11px; font-weight:700;
+    letter-spacing:0.5px; cursor:pointer; text-transform:uppercase;
+    transition:all .2s; border:1px solid;
+  }
+  .doc-btn-blue { background:var(--blue-dim); border-color:var(--blue)44; color:var(--blue); }
+  .doc-btn-blue:hover { background:var(--blue)22; border-color:var(--blue)88; box-shadow:0 4px 14px var(--blue)22; }
+  .doc-btn-green { background:var(--green-dim); border-color:var(--green)44; color:var(--green); }
+  .doc-btn-green:hover { background:var(--green)22; border-color:var(--green)88; box-shadow:0 4px 14px var(--green)22; }
+
+
+  /* HABER TICKER */
+  .ticker-wrap {
+    width:100%; background:var(--surface); border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border); overflow:hidden;
+    padding:8px 0; position:relative; margin-bottom:18px;
+  }
+  .ticker-track {
+    display:flex; gap:60px; white-space:nowrap;
+    animation: ticker-scroll 60s linear infinite;
+  }
+  .ticker-wrap:hover .ticker-track { animation-play-state: paused; }
+  @keyframes ticker-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .ticker-item {
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--mono); font-size:11px; color:var(--text2);
+    cursor:pointer; transition:color .2s; flex-shrink:0;
+  }
+  .ticker-item:hover { color:var(--green); }
+  .ticker-dot { width:4px; height:4px; border-radius:50%; background:var(--green); flex-shrink:0; }
+
+  /* HABER LİSTESİ */
+  .haberler-panel {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:13px; overflow:hidden; margin-top:14px;
+  }
+  .haberler-header {
+    padding:12px 18px; border-bottom:1px solid var(--border);
+    font-size:10px; font-family:var(--mono); letter-spacing:0.8px;
+    text-transform:uppercase; color:var(--text3);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .haberler-liste { padding:8px 0; }
+  .haber-item {
+    display:flex; align-items:flex-start; gap:12px;
+    padding:10px 18px; border-bottom:1px solid var(--border);
+    text-decoration:none; transition:background .2s; cursor:pointer;
+  }
+  .haber-item:last-child { border-bottom:none; }
+  .haber-item:hover { background:var(--surface2); }
+  .haber-kategori {
+    font-size:8px; font-family:var(--mono); letter-spacing:1px;
+    text-transform:uppercase; color:var(--blue);
+    white-space:nowrap; margin-top:2px; flex-shrink:0; min-width:80px;
+  }
+  .haber-baslik {
+    font-size:12px; color:var(--text); line-height:1.5;
+    flex:1;
+  }
+  .haber-kaynak {
+    font-size:9px; font-family:var(--mono); color:var(--text3);
+    margin-top:3px;
+  }
+
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="header-left">
+      <h1>YAT<span>IRIM</span> SİNYAL PANELİ <span style="font-size:11px;color:var(--text3)">v3</span></h1>
+      <p>// BIST · Altın · Döviz · Tahvil · S&P 500 · Nasdaq · Resesyon Skoru</p>
+    </div>
+    <div class="header-right">
+    <div class="doc-btns">
+      <button class="doc-btn doc-btn-blue" onclick="initDocs();openModal('modal-gostergeler')">📖 Göstergeler</button>
+      <button class="doc-btn doc-btn-green" onclick="initDocs();openModal('modal-kombinasyon')">📋 Formüller</button>
+    </div>
+      <button id="refresh-btn" onclick="guncelleTetikle()" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.5px;cursor:pointer;text-transform:uppercase;background:var(--green-dim);border:1px solid var(--green);color:var(--green);transition:all .2s;">🔄 GÜNCELLE</button>
+      <div class="pulse" id="status-pulse"></div>
+      <span id="status-text" style="font-family:var(--mono);font-size:10px;color:var(--text3)">yükleniyor...</span>
+    </div>
+  </header>
+
+  
+  <!-- HABER TICKER -->
+  <div class="ticker-wrap" id="ticker-wrap" style="display:none;">
+    <div class="ticker-track" id="ticker-track"></div>
+  </div>
+
+  <div class="main-grid">
+
+    <!-- ── INPUT PANEL ── -->
+    <div class="input-panel">
+      <div class="panel-header">
+        <div class="panel-header-icon">⌨</div>
+        <div>
+          <h2>Gösterge Girişi</h2>
+          <p>// değerleri gir → analiz et</p>
+        </div>
+      </div>
+
+      <div class="inputs-grid">
+
+        <div class="input-section-label">KÜRESEL RİSK</div>
+
+        <div class="input-group">
+          <label>VIX <span class="input-hint">normal: 10–20</span></label>
+          <div class="input-row">
+            <input type="number" id="vix" placeholder="ör. 18.5" step="0.1" min="0" oninput="ui('ind-vix',this.value,v=>v<20?'g':v<30?'a':'r')">
+            <div class="input-indicator" id="ind-vix">—</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>MOVE <span class="input-hint">normal: 55–130</span></label>
+          <div class="input-row">
+            <input type="number" id="move" placeholder="ör. 95" step="0.1" min="0" oninput="ui('ind-move',this.value,v=>v<80?'g':v<130?'a':'r')">
+            <div class="input-indicator" id="ind-move">—</div>
+          </div>
+        </div>
+
+        <div class="input-section-label">DÖVİZ & DOLAR</div>
+
+        <div class="input-group">
+          <label>DXY <span class="input-hint">normal: 90–105</span></label>
+          <div class="input-row">
+            <input type="number" id="dxy" placeholder="ör. 102.5" step="0.01" min="0" oninput="ui('ind-dxy',this.value,v=>v<100?'g':v<106?'a':'r')">
+            <div class="input-indicator" id="ind-dxy">—</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>USD/TL <span class="input-hint">aylık değişim %</span></label>
+          <div class="input-row">
+            <input type="number" id="usdtl_change" placeholder="ör. 1.5" step="0.1" oninput="ui('ind-usdtl',this.value,v=>v<2?'g':v<5?'a':'r')">
+            <div class="input-indicator" id="ind-usdtl">—</div>
+          </div>
+        </div>
+
+        <div class="input-section-label">FAİZ & TAHVİL</div>
+
+        <div class="input-group">
+          <label>ABD 10Y % <span class="input-hint">nominal getiri</span></label>
+          <div class="input-row">
+            <input type="number" id="us10y" placeholder="ör. 4.2" step="0.01" min="0" oninput="ui('ind-us10y',this.value,v=>v<3.5?'g':v<4.5?'a':'r')">
+            <div class="input-indicator" id="ind-us10y">—</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>10Y–2Y Spread bps <span class="input-hint">negatif = inversiyon</span></label>
+          <div class="input-row">
+            <input type="number" id="spread" placeholder="ör. 50" step="1" oninput="ui('ind-spread',this.value,v=>v>30?'g':v>-20?'a':'r')">
+            <div class="input-indicator" id="ind-spread">—</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Fed İndirim Olasılığı % <span class="input-hint">FedWatch EASE</span></label>
+          <div class="input-row">
+            <input type="number" id="fed_cut" placeholder="ör. 35" step="1" min="0" max="100" oninput="ui('ind-fed',this.value,v=>v>50?'g':v>25?'a':'r')">
+            <div class="input-indicator" id="ind-fed">—</div>
+          </div>
+        </div>
+
+        <div class="input-section-label">TÜRKİYE</div>
+
+        <div class="input-group">
+          <label>TR CDS (bps) <span class="input-hint">normal: 150–300</span></label>
+          <div class="input-row">
+            <input type="number" id="cds" placeholder="ör. 265" step="1" min="0" oninput="ui('ind-cds',this.value,v=>v<200?'g':v<300?'a':'r')">
+            <div class="input-indicator" id="ind-cds">—</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>TCMB Faizi % <span class="input-hint">politika faizi</span></label>
+          <div class="input-row">
+            <input type="number" id="tcmb" placeholder="ör. 37" step="0.25" min="0" oninput="ui('ind-tcmb',this.value,v=>v<25?'g':v<40?'a':'r')">
+            <div class="input-indicator" id="ind-tcmb">—</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>TCMB Yönü</label>
+          <div class="input-row">
+            <select id="tcmb_dir" onchange="uis('ind-tcmb-dir',this.value,'indirim','artis')" style="flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:7px 10px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;">
+              <option value="">-- seç --</option>
+              <option value="indirim">İndirim Döngüsünde</option>
+              <option value="sabit">Sabit / Bekle</option>
+              <option value="artis">Artış Döngüsünde</option>
+            </select>
+            <div class="input-indicator" id="ind-tcmb-dir">—</div>
+          </div>
+        </div>
+
+        <div class="input-section-label">EMTİA</div>
+
+        <div class="input-group">
+          <label>Ons Altın $ <span class="input-hint">güncel fiyat</span></label>
+          <div class="input-row">
+            <input type="number" id="gold" placeholder="ör. 3200" step="1" min="0" oninput="ui('ind-gold',this.value,v=>v>0?'g':'a')">
+            <div class="input-indicator" id="ind-gold">—</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Brent Petrol $ <span class="input-hint">varil</span></label>
+          <div class="input-row">
+            <input type="number" id="brent" placeholder="ör. 75" step="0.1" min="0" oninput="ui('ind-brent',this.value,v=>v<75?'g':v<90?'a':'r')">
+            <div class="input-indicator" id="ind-brent">—</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Bakır/Altın Oranı <span class="input-hint">ör. 0.00090</span></label>
+          <div class="input-row">
+            <input type="number" id="cuau" placeholder="ör. 0.00090" step="0.00001" min="0" oninput="ui('ind-cuau',this.value,v=>v>0.0013?'g':v>0.0008?'a':'r')">
+            <div class="input-indicator" id="ind-cuau">—</div>
+          </div>
+        </div>
+
+        <div class="input-section-label">BORSA</div>
+
+        <div class="input-group">
+          <label>MSCI EM Yönü <span class="input-hint">EEM ETF</span></label>
+          <div class="input-row">
+            <select id="msci_dir" onchange="uis('ind-msci',this.value,'yukselis','dusus')" style="flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:7px 10px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;">
+              <option value="">-- seç --</option>
+              <option value="yukselis">Yükseliyor</option>
+              <option value="yatay">Yatay</option>
+              <option value="dusus">Düşüyor</option>
+            </select>
+            <div class="input-indicator" id="ind-msci">—</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>S&P 500 Yönü <span class="input-hint">aylık trend</span></label>
+          <div class="input-row">
+            <select id="sp500_dir" onchange="uis('ind-sp500',this.value,'yukselis','dusus')" style="flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:7px 10px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;">
+              <option value="">-- seç --</option>
+              <option value="yukselis">Yükseliyor</option>
+              <option value="yatay">Yatay</option>
+              <option value="dusus">Düşüyor</option>
+            </select>
+            <div class="input-indicator" id="ind-sp500">—</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>S&P 500 200-Gün MA <span class="input-hint">fiyat MA'nın altında mı?</span></label>
+          <div class="input-row">
+            <select id="sp500_ma" onchange="uis('ind-sp500ma',this.value,'ustunde','altinda')" style="flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:7px 10px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;">
+              <option value="">-- seç --</option>
+              <option value="ustunde">MA üzerinde</option>
+              <option value="altinda">MA altında</option>
+            </select>
+            <div class="input-indicator" id="ind-sp500ma">—</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>ABD İşsizlik % <span class="input-hint">normal: 3.5–4.5</span></label>
+          <div class="input-row">
+            <input type="number" id="unemployment" placeholder="ör. 4.1" step="0.1" min="0" oninput="ui('ind-unemp',this.value,v=>v<4?'g':v<5?'a':'r')">
+            <div class="input-indicator" id="ind-unemp">—</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>ABD Enflasyon % <span class="input-hint">CPI yıllık</span></label>
+          <div class="input-row">
+            <input type="number" id="us_cpi" placeholder="ör. 3.2" step="0.1" min="0" oninput="ui('ind-cpi',this.value,v=>v<2.5?'g':v<4?'a':'r')">
+            <div class="input-indicator" id="ind-cpi">—</div>
+          </div>
+        </div>
+
+      </div>
+
+      <button class="analyze-btn" onclick="analyze()">→ ANALİZ ET</button>
+    </div>
+
+    <!-- ── RESULTS ── -->
+    <div class="results-panel" id="results">
+      <div class="no-data-state">
+        <div class="big-icon">⬡</div>
+        <div>Gösterge değerlerini girerek analizi başlat</div>
+      </div>
+    </div>
+
+  
+  <!-- MODAL 1: Göstergeler -->
+  <div class="modal-overlay" id="modal-gostergeler" onclick="closeModal(event, 'modal-gostergeler')">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>YATIRIM KARAR <span>GÖSTERGELERİ</span></h2>
+        <button class="modal-close" onclick="closeModalDirect('modal-gostergeler')">✕</button>
+      </div>
+      <div class="modal-body" id="body-gostergeler"></div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: Kombinasyon Formülleri -->
+  <div class="modal-overlay" id="modal-kombinasyon" onclick="closeModal(event, 'modal-kombinasyon')">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>KOMBİNASYON <span>FORMÜLLERİ</span></h2>
+        <button class="modal-close" onclick="closeModalDirect('modal-kombinasyon')">✕</button>
+      </div>
+      <div class="modal-body" id="body-kombinasyon"></div>
+    </div>
+  </div>
+
+
+      <!-- HABER LİSTESİ -->
+      <div class="haberler-panel" id="haberler-panel" style="display:none;">
+        <div class="haberler-header">
+          <span>📰 PİYASA HABERLERİ</span>
+          <span id="haber-guncelleme" style="color:var(--text3);font-size:9px;"></span>
+        </div>
+        <div class="haberler-liste" id="haberler-liste"></div>
+      </div>
+
+  </div>
+</div>
+
+<script>
+
+// ── UI HELPERS ──
+function ui(id, val, colorFn) {
+  const el = document.getElementById(id); if (!el) return;
+  const v = parseFloat(val);
+  if (isNaN(v)) { el.className='input-indicator'; el.textContent='—'; return; }
+  const c = colorFn(v);
+  const map = {g:'green',a:'amber',r:'red'};
+  const col = map[c]||c;
+  el.className='input-indicator ind-'+col;
+  el.textContent = col==='green'?'✓':col==='red'?'✗':'~';
+}
+function uis(id, val, greenVal, redVal) {
+  const el = document.getElementById(id); if (!el||!val){if(el){el.className='input-indicator';el.textContent='—';}return;}
+  const col = val===greenVal?'green':val===redVal?'red':'amber';
+  el.className='input-indicator ind-'+col;
+  el.textContent = col==='green'?'✓':col==='red'?'✗':'~';
+}
+function gv(id) { const el=document.getElementById(id); if(!el)return null; const v=parseFloat(el.value); return isNaN(v)?null:v; }
+function gs(id) { const el=document.getElementById(id); return el?el.value:''; }
+
+// ── MAIN ANALYZE ──
+function analyze() {
+  const v = {
+    vix:gv('vix'), move:gv('move'), dxy:gv('dxy'),
+    usdtl:gv('usdtl_change'), us10y:gv('us10y'), spread:gv('spread'),
+    fedCut:gv('fed_cut'), cds:gv('cds'), tcmb:gv('tcmb'),
+    tcmbDir:gs('tcmb_dir'), gold:gv('gold'), brent:gv('brent'),
+    cuau:gv('cuau'), msci:gs('msci_dir'),
+    sp500Dir:gs('sp500_dir'), sp500MA:gs('sp500_ma'),
+    unemployment:gv('unemployment'), usCPI:gv('us_cpi'),
+  };
+
+  const tr  = { bist:analyzeBIST(v), altin:analyzeAltin(v), doviz:analyzeDoviz(v), tahvil:analyzeTahvil(v) };
+  const us  = { sp500:analyzeSP500(v), nasdaq:analyzeNasdaq(v) };
+  const rec = analyzeRecession(v);
+  const warns = getWarnings(v, rec);
+
+  renderResults(tr, us, rec, warns);
+}
+
+// ── S2S ──
+function s2s(score, max, reasons) {
+  const pct = max>0?score/max:0;
+  let signal, action, color;
+  if(pct>=0.70){signal='AL';action='Koşullar elverişli';color='green';}
+  else if(pct>=0.45){signal='BEKLE';action='Karma sinyal, izle';color='amber';}
+  else{signal='SAT/KAÇIN';action='Risk yüksek, çık';color='red';}
+  return {signal,action,color,reasons,pct:pct*100};
+}
+
+// ── BIST ──
+function analyzeBIST(v) {
+  let s=0,m=0; const r=[];
+  if(v.vix!==null){m+=2;if(v.vix<20){s+=2;r.push({c:'green',t:`VIX ${v.vix} — sakin, risk iştahı açık`})}else if(v.vix<30){s+=1;r.push({c:'amber',t:`VIX ${v.vix} — gerginlik var`})}else{r.push({c:'red',t:`VIX ${v.vix} — 30 üzeri, EM satışı riski`})}}
+  if(v.cds!==null){m+=2;if(v.cds<200){s+=2;r.push({c:'green',t:`CDS ${v.cds} bps — düşük risk`})}else if(v.cds<300){s+=1;r.push({c:'amber',t:`CDS ${v.cds} bps — orta risk`})}else{r.push({c:'red',t:`CDS ${v.cds} bps — 300+ kritik eşik`})}}
+  if(v.msci){m+=2;if(v.msci==='yukselis'){s+=2;r.push({c:'green',t:'MSCI EM yükseliyor'})}else if(v.msci==='yatay'){s+=1;r.push({c:'amber',t:'MSCI EM yatay'})}else{r.push({c:'red',t:'MSCI EM düşüyor'})}}
+  if(v.usdtl!==null){m+=2;if(v.usdtl<2){s+=2;r.push({c:'green',t:`USD/TL aylık +%${v.usdtl.toFixed(1)} — kontrollü`})}else if(v.usdtl<5){s+=1;r.push({c:'amber',t:`USD/TL aylık +%${v.usdtl.toFixed(1)} — hız artıyor`})}else{r.push({c:'red',t:`USD/TL aylık +%${v.usdtl.toFixed(1)} — alarm hızı`})}}
+  if(v.tcmbDir){m+=1;if(v.tcmbDir==='indirim'){s+=1;r.push({c:'green',t:'TCMB indirim döngüsünde'})}else if(v.tcmbDir==='sabit'){s+=0.5;r.push({c:'amber',t:'TCMB beklemede'})}else{r.push({c:'red',t:'TCMB artış döngüsünde'})}}
+  if(v.brent!==null){m+=1;if(v.brent<75){s+=1;r.push({c:'green',t:`Brent $${v.brent} — cari açık baskısı sınırlı`})}else if(v.brent<90){s+=0.5;r.push({c:'amber',t:`Brent $${v.brent} — dikkat`})}else{r.push({c:'red',t:`Brent $${v.brent} — 90$+ tehlike`})}}
+  if(v.spread!==null){m+=1;if(v.spread>30){s+=1;r.push({c:'green',t:`Yield spread +${v.spread.toFixed(0)} bps — normal eğri`})}else if(v.spread>-20){s+=0.5;r.push({c:'amber',t:`Spread ${v.spread.toFixed(0)} bps — dikkat`})}else{r.push({c:'red',t:`Spread ${v.spread.toFixed(0)} bps — inversiyon!`})}}
+  return s2s(s,m,r);
+}
+
+// ── ALTIN ──
+function analyzeAltin(v) {
+  let s=0,m=0; const r=[];
+  if(v.dxy!==null){m+=2;if(v.dxy<100){s+=2;r.push({c:'green',t:`DXY ${v.dxy} — dolar zayıf, altın destekli`})}else if(v.dxy<106){s+=1;r.push({c:'amber',t:`DXY ${v.dxy} — nötr`})}else{r.push({c:'red',t:`DXY ${v.dxy} — güçlü dolar, altın baskı`})}}
+  if(v.us10y!==null){m+=2;if(v.us10y<2){s+=2;r.push({c:'green',t:'10Y getiri düşük — altın güçlü destek'})}else if(v.us10y<4){s+=1;r.push({c:'amber',t:`10Y %${v.us10y} — orta baskı`})}else{r.push({c:'red',t:`10Y %${v.us10y} — yüksek getiri, altın baskı`})}}
+  if(v.vix!==null){m+=1;if(v.vix>25){s+=1;r.push({c:'green',t:`VIX ${v.vix} — güvenli liman talebi`})}else if(v.vix>18){s+=0.5;r.push({c:'amber',t:`VIX ${v.vix} — orta talep`})}}
+  if(v.fedCut!==null){m+=2;if(v.fedCut>60){s+=2;r.push({c:'green',t:`Fed indirim %${v.fedCut} — reel getiri düşecek`})}else if(v.fedCut>30){s+=1;r.push({c:'amber',t:`Fed indirim %${v.fedCut} — belirsizlik`})}else{r.push({c:'red',t:`Fed indirim %${v.fedCut} — şahin baskı`})}}
+  if(v.cuau!==null){m+=1;if(v.cuau<0.0008){s+=1;r.push({c:'green',t:`Cu/Au ${v.cuau.toFixed(5)} — büyüme korkusu, altına talep`})}else if(v.cuau<0.0013){s+=0.5;r.push({c:'amber',t:`Cu/Au ${v.cuau.toFixed(5)} — nötr`})}else{r.push({c:'amber',t:`Cu/Au ${v.cuau.toFixed(5)} — büyüme iyimserliği`})}}
+  if(v.move!==null){m+=1;if(v.move>120){s+=1;r.push({c:'green',t:`MOVE ${v.move} — tahvil stresi, altın destekli`})}else if(v.move>80){s+=0.5;r.push({c:'amber',t:`MOVE ${v.move} — orta stres`})}}
+  return s2s(s,m,r);
+}
+
+// ── DÖVİZ ──
+function analyzeDoviz(v) {
+  let s=0,m=0; const r=[];
+  if(v.vix!==null){m+=2;if(v.vix>30){s+=2;r.push({c:'red',t:`VIX ${v.vix} — 30 üzeri, döviz koru`})}else if(v.vix>22){s+=1;r.push({c:'amber',t:`VIX ${v.vix} — gerginlik var`})}else{r.push({c:'green',t:`VIX ${v.vix} — sakin`})}}
+  if(v.cds!==null){m+=2;if(v.cds>300){s+=2;r.push({c:'red',t:`CDS ${v.cds} bps — 300+ aşıldı`})}else if(v.cds>200){s+=1;r.push({c:'amber',t:`CDS ${v.cds} bps — orta risk`})}else{r.push({c:'green',t:`CDS ${v.cds} bps — düşük risk`})}}
+  if(v.usdtl!==null){m+=2;if(v.usdtl>5){s+=2;r.push({c:'red',t:`Aylık +%${v.usdtl.toFixed(1)} — kriz hızı`})}else if(v.usdtl>2){s+=1;r.push({c:'amber',t:`Aylık +%${v.usdtl.toFixed(1)} — hız artıyor`})}else{r.push({c:'green',t:`Aylık +%${v.usdtl.toFixed(1)} — normal`})}}
+  if(v.brent!==null){m+=1;if(v.brent>90){s+=1;r.push({c:'red',t:`Brent $${v.brent} — enerji baskısı`})}else if(v.brent>75){s+=0.5;r.push({c:'amber',t:`Brent $${v.brent} — dikkat`})}else{r.push({c:'green',t:`Brent $${v.brent} — kontrollü`})}}
+  if(v.dxy!==null){m+=1;if(v.dxy>106){s+=1;r.push({c:'red',t:`DXY ${v.dxy} — güçlü dolar`})}else if(v.dxy>100){s+=0.5;r.push({c:'amber',t:`DXY ${v.dxy} — nötr-güçlü`})}else{r.push({c:'green',t:`DXY ${v.dxy} — zayıf dolar`})}}
+  const pct=m>0?s/m:0;
+  let signal,action,color;
+  if(pct>0.65){signal='DÖVİZ KOR';action='TL riskini azalt';color='red';}
+  else if(pct>0.35){signal='DENGELİ';action='Kısmi koruma yeterli';color='amber';}
+  else{signal='TL RAHAT';action='Döviz baskısı sınırlı';color='green';}
+  return {signal,action,color,reasons:r,pct:pct*100};
+}
+
+// ── TAHVİL ──
+function analyzeTahvil(v) {
+  let s=0,m=0; const r=[];
+  if(v.cds!==null){m+=2;if(v.cds<200){s+=2;r.push({c:'green',t:`CDS ${v.cds} bps — ülke riski düşük`})}else if(v.cds<300){s+=1;r.push({c:'amber',t:`CDS ${v.cds} bps — orta risk`})}else{r.push({c:'red',t:`CDS ${v.cds} bps — yüksek risk`})}}
+  if(v.tcmbDir){m+=2;if(v.tcmbDir==='indirim'){s+=2;r.push({c:'green',t:'TCMB indirim döngüsünde — tahvil fiyatı yükselir'})}else if(v.tcmbDir==='sabit'){s+=1;r.push({c:'amber',t:'TCMB beklemede'})}else{r.push({c:'red',t:'TCMB artış döngüsünde — tahvil düşer'})}}
+  if(v.move!==null){m+=2;if(v.move<80){s+=2;r.push({c:'green',t:`MOVE ${v.move} — düşük volatilite`})}else if(v.move<130){s+=1;r.push({c:'amber',t:`MOVE ${v.move} — orta volatilite`})}else{r.push({c:'red',t:`MOVE ${v.move} — tahvil piyasası gergin`})}}
+  if(v.fedCut!==null){m+=1;if(v.fedCut>50){s+=1;r.push({c:'green',t:`Fed indirim %${v.fedCut} — küresel faiz destekli`})}else if(v.fedCut>25){s+=0.5;r.push({c:'amber',t:'Fed belirsizlik'})}else{r.push({c:'red',t:'Fed şahin — faiz baskısı'})}}
+  if(v.vix!==null){m+=1;if(v.vix<20){s+=1;r.push({c:'green',t:`VIX ${v.vix} — sakin ortam`})}else if(v.vix>30){r.push({c:'red',t:`VIX ${v.vix} — panik ortamı`})}}
+  return s2s(s,m,r);
+}
+
+// ── S&P 500 ──
+function analyzeSP500(v) {
+  let s=0,m=0; const r=[];
+
+  if(v.vix!==null){m+=2;if(v.vix<18){s+=2;r.push({c:'green',t:`VIX ${v.vix} — piyasa sakin, riske açık`})}else if(v.vix<25){s+=1;r.push({c:'amber',t:`VIX ${v.vix} — orta gerginlik`})}else{r.push({c:'red',t:`VIX ${v.vix} — yüksek korku, hisse baskı`})}}
+
+  if(v.fedCut!==null){m+=2;if(v.fedCut>55){s+=2;r.push({c:'green',t:`Fed indirim %${v.fedCut} — likidite artacak, borsa pozitif`})}else if(v.fedCut>25){s+=1;r.push({c:'amber',t:`Fed indirim %${v.fedCut} — belirsizlik`})}else{r.push({c:'red',t:`Fed indirim %${v.fedCut} — şahin Fed, borsa baskı`})}}
+
+  if(v.us10y!==null){m+=2;if(v.us10y<3){s+=2;r.push({c:'green',t:`10Y %${v.us10y} — düşük getiri, hisse değerlemesi yüksek`})}else if(v.us10y<4.5){s+=1;r.push({c:'amber',t:`10Y %${v.us10y} — orta baskı`})}else{r.push({c:'red',t:`10Y %${v.us10y} — yüksek faiz, değerleme baskısı`})}}
+
+  if(v.spread!==null){m+=2;if(v.spread>30){s+=2;r.push({c:'green',t:`Yield spread +${v.spread.toFixed(0)} bps — büyüme beklentisi sağlıklı`})}else if(v.spread>-20){s+=1;r.push({c:'amber',t:`Spread ${v.spread.toFixed(0)} bps — dikkat, düzleşiyor`})}else{r.push({c:'red',t:`Spread ${v.spread.toFixed(0)} bps — inversiyon, resesyon riski`})}}
+
+  if(v.sp500Dir){m+=2;if(v.sp500Dir==='yukselis'){s+=2;r.push({c:'green',t:'S&P 500 yükseliş trendinde — momentum güçlü'})}else if(v.sp500Dir==='yatay'){s+=1;r.push({c:'amber',t:'S&P 500 yatay — yön belirsiz'})}else{r.push({c:'red',t:'S&P 500 düşüş trendinde — momentum zayıf'})}}
+
+  if(v.sp500MA){m+=1;if(v.sp500MA==='ustunde'){s+=1;r.push({c:'green',t:'200-gün MA üzerinde — uzun vadeli trend yukarı'})}else{r.push({c:'red',t:'200-gün MA altında — uzun vadeli trend bozulmuş'})}}
+
+  if(v.cuau!==null){m+=1;if(v.cuau>0.0013){s+=1;r.push({c:'green',t:`Cu/Au ${v.cuau.toFixed(5)} — büyüme iyimserliği, endüstriyel talep güçlü`})}else if(v.cuau>0.0008){s+=0.5;r.push({c:'amber',t:`Cu/Au ${v.cuau.toFixed(5)} — nötr büyüme beklentisi`})}else{r.push({c:'red',t:`Cu/Au ${v.cuau.toFixed(5)} — büyüme korkusu, borsa zorlanır`})}}
+
+  if(v.usCPI!==null){m+=1;if(v.usCPI<2.5){s+=1;r.push({c:'green',t:`Enflasyon %${v.usCPI} — Fed elini rahatlatır`})}else if(v.usCPI<4){s+=0.5;r.push({c:'amber',t:`Enflasyon %${v.usCPI} — orta baskı`})}else{r.push({c:'red',t:`Enflasyon %${v.usCPI} — yüksek, Fed elini bağlar`})}}
+
+  return s2s(s,m,r);
+}
+
+// ── NASDAQ ──
+function analyzeNasdaq(v) {
+  let s=0,m=0; const r=[];
+
+  // Nasdaq 10Y faize çok daha duyarlı (uzun vadeli nakit akışı)
+  if(v.us10y!==null){m+=3;if(v.us10y<3){s+=3;r.push({c:'green',t:`10Y %${v.us10y} — düşük faiz, teknoloji değerlemeleri için ideal`})}else if(v.us10y<4){s+=2;r.push({c:'amber',t:`10Y %${v.us10y} — orta baskı`})}else if(v.us10y<4.5){s+=1;r.push({c:'amber',t:`10Y %${v.us10y} — değerleme baskısı artıyor`})}else{r.push({c:'red',t:`10Y %${v.us10y} — 4.5%+ teknoloji hisselerini en çok vurur`})}}
+
+  if(v.vix!==null){m+=2;if(v.vix<18){s+=2;r.push({c:'green',t:`VIX ${v.vix} — sakin, büyüme hisselerine iştah var`})}else if(v.vix<25){s+=1;r.push({c:'amber',t:`VIX ${v.vix} — orta gerginlik`})}else{r.push({c:'red',t:`VIX ${v.vix} — teknoloji ilk satılan sektör`})}}
+
+  if(v.fedCut!==null){m+=2;if(v.fedCut>55){s+=2;r.push({c:'green',t:`Fed indirim %${v.fedCut} — büyüme hisseleri için güçlü katalist`})}else if(v.fedCut>25){s+=1;r.push({c:'amber',t:'Fed belirsizlik — sınırlı destek'})}else{r.push({c:'red',t:'Şahin Fed — büyüme hisselerini olumsuz etkiler'})}}
+
+  if(v.sp500Dir){m+=1;if(v.sp500Dir==='yukselis'){s+=1;r.push({c:'green',t:'S&P trend yukarı — Nasdaq genellikle S&P\u2019ya göre daha fazla yükselir'})}else if(v.sp500Dir==='dusus'){r.push({c:'red',t:'S&P düşüş trendinde — Nasdaq daha derin düşer'})}}
+
+  if(v.usCPI!==null){m+=1;if(v.usCPI<2.5){s+=1;r.push({c:'green',t:`Enflasyon %${v.usCPI} — reel büyüme beklentisi güçlü`})}else if(v.usCPI<4){s+=0.5;r.push({c:'amber',t:`Enflasyon %${v.usCPI} — orta baskı`})}else{r.push({c:'red',t:`Enflasyon %${v.usCPI} — değerleme baskısı güçlü`})}}
+
+  if(v.dxy!==null){m+=1;if(v.dxy<100){s+=1;r.push({c:'green',t:`DXY ${v.dxy} — zayıf dolar, yabancı yatırımcı ABD teknolojisine giriyor`})}else if(v.dxy>106){r.push({c:'amber',t:`DXY ${v.dxy} — güçlü dolar, yabancı getirisi azalır`})}}
+
+  return s2s(s,m,r);
+}
+
+// ── RESESYON ANALİZİ ──
+function analyzeRecession(v) {
+  let score = 0;
+  const signals = [];
+
+  // 1. Yield curve inversiyon
+  if(v.spread!==null) {
+    if(v.spread<-50){score+=30;signals.push({label:'Yield Curve',val:`${v.spread.toFixed(0)} bps — derin inversiyon`,cls:'rsig-danger'});}
+    else if(v.spread<0){score+=20;signals.push({label:'Yield Curve',val:`${v.spread.toFixed(0)} bps — inversiyon var`,cls:'rsig-warn'});}
+    else if(v.spread<40){score+=8;signals.push({label:'Yield Curve',val:`+${v.spread.toFixed(0)} bps — dis-inversiyon`,cls:'rsig-warn'});}
+    else{signals.push({label:'Yield Curve',val:`+${v.spread.toFixed(0)} bps — normal`,cls:'rsig-ok'});}
+  }
+
+  // 2. Cu/Au oranı
+  if(v.cuau!==null) {
+    if(v.cuau<0.0008){score+=25;signals.push({label:'Cu/Au Oranı',val:`${v.cuau.toFixed(5)} — tarihi düşük`,cls:'rsig-danger'});}
+    else if(v.cuau<0.0013){score+=10;signals.push({label:'Cu/Au Oranı',val:`${v.cuau.toFixed(5)} — yavaşlama`,cls:'rsig-warn'});}
+    else{signals.push({label:'Cu/Au Oranı',val:`${v.cuau.toFixed(5)} — büyüme var`,cls:'rsig-ok'});}
+  }
+
+  // 3. VIX
+  if(v.vix!==null) {
+    if(v.vix>40){score+=20;signals.push({label:'VIX',val:`${v.vix} — panik`,cls:'rsig-danger'});}
+    else if(v.vix>28){score+=12;signals.push({label:'VIX',val:`${v.vix} — yüksek stres`,cls:'rsig-warn'});}
+    else if(v.vix>20){score+=5;signals.push({label:'VIX',val:`${v.vix} — orta stres`,cls:'rsig-warn'});}
+    else{signals.push({label:'VIX',val:`${v.vix} — sakin`,cls:'rsig-ok'});}
+  }
+
+  // 4. İşsizlik
+  if(v.unemployment!==null) {
+    if(v.unemployment>5.5){score+=20;signals.push({label:'İşsizlik',val:`%${v.unemployment} — tehlike`,cls:'rsig-danger'});}
+    else if(v.unemployment>4.5){score+=10;signals.push({label:'İşsizlik',val:`%${v.unemployment} — yükseliyor`,cls:'rsig-warn'});}
+    else{signals.push({label:'İşsizlik',val:`%${v.unemployment} — kontrollü`,cls:'rsig-ok'});}
+  }
+
+  // 5. Fed indirim aciliyeti
+  if(v.fedCut!==null) {
+    if(v.fedCut>80){score+=15;signals.push({label:'Fed Aciliyeti',val:`%${v.fedCut} — panik indirim beklentisi`,cls:'rsig-danger'});}
+    else if(v.fedCut>50){score+=5;signals.push({label:'Fed Aciliyeti',val:`%${v.fedCut} — güvercin baskı`,cls:'rsig-warn'});}
+    else{signals.push({label:'Fed Aciliyeti',val:`%${v.fedCut} — normal`,cls:'rsig-ok'});}
+  }
+
+  // 6. Enflasyon — stagflasyon riski
+  if(v.usCPI!==null && v.unemployment!==null) {
+    if(v.usCPI>4 && v.unemployment>4.5){score+=15;signals.push({label:'Stagflasyon',val:`Enflasyon %${v.usCPI} + İşsizlik %${v.unemployment}`,cls:'rsig-danger'});}
+    else if(v.usCPI>4){signals.push({label:'Enflasyon',val:`%${v.usCPI} — yüksek ama büyüme var`,cls:'rsig-warn'});}
+  }
+
+  // 7. MOVE
+  if(v.move!==null) {
+    if(v.move>150){score+=10;signals.push({label:'MOVE',val:`${v.move} — aşırı tahvil stresi`,cls:'rsig-danger'});}
+    else if(v.move>110){score+=5;signals.push({label:'MOVE',val:`${v.move} — tahvil gergin`,cls:'rsig-warn'});}
+    else{signals.push({label:'MOVE',val:`${v.move} — tahvil sakin`,cls:'rsig-ok'});}
+  }
+
+  // 8. S&P 200MA
+  if(v.sp500MA==='altinda'){score+=15;signals.push({label:'S&P 200 MA',val:'Fiyat MA altında — trend bozuk',cls:'rsig-danger'});}
+  else if(v.sp500MA==='ustunde'){signals.push({label:'S&P 200 MA',val:'Fiyat MA üzerinde — trend sağlıklı',cls:'rsig-ok'});}
+
+  // Skor sınırla
+  score = Math.min(score, 100);
+
+  let level, verdict, color, meterColor;
+  if(score>=70){
+    level='YÜKSEK RİSK';
+    verdict='Birden fazla resesyon sinyali aktif. Savunmacı pozisyon: döviz, altın, kısa vadeli tahvil. Hisse ve BIST riskini azaltın.';
+    color='red'; meterColor='#ff4d6d';
+  } else if(score>=40){
+    level='ORTA RİSK';
+    verdict='Bazı uyarı işaretleri var ama henüz resesyon kesin değil. Gelişmeleri yakın takip edin, pozisyon ağırlığını dengeleyin.';
+    color='amber'; meterColor='#f5a623';
+  } else if(score>=20){
+    level='DÜŞÜK-ORTA';
+    verdict='Piyasa yavaşlama sinyalleri veriyor ama resesyon beklentisi güçlü değil. Seçici kalın.';
+    color='amber'; meterColor='#f5a623';
+  } else {
+    level='DÜŞÜK RİSK';
+    verdict='Resesyon göstergeleri şimdilik iyi. Büyüme ortamı devam ediyor, risk varlıklarına girilabilir.';
+    color='green'; meterColor='#00d97e';
+  }
+
+  return {score, level, verdict, color, meterColor, signals};
+}
+
+// ── UYARILAR ──
+function getWarnings(v, rec) {
+  const w = [];
+  if(v.move!==null&&v.vix!==null&&v.move>120&&v.vix<20) w.push({level:'red',icon:'⚠',title:'Gizli Stres',text:`MOVE ${v.move} yüksek ama VIX ${v.vix} sakin. Tahvil piyasası gergin, hisseler henüz fark etmedi.`});
+  if(v.cds!==null&&v.vix!==null&&v.cds>300&&v.vix<22) w.push({level:'amber',icon:'⚡',title:"TR Özgün Risk",text:`CDS ${v.cds} bps yüksek ama VIX ${v.vix} sakin. Küresel sorun yok — Türkiye'ye özgü bir şey var, araştır.`});
+  if(v.dxy!==null&&v.gold!==null&&v.dxy>102&&v.gold>3000) w.push({level:'amber',icon:'◈',title:'Korelasyon Kırıldı',text:`DXY ${v.dxy} güçlü VE altın $${v.gold} da yüksek. Dolar güven krizi sinyali — eski ters korelasyon bozuldu.`});
+  if(v.spread!==null&&v.spread>0&&v.spread<40) w.push({level:'amber',icon:'↗',title:'Dis-İnversiyon',text:`Yield spread +${v.spread.toFixed(0)} bps ile normalleşiyor. Tarihsel olarak resesyon inversiyon bittikten hemen sonra başlar.`});
+  if(v.brent!==null&&v.brent>90) w.push({level:'red',icon:'⛽',title:'Petrol Alarmı',text:`Brent $${v.brent} — 90$+ Türkiye için kritik. Cari açık, enflasyon ve TCMB faiz indirimi baskı altında.`});
+  if(v.msci==='dusus'&&v.vix!==null&&v.vix<20) w.push({level:'amber',icon:'↕',title:'EM Ayrışması',text:`MSCI EM düşüyor ama VIX sakin. Para EM'den ABD'ye akıyor — ABD istisnacılığı. BIST bu ralliye katılamaz.`});
+  if(v.cuau!==null&&v.cuau<0.0008) w.push({level:'red',icon:'⬇',title:'Cu/Au Tarihi Düşük',text:`Cu/Au ${v.cuau.toFixed(5)} — resesyon sinyali çok güçlü. Savunmacı pozisyon önerilir.`});
+  // ABD borsa özel uyarılar
+  if(v.us10y!==null&&v.us10y>4.5&&v.sp500Dir==='dusus') w.push({level:'red',icon:'📉',title:'ABD Borsa Çift Baskı',text:`10Y %${v.us10y} yüksek VE S&P düşüş trendinde. Değerleme baskısı + momentum kaybı bir arada.`});
+  if(v.usCPI!==null&&v.unemployment!==null&&v.usCPI>4&&v.unemployment>4.5) w.push({level:'red',icon:'🔥',title:'Stagflasyon Riski',text:`Enflasyon %${v.usCPI} VE işsizlik %${v.unemployment} aynı anda yüksek. Fed hem sıkılaştıramaz hem gevşetemez — en zor senaryo.`});
+  if(v.sp500MA==='altinda'&&v.vix!==null&&v.vix>25) w.push({level:'red',icon:'⚡',title:'ABD Borsa Teknik Kırılım',text:`S&P 500 200-günlük MA altında VE VIX ${v.vix} yüksek. Teknik trend bozulmuş, piyasa gergin.`});
+  if(rec.score>=70) w.push({level:'red',icon:'🔴',title:`Resesyon Skoru: ${rec.score}/100`,text:`Birden fazla resesyon indikatörü eş zamanlı tehlike sinyali veriyor. Portföyü savunmacı yapıya çekin.`});
+  return w;
+}
+
+// ── RENDER ──
+function renderResults(tr, us, rec, warns) {
+  const trAssets = [
+    {name:'BIST',sub:'Hisse Senedi',r:tr.bist},
+    {name:'ALTIN',sub:'Ons / Gram',r:tr.altin},
+    {name:'DÖVİZ',sub:'USD/TL Riski',r:tr.doviz},
+    {name:'TAHVİL',sub:'TL / Eurobond',r:tr.tahvil},
+  ];
+  const usAssets = [
+    {name:'S&P 500',sub:'Geniş Piyasa',r:us.sp500},
+    {name:'NASDAQ',sub:'Teknoloji / Büyüme',r:us.nasdaq},
+  ];
+
+  function scoreBar(assets, cls) {
+    return `<div class="score-bar ${cls}">${assets.map(a=>`
+      <div class="score-item score-${a.r.color}">
+        <div class="score-label">${a.name}</div>
+        <div class="score-signal">${a.r.signal}</div>
+        <div class="score-action">${a.r.action}</div>
+      </div>`).join('')}</div>`;
+  }
+
+  function cards(assets) {
+    return `<div class="asset-cards">${assets.map(a=>`
+      <div class="asset-card card-${a.r.color} animate-in">
+        <div class="card-top">
+          <div><div class="card-asset-name">${a.name}</div><div class="card-asset-sub">${a.sub}</div></div>
+          <div class="card-badge badge-${a.r.color}">${a.r.signal}</div>
+        </div>
+        <div class="card-score-bar"><div class="card-score-fill fill-${a.r.color}" style="width:${a.r.pct}%"></div></div>
+        <div class="card-reasons">
+          ${a.r.reasons.map(r=>`<div class="reason-row"><div class="reason-dot dot-${r.c}"></div><span>${r.t}</span></div>`).join('')}
+          ${a.r.reasons.length===0?'<div class="reason-row"><div class="reason-dot dot-amber"></div><span>Yeterli veri girilmedi</span></div>':''}
+        </div>
+      </div>`).join('')}</div>`;
+  }
+
+  // Resesyon metre HTML
+  const meterPct = rec.score;
+  const recHTML = `
+    <div class="recession-meter animate-in">
+      <div class="recession-header">
+        <h3>🔴 Resesyon Riski Skoru</h3>
+        <div class="recession-score-badge badge-${rec.color}">${rec.score}/100 — ${rec.level}</div>
+      </div>
+      <div class="recession-body">
+        <div class="meter-bar">
+          <div class="meter-fill" style="width:${meterPct}%;background:${rec.meterColor};"></div>
+        </div>
+        <div class="meter-labels">
+          <span>0 — Büyüme</span><span>25</span><span>50</span><span>75</span><span>100 — Resesyon</span>
+        </div>
+        <div class="recession-signals">
+          ${rec.signals.map(s=>`
+            <div class="rsig ${s.cls}">
+              <div class="rsig-label">${s.label}</div>
+              <div class="rsig-val">${s.val}</div>
+            </div>`).join('')}
+        </div>
+        <div class="recession-verdict" style="border-color:${rec.meterColor}33;background:${rec.meterColor}12;color:var(--text2);">
+          ${rec.verdict}
+        </div>
+      </div>
+    </div>`;
+
+  const warnsHTML = warns.length>0 ? `
+    <div class="warnings-panel animate-in">
+      <div class="warnings-header">⚠ Özel Uyarılar — İstisna Kombinasyonlar</div>
+      <div class="warnings-list">
+        ${warns.map(w=>`<div class="warning-item warning-${w.level}">
+          <span class="warning-icon">${w.icon}</span>
+          <span><strong>${w.title}:</strong> ${w.text}</span>
+        </div>`).join('')}
+      </div>
+    </div>` : '';
+
+  document.getElementById('results').innerHTML = `
+    <div class="section-title animate-in">TÜRKİYE PİYASALARI <span>// BIST · Altın · Döviz · Tahvil</span></div>
+    ${scoreBar(trAssets,'score-bar-tr')}
+    ${cards(trAssets)}
+    <div class="section-title animate-in" style="margin-top:6px;">AMERİKAN BORSALARI <span>// S&P 500 · Nasdaq</span></div>
+    ${scoreBar(usAssets,'score-bar-us')}
+    ${cards(usAssets)}
+    ${recHTML}
+    ${warnsHTML}
+  `;
+}
+
+
+// ── DOC CONTENT ──
+const DOC1_HTML = "\n<h2 class=\"dh1\">1. VIX \u2014 Korku Endeksi</h2>\n<p class=\"dpara\">S&P 500 opsiyonlar\u0131ndan hesaplanan, piyasan\u0131n \u00f6n\u00fcm\u00fczdeki 30 g\u00fcnl\u00fck beklenen volatilitesini g\u00f6sterir.</p>\n\n<h3 class=\"dh2\">VIX Seviye Rehberi</h3>\n<table class=\"dtable\"><thead><tr><th>Seviye</th><th>Durum</th><th>Ne anlama gelir?</th><th>T\u00fcrkiye etkisi</th></tr></thead><tbody>\n<tr><td class=\"dcell-key\">60+</td><td class=\"dcell-val\">Tarihi panik</td><td class=\"dcell-desc\">2008 (80), Covid 2020 (82), Nisan 2025 tarifeler (50+)</td><td class=\"dcell-desc\">BIST sert d\u00fc\u015f\u00fc\u015f, TL s\u0131\u00e7rama</td></tr>\n<tr><td class=\"dcell-key\">40\u201360</td><td class=\"dcell-val\">Panik modu</td><td class=\"dcell-desc\">EM'den sermaye ka\u00e7\u0131\u015f\u0131, TL bask\u0131</td><td class=\"dcell-desc\">BIST'ten \u00e7\u0131k, d\u00f6viz/alt\u0131n tut</td></tr>\n<tr><td class=\"dcell-key\">30\u201340</td><td class=\"dcell-val\">Y\u00fcksek stres</td><td class=\"dcell-desc\">Belirgin risk-off. Al\u0131mlar i\u00e7in erken</td><td class=\"dcell-desc\">Bekle, pozisyon k\u00fc\u00e7\u00fclt</td></tr>\n<tr><td class=\"dcell-key\">20\u201330</td><td class=\"dcell-val\">Gerginlik</td><td class=\"dcell-desc\">Normal-\u00fcst\u00fc belirsizlik, se\u00e7ici pozisyon</td><td class=\"dcell-desc\">Se\u00e7ici ol, stop-loss s\u0131k\u0131la\u015ft\u0131r</td></tr>\n<tr><td class=\"dcell-key\">15\u201320</td><td class=\"dcell-val\">Normal</td><td class=\"dcell-desc\">Tarihsel medyan ~17.6. Risk i\u015ftah\u0131 makul</td><td class=\"dcell-desc\">BIST ve TL varl\u0131klar i\u00e7in uygun</td></tr>\n<tr><td class=\"dcell-key\">10\u201315</td><td class=\"dcell-val\">A\u015f\u0131r\u0131 sakin</td><td class=\"dcell-desc\">Complacency uyar\u0131s\u0131 \u2014 s\u00fcrpriz riski artar</td><td class=\"dcell-desc\">Dikkat: uyu\u015fukluk k\u0131r\u0131labilir</td></tr>\n</tbody></table>\n\n<h3 class=\"dh2\">VIX Mean Reversion \u2014 Kriz Sonras\u0131 Fazlar</h3>\n<table class=\"dtable\"><thead><tr><th>Faz</th><th>VIX</th><th>Ne yap\u0131l\u0131r?</th><th>T\u00fcrkiye stratejisi</th></tr></thead><tbody>\n<tr><td class=\"dcell-key\">Faz 1 \u2014 Spike</td><td class=\"dcell-val\">40+</td><td class=\"dcell-desc\">Panik. Nakitte kal, izle.</td><td class=\"dcell-desc\">D\u00f6viz/alt\u0131n tut, BIST'ten \u00e7\u0131k</td></tr>\n<tr><td class=\"dcell-key\">Faz 2 \u2014 D\u00fc\u015f\u00fc\u015f</td><td class=\"dcell-val\">30\u201340</td><td class=\"dcell-desc\">\u0130lk sinyaller. Kademeli ba\u015fla.</td><td class=\"dcell-desc\">CDS d\u00fc\u015f\u00fcyor mu? \u0130zle.</td></tr>\n<tr><td class=\"dcell-key\">Faz 3 \u2014 Normalle\u015fme</td><td class=\"dcell-val\">20\u201330</td><td class=\"dcell-desc\">Ana f\u0131rsat penceresi.</td><td class=\"dcell-desc\">Kademeli BIST al\u0131m\u0131 d\u00fc\u015f\u00fcn\u00fclebilir</td></tr>\n<tr><td class=\"dcell-key\">Faz 4 \u2014 Sakinlik</td><td class=\"dcell-val\">15\u201320</td><td class=\"dcell-desc\">Trend devam. Pozisyon koru.</td><td class=\"dcell-desc\">BIST ve TL varl\u0131klar en verimli</td></tr>\n</tbody></table>\n\n<h2 class=\"dh1\">2. MOVE \u2014 Tahvil Volatilite Endeksi</h2>\n<p class=\"dpara\">VIX'in tahvil piyasas\u0131 versiyonu. 2Y, 5Y, 10Y, 30Y Hazine tahvili opsiyonlar\u0131ndan hesaplan\u0131r. Normal aral\u0131k: 55\u2013130.</p>\n\n<h3 class=\"dh2\">MOVE vs VIX</h3>\n<table class=\"dtable\"><thead><tr><th>\u00d6zellik</th><th>VIX</th><th>MOVE</th></tr></thead><tbody>\n<tr><td class=\"dcell-key\">Ne \u00f6l\u00e7er?</td><td class=\"dcell-val\">Hisse senedi volatilitesi</td><td class=\"dcell-desc\">Tahvil piyasas\u0131 volatilitesi</td></tr>\n<tr><td class=\"dcell-key\">Tepki t\u00fcr\u00fc</td><td class=\"dcell-val\">Tepkisel \u2014 krizde y\u00fckselir</td><td class=\"dcell-desc\">\u00d6nc\u00fc \u2014 krizden \u00f6nce sinyal verir</td></tr>\n<tr><td class=\"dcell-key\">Normal aral\u0131k</td><td class=\"dcell-val\">10\u201320</td><td class=\"dcell-desc\">55\u2013130</td></tr>\n<tr><td class=\"dcell-key\">Alarm seviyesi</td><td class=\"dcell-val\">30+</td><td class=\"dcell-desc\">130+</td></tr>\n</tbody></table>\n\n<h3 class=\"dh2\">MOVE + VIX Kombinasyon Tablosu</h3>\n<table class=\"dtable\"><thead><tr><th>MOVE</th><th>VIX</th><th>Ne anlama gelir?</th><th>T\u00fcrkiye etkisi</th></tr></thead><tbody>\n<tr><td class=\"dcell-key\">D\u00fc\u015f\u00fck</td><td class=\"dcell-val\">D\u00fc\u015f\u00fck</td><td class=\"dcell-desc\">Tam risk-on. Sakin makro ortam.</td><td class=\"dcell-desc\">BIST & TL i\u00e7in elveri\u015fli</td></tr>\n<tr><td class=\"dcell-key\">\u26a0 Y\u00fcksek</td><td class=\"dcell-val\">D\u00fc\u015f\u00fck</td><td class=\"dcell-desc\">Gizli stres! Tahvil gergin, hisse fark etmedi.</td><td class=\"dcell-desc\">Erken uyar\u0131 \u2014 dikkat</td></tr>\n<tr><td class=\"dcell-key\">D\u00fc\u015f\u00fck</td><td class=\"dcell-val\">Y\u00fcksek</td><td class=\"dcell-desc\">Hisse spesifik panik, makro sa\u011flam.</td><td class=\"dcell-desc\">Ge\u00e7ici, k\u0131sa f\u0131rsatlar do\u011fabilir</td></tr>\n<tr><td class=\"dcell-key\">\ud83d\udd34 Y\u00fcksek</td><td class=\"dcell-val\">Y\u00fcksek</td><td class=\"dcell-desc\">Tam kriz modu. Sistem genelinde stres.</td><td class=\"dcell-desc\">TL bask\u0131, CDS y\u00fckselir, ka\u00e7\u0131n</td></tr>\n</tbody></table>\n\n<h2 class=\"dh1\">3. DXY \u2014 Dolar Endeksi</h2>\n<p class=\"dpara\">EUR %57.6 \u00b7 JPY %13.6 \u00b7 GBP %11.9 \u00b7 CAD %9.1 \u00b7 SEK %4.2 \u00b7 CHF %3.6. TL bu sepette yok \u2014 dolayl\u0131 etkiler.</p>\n\n<h3 class=\"dh2\">DXY Korelasyon Tablosu</h3>\n<table class=\"dtable\"><thead><tr><th>Varl\u0131k</th><th>Korelasyon</th><th>G\u00fc\u00e7</th><th>A\u00e7\u0131klama</th></tr></thead><tbody>\n<tr><td class=\"dcell-key\">Ons Alt\u0131n</td><td class=\"dcell-val\">Ters</td><td class=\"dcell-desc\">~-0.7</td><td class=\"dcell-desc\">DXY d\u00fc\u015f\u00fcnce alt\u0131n y\u00fckselir. 2025'te kural k\u0131r\u0131ld\u0131.</td></tr>\n<tr><td class=\"dcell-key\">Brent Petrol</td><td class=\"dcell-val\">Ters</td><td class=\"dcell-desc\">Orta</td><td class=\"dcell-desc\">DXY g\u00fc\u00e7lenince petrol pahalan\u0131r, talep d\u00fc\u015fer.</td></tr>\n<tr><td class=\"dcell-key\">USD/TL</td><td class=\"dcell-val\">Pozitif</td><td class=\"dcell-desc\">G\u00fc\u00e7l\u00fc</td><td class=\"dcell-desc\">DXY y\u00fckselince USD/TL de y\u00fckselir.</td></tr>\n<tr><td class=\"dcell-key\">BIST ($)</td><td class=\"dcell-val\">Ters</td><td class=\"dcell-desc\">Orta</td><td class=\"dcell-desc\">G\u00fc\u00e7l\u00fc dolar \u2192 EM sat\u0131\u015f\u0131 \u2192 BIST bask\u0131.</td></tr>\n</tbody></table>\n\n<h3 class=\"dh2\">DXY Hareketi \u2192 Piyasa Senaryolar\u0131</h3>\n<table class=\"dtable\"><thead><tr><th>DXY</th><th>Neden?</th><th>Alt\u0131n</th><th>USD/TL</th><th>Strateji</th></tr></thead><tbody>\n<tr><td class=\"dcell-key\">G\u00fc\u00e7l\u00fc d\u00fc\u015f\u00fc\u015f</td><td class=\"dcell-val\">Fed indirim, ABD zay\u0131f</td><td class=\"dcell-desc\">\u2191\u2191</td><td class=\"dcell-desc\">\u2193</td><td class=\"dcell-desc\">Alt\u0131n, BIST ve TL varl\u0131klar avantajl\u0131</td></tr>\n<tr><td class=\"dcell-key\">Hafif d\u00fc\u015f\u00fc\u015f</td><td class=\"dcell-val\">Risk-on ortam\u0131</td><td class=\"dcell-desc\">\u2191</td><td class=\"dcell-desc\">\u2192</td><td class=\"dcell-desc\">EM ve emtia iyi \u00e7al\u0131\u015f\u0131r</td></tr>\n<tr><td class=\"dcell-key\">G\u00fc\u00e7l\u00fc y\u00fckseli\u015f</td><td class=\"dcell-val\">Fed s\u0131k\u0131, risk-off</td><td class=\"dcell-desc\">\u2193</td><td class=\"dcell-desc\">\u2191\u2191</td><td class=\"dcell-desc\">D\u00f6vizli varl\u0131k tut, BIST'i ertele</td></tr>\n<tr><td class=\"dcell-key\">\u26a0 Kriz + Alt\u0131n\u2191</td><td class=\"dcell-val\">Dolar g\u00fcven krizi</td><td class=\"dcell-desc\">\u2191\u2191</td><td class=\"dcell-desc\">\u2191\u2191</td><td class=\"dcell-desc\">Korelasyon k\u0131r\u0131lm\u0131\u015f \u2014 makroyu yeniden de\u011ferlendir</td></tr>\n</tbody></table>\n\n<h2 class=\"dh1\">4. Fed Funds Futures \u2014 Faiz Beklentisi</h2>\n<p class=\"dpara\">FedWatch: cmegroup.com/markets/interest-rates/cme-fedwatch-tool.html \u2014 Sa\u011f \u00fcstteki EASE % = toplam indirim olas\u0131l\u0131\u011f\u0131.</p>\n\n<h3 class=\"dh2\">FedWatch Olas\u0131l\u0131k \u2192 Piyasa Tepkisi</h3>\n<table class=\"dtable\"><thead><tr><th>De\u011fi\u015fim</th><th>DXY</th><th>Alt\u0131n</th><th>USD/TL</th><th>BIST ($)</th></tr></thead><tbody>\n<tr><td class=\"dcell-key\">\u0130ndirim beklentisi \u2191\u2191</td><td class=\"dcell-val\">\u2193\u2193</td><td class=\"dcell-desc\">\u2191\u2191</td><td class=\"dcell-desc\">\u2193</td><td class=\"dcell-desc\">\u2191\u2191 EM i\u00e7in en iyi</td></tr>\n<tr><td class=\"dcell-key\">\u0130ndirim beklentisi \u2191</td><td class=\"dcell-val\">\u2193</td><td class=\"dcell-desc\">\u2191</td><td class=\"dcell-desc\">\u2193</td><td class=\"dcell-desc\">\u2191</td></tr>\n<tr><td class=\"dcell-key\">Olas\u0131l\u0131k de\u011fi\u015fmedi</td><td class=\"dcell-val\">\u2192</td><td class=\"dcell-desc\">\u2192</td><td class=\"dcell-desc\">\u2192</td><td class=\"dcell-desc\">\u2192</td></tr>\n<tr><td class=\"dcell-key\">\u0130ndirim beklentisi \u2193</td><td class=\"dcell-val\">\u2191</td><td class=\"dcell-desc\">\u2193</td><td class=\"dcell-desc\">\u2191</td><td class=\"dcell-desc\">\u2193</td></tr>\n<tr><td class=\"dcell-key\">\ud83d\udd34 \u015eahin s\u00fcrpriz</td><td class=\"dcell-val\">\u2191\u2191</td><td class=\"dcell-desc\">\u2193\u2193</td><td class=\"dcell-desc\">\u2191\u2191</td><td class=\"dcell-desc\">\u2193\u2193</td></tr>\n</tbody></table>\n\n<h2 class=\"dh1\">5. 10Y\u20132Y Getiri Fark\u0131 (Yield Curve)</h2>\n<p class=\"dpara\">Son 50 y\u0131l\u0131n 8 resesyonunun tamam\u0131nda \u00f6nceden g\u00f6r\u00fcld\u00fc \u2014 %87.5 do\u011fruluk. Inversiyon bittikten sonra resesyon ba\u015flar (dis-inversiyon).</p>\n\n<h3 class=\"dh2\">Yield Curve Seviyeleri</h3>\n<table class=\"dtable\"><thead><tr><th>Durum</th><th>Spread</th><th>Sinyal</th><th>Piyasa etkisi</th></tr></thead><tbody>\n<tr><td class=\"dcell-key\">Normal e\u011fri</td><td class=\"dcell-val\">+50 bps+</td><td class=\"dcell-desc\">B\u00fcy\u00fcme beklentisi iyi</td><td class=\"dcell-desc\">Risk varl\u0131klar\u0131 olumlu. BIST destekli.</td></tr>\n<tr><td class=\"dcell-key\">D\u00fcz e\u011fri</td><td class=\"dcell-val\">0\u2013+50 bps</td><td class=\"dcell-desc\">Yava\u015flama endi\u015fesi</td><td class=\"dcell-desc\">Belirsizlik. Se\u00e7ici yat\u0131r\u0131m.</td></tr>\n<tr><td class=\"dcell-key\">Hafif inversiyon</td><td class=\"dcell-val\">-20\u20130 bps</td><td class=\"dcell-desc\">Resesyon erken sinyali</td><td class=\"dcell-desc\">Dikkatli ol.</td></tr>\n<tr><td class=\"dcell-key\">Derin inversiyon</td><td class=\"dcell-val\">-50 bps-</td><td class=\"dcell-desc\">G\u00fc\u00e7l\u00fc resesyon sinyali</td><td class=\"dcell-desc\">Alt\u0131n ve d\u00f6viz a\u011f\u0131rl\u0131\u011f\u0131n\u0131 art\u0131r.</td></tr>\n<tr><td class=\"dcell-key\">\u26a0 Dis-inversiyon</td><td class=\"dcell-val\">0\u2192+30 bps</td><td class=\"dcell-desc\">ASIL TEHL\u0130KEL\u0130 A\u015eAMA</td><td class=\"dcell-desc\">Resesyon inversiyon bittikten sonra ba\u015flar!</td></tr>\n</tbody></table>\n<p class=\"dnote\">G\u00fcncel (Mart 2026): ~+55 bps \u2014 dis-inversiyon a\u015famas\u0131.</p>\n\n<h2 class=\"dh1\">6. T\u00fcrkiye CDS Primleri</h2>\n<p class=\"dpara\">Takip: Investing.com \u2192 \"Turkey CDS 5 Year\" | TradingView: TRGV5YUSAC. CDS d\u00fc\u015fmeden s\u00fcrd\u00fcr\u00fclebilir BIST rallisi zordur.</p>\n\n<h3 class=\"dh2\">CDS Seviye Rehberi</h3>\n<table class=\"dtable\"><thead><tr><th>CDS (bps)</th><th>Risk</th><th>BIST etkisi</th><th>Strateji</th></tr></thead><tbody>\n<tr><td class=\"dcell-key\">&lt;150 bps</td><td class=\"dcell-val\">\u00c7ok d\u00fc\u015f\u00fck</td><td class=\"dcell-desc\">G\u00fc\u00e7l\u00fc destek</td><td class=\"dcell-desc\">BIST i\u00e7in \u00e7ok elveri\u015fli</td></tr>\n<tr><td class=\"dcell-key\">150\u2013250 bps</td><td class=\"dcell-val\">Makul</td><td class=\"dcell-desc\">Yabanc\u0131 giri\u015fi destekli</td><td class=\"dcell-desc\">Giri\u015f yap\u0131labilir</td></tr>\n<tr><td class=\"dcell-key\">250\u2013300 bps</td><td class=\"dcell-val\">Orta-y\u00fcksek</td><td class=\"dcell-desc\">Karma sinyal</td><td class=\"dcell-desc\">Se\u00e7ici ol, 300 bps'e dikkat</td></tr>\n<tr><td class=\"dcell-key\">300\u2013500 bps</td><td class=\"dcell-val\">Y\u00fcksek</td><td class=\"dcell-desc\">Yabanc\u0131 \u00e7\u0131k\u0131\u015f\u0131 ba\u015flar</td><td class=\"dcell-desc\">Stop-loss s\u0131k\u0131la\u015ft\u0131r, d\u00f6viz tut</td></tr>\n<tr><td class=\"dcell-key\">500+ bps</td><td class=\"dcell-val\">Kriz</td><td class=\"dcell-desc\">Derin d\u00fc\u015f\u00fc\u015f, TL sert kay\u0131p</td><td class=\"dcell-desc\">BIST'ten \u00e7\u0131k, alt\u0131n/d\u00f6viz tut</td></tr>\n</tbody></table>\n<p class=\"dnote\">Eyl\u00fcl 2025: 241 bps (dip). Nisan 2025: 372 bps (zirve). Mart 2026: ~260 bps.</p>\n\n<h2 class=\"dh1\">7. Ons Alt\u0131n</h2>\n<h3 class=\"dh2\">Alt\u0131n Giri\u015f Sinyal Tablosu</h3>\n<table class=\"dtable\"><thead><tr><th>G\u00f6sterge kombinasyonu</th><th>Sinyal</th><th>G\u00fc\u00e7</th></tr></thead><tbody>\n<tr><td class=\"dcell-key\">DXY\u2193 + 10Y reel\u2193 + VIX\u2191</td><td class=\"dcell-val\">G\u00fc\u00e7l\u00fc AL</td><td class=\"dcell-desc\">\u2605\u2605\u2605\u2605\u2605 En ideal kombinasyon</td></tr>\n<tr><td class=\"dcell-key\">DXY\u2193 + Fed indirim beklentisi\u2191</td><td class=\"dcell-val\">AL</td><td class=\"dcell-desc\">\u2605\u2605\u2605\u2605</td></tr>\n<tr><td class=\"dcell-key\">VIX 25+ + Jeopolitik kriz</td><td class=\"dcell-val\">K\u0131sa vadeli AL</td><td class=\"dcell-desc\">\u2605\u2605\u2605 Kal\u0131c\u0131 de\u011fil</td></tr>\n<tr><td class=\"dcell-key\">DXY g\u00fc\u00e7l\u00fc\u2191 + 10Y\u2191</td><td class=\"dcell-val\">BEKLE</td><td class=\"dcell-desc\">\u2717 R\u00fczgara kar\u015f\u0131 y\u00fcr\u00fcmek</td></tr>\n<tr><td class=\"dcell-key\">DXY\u2191 + Alt\u0131n da\u2191</td><td class=\"dcell-val\">\u26a0 G\u00dcVEN KR\u0130Z\u0130</td><td class=\"dcell-desc\">Korelasyon k\u0131r\u0131ld\u0131 \u2014 2025 senaryosu</td></tr>\n</tbody></table>\n\n<h2 class=\"dh1\">8. Brent Petrol</h2>\n<p class=\"dpara\">T\u00fcrkiye g\u00fcnde ~1 milyon varil ithal eder. $10 art\u0131\u015f \u2192 cari a\u00e7\u0131k ~1.2 Mrd$ geni\u015fler \u2192 enflasyon +1 puan. Alarm: 90$.</p>\n\n<h3 class=\"dh2\">Brent Seviye \u2192 T\u00fcrkiye</h3>\n<table class=\"dtable\"><thead><tr><th>Brent $</th><th>Cari a\u00e7\u0131k</th><th>TL</th><th>BIST</th></tr></thead><tbody>\n<tr><td class=\"dcell-key\">&lt;60$</td><td class=\"dcell-val\">Daral\u0131r</td><td class=\"dcell-desc\">G\u00f6rece g\u00fc\u00e7l\u00fc</td><td class=\"dcell-desc\">\u2191 En elveri\u015fli</td></tr>\n<tr><td class=\"dcell-key\">60\u201375$</td><td class=\"dcell-val\">Y\u00f6netilebilir</td><td class=\"dcell-desc\">Sakin</td><td class=\"dcell-desc\">\u2192 N\u00f6tr</td></tr>\n<tr><td class=\"dcell-key\">75\u201390$</td><td class=\"dcell-val\">Geni\u015fler</td><td class=\"dcell-desc\">\u2191 Bask\u0131 ba\u015flar</td><td class=\"dcell-desc\">\u2193 Hafif bask\u0131</td></tr>\n<tr><td class=\"dcell-key\">90\u2013100$</td><td class=\"dcell-val\">Ciddi geni\u015fler</td><td class=\"dcell-desc\">\u2191\u2191 De\u011fer kayb\u0131</td><td class=\"dcell-desc\">\u2193\u2193 ALARM</td></tr>\n<tr><td class=\"dcell-key\">100$+</td><td class=\"dcell-val\">Kriz riski</td><td class=\"dcell-desc\">Sert kay\u0131p</td><td class=\"dcell-desc\">\u2193\u2193\u2193 \u00c7\u0131k</td></tr>\n</tbody></table>\n\n<h2 class=\"dh1\">9. USD/TL \u2014 H\u0131za Bak</h2>\n<table class=\"dtable\"><thead><tr><th>Ayl\u0131k de\u011fi\u015fim</th><th>Durum</th><th>Ne anlama gelir?</th><th>Aksiyon</th></tr></thead><tbody>\n<tr><td class=\"dcell-key\">%1\u20132/ay</td><td class=\"dcell-val\">Normal</td><td class=\"dcell-desc\">Kontroll\u00fc deval\u00fcasyon</td><td class=\"dcell-desc\">Panik yok</td></tr>\n<tr><td class=\"dcell-key\">%3\u20135/ay</td><td class=\"dcell-val\">Dikkat</td><td class=\"dcell-desc\">H\u0131z art\u0131yor</td><td class=\"dcell-desc\">CDS ve VIX'e bak</td></tr>\n<tr><td class=\"dcell-key\">%5\u20137/ay</td><td class=\"dcell-val\">Alarm</td><td class=\"dcell-desc\">Panik sat\u0131\u015f\u0131 olabilir</td><td class=\"dcell-desc\">D\u00f6viz/alt\u0131n tut</td></tr>\n<tr><td class=\"dcell-key\">%7+/ay</td><td class=\"dcell-val\">Kriz</td><td class=\"dcell-desc\">2018, 2021 benzeri</td><td class=\"dcell-desc\">BIST'ten \u00e7\u0131k</td></tr>\n</tbody></table>\n\n<h2 class=\"dh1\">10. Bak\u0131r/Alt\u0131n Oran\u0131 (Cu/Au)</h2>\n<p class=\"dpara\">TradingView: COMEX:HG1! / COMEX:GC1! Y\u00fckselince b\u00fcy\u00fcme iyimserli\u011fi, d\u00fc\u015f\u00fcnce resesyon korkusu.</p>\n<table class=\"dtable\"><thead><tr><th>Oran</th><th>B\u00fcy\u00fcme sinyali</th><th>Alt\u0131n etkisi</th><th>BIST/EM</th></tr></thead><tbody>\n<tr><td class=\"dcell-key\">0.0020+</td><td class=\"dcell-val\">G\u00fc\u00e7l\u00fc b\u00fcy\u00fcme</td><td class=\"dcell-desc\">G\u00f6rece zay\u0131f</td><td class=\"dcell-desc\">EM i\u00e7in iyi</td></tr>\n<tr><td class=\"dcell-key\">0.0013\u20130.0020</td><td class=\"dcell-val\">Normal b\u00f6lge</td><td class=\"dcell-desc\">N\u00f6tr</td><td class=\"dcell-desc\">Dengeli</td></tr>\n<tr><td class=\"dcell-key\">0.0008\u20130.0013</td><td class=\"dcell-val\">Yava\u015flama</td><td class=\"dcell-desc\">Destekli</td><td class=\"dcell-desc\">Se\u00e7ici ol</td></tr>\n<tr><td class=\"dcell-key\">&lt;0.0008</td><td class=\"dcell-val\">Resesyon korkusu</td><td class=\"dcell-desc\">G\u00fc\u00e7l\u00fc destek</td><td class=\"dcell-desc\">Savunmac\u0131 pozisyon</td></tr>\n</tbody></table>\n<p class=\"dnote\">G\u00fcncel (Mart 2026): ~0.00077 \u2014 1850'den bu yana en d\u00fc\u015f\u00fck. Tarihi resesyon uyar\u0131s\u0131.</p>\n\n<h2 class=\"dh1\">11. MSCI EM</h2>\n<p class=\"dpara\">24 \u00fclke, ~2.4 trilyon$ pasif para. T\u00fcrkiye a\u011f\u0131rl\u0131\u011f\u0131 ~%1. Y\u0131lda 4 rebalancing: \u015eub, May, A\u011fu, Kas.</p>\n<table class=\"dtable\"><thead><tr><th>MSCI EM</th><th>S&P 500</th><th>BIST beklentisi</th></tr></thead><tbody>\n<tr><td class=\"dcell-key\">Y\u00fckseliyor</td><td class=\"dcell-val\">Y\u00fckseliyor</td><td class=\"dcell-desc\">\u2191\u2191 En iyi giri\u015f ortam\u0131</td></tr>\n<tr><td class=\"dcell-key\">Y\u00fckseliyor</td><td class=\"dcell-val\">Geride kal\u0131yor</td><td class=\"dcell-desc\">\u2191\u2191 EM'e rotasyon var</td></tr>\n<tr><td class=\"dcell-key\">D\u00fc\u015f\u00fcyor</td><td class=\"dcell-val\">Y\u00fckseliyor</td><td class=\"dcell-desc\">\u2193 ABD istisnac\u0131l\u0131\u011f\u0131 \u2014 BIST kat\u0131lamaz</td></tr>\n<tr><td class=\"dcell-key\">D\u00fc\u015f\u00fcyor</td><td class=\"dcell-val\">D\u00fc\u015f\u00fcyor</td><td class=\"dcell-desc\">\u2193\u2193 Ka\u00e7\u0131n</td></tr>\n<tr><td class=\"dcell-key\">Yatay</td><td class=\"dcell-val\">Yatay</td><td class=\"dcell-desc\">Yerel dinamikler belirleyici</td></tr>\n</tbody></table>\n\n<h2 class=\"dh1\">12. TCMB Faiz Kararlar\u0131</h2>\n<p class=\"dpara\">Karar kadar TONUN \u00f6nemli. PPK \u00f6zet metni 5 g\u00fcn sonra yay\u0131nlan\u0131r.</p>\n<table class=\"dtable\"><thead><tr><th>Senaryo</th><th>BIST</th><th>Banka hisseleri</th></tr></thead><tbody>\n<tr><td class=\"dcell-key\">Beklenen indirim geldi</td><td class=\"dcell-val\">\u2192 Zaten fiyatlanm\u0131\u015f</td><td class=\"dcell-desc\">\u2192 N\u00f6tr</td></tr>\n<tr><td class=\"dcell-key\">Beklenenden b\u00fcy\u00fck indirim</td><td class=\"dcell-val\">\u2191\u2191 G\u00fc\u00e7l\u00fc ralli</td><td class=\"dcell-desc\">\u2192 Bask\u0131 (marj daral\u0131r)</td></tr>\n<tr><td class=\"dcell-key\">Beklenen gelmedi (\u015fahin)</td><td class=\"dcell-val\">\u2193 D\u00fc\u015f\u00fc\u015f</td><td class=\"dcell-desc\">\u2191 Pozitif (marj geni\u015fler)</td></tr>\n<tr><td class=\"dcell-key\">Art\u0131\u015f karar\u0131</td><td class=\"dcell-val\">\u2193\u2193 Sert</td><td class=\"dcell-desc\">\u2191\u2191 G\u00fc\u00e7l\u00fc</td></tr>\n</tbody></table>\n<p class=\"dnote\">2026 PPK takvimi: 22 Nisan \u00b7 12 Haziran \u00b7 23 Temmuz \u00b7 17 Eyl\u00fcl \u00b7 5 Kas\u0131m \u00b7 17 Aral\u0131k</p>\n\n<h2 class=\"dh1\">13. Sabah 5 Dakika Kontrol Rutini</h2>\n<p class=\"dlist\">1. VIX \u2014 25 \u00fcst\u00fc ise dikkat modu.</p>\n<p class=\"dlist\">2. TR CDS \u2014 20+ bps hareket varsa nedenini ara\u015ft\u0131r.</p>\n<p class=\"dlist\">3. DXY \u2014 g\u00fc\u00e7leniyor mu zay\u0131fl\u0131yor mu?</p>\n<p class=\"dlist\">4. Ons Alt\u0131n \u2014 DXY ile ayn\u0131 y\u00f6nde mi? Ayn\u0131 y\u00f6ndeyse korelasyon k\u0131r\u0131lm\u0131\u015f.</p>\n<p class=\"dlist\">5. MSCI EM (EEM/VWO) \u2014 y\u00fckseliyor mu d\u00fc\u015f\u00fcyor mu?</p>\n<p class=\"dlist\">6. Brent Petrol \u2014 90$ k\u0131r\u0131ld\u0131 m\u0131? K\u0131r\u0131ld\u0131ysa TL ve enflasyon i\u00e7in alarm.</p>\n<p class=\"dlist\">7. FedWatch \u2014 toplant\u0131 olas\u0131l\u0131\u011f\u0131 d\u00fcnden b\u00fcy\u00fck de\u011fi\u015ftiyse nedenini bul.</p>\n<p class=\"dlist\">8. Cu/Au \u2014 0.0008 alt\u0131nda m\u0131? Savunmac\u0131 pozisyon sinyali.</p>\n`; bu tarihsel y\u0131ll\u0131k ortalaman\u0131n \u00fczerinde. </p>` +\n`<p class=\"dpara\">Complacency tuza\u011f\u0131 \u2014 15'in alt\u0131 \"tehlikesiz\" de\u011fil, aksine uyar\u0131 i\u015fareti. Piyasa kendinden fazla emin oldu\u011funda s\u00fcrpriz riskine a\u00e7\u0131k hale gelir.</p>` +\n`<p class=\"dpara\">T\u00fcrkiye ekonomisinde \u015fu \u015fekilde kullanabiliriz; VIX 30'u ge\u00e7ti\u011finde geli\u015fmekte olan piyasalardan para ka\u00e7\u0131\u015f\u0131 ba\u015flar, TL \u00fczerinde bask\u0131 olu\u015fur ve BIST d\u00fc\u015fer. Bu seviyede yeni pozisyon a\u00e7mak yerine beklemek, VIX'in tekrar 20\u201322 alt\u0131na \u00e7ekilmesini izlemek genellikle daha sa\u011fl\u0131kl\u0131 bir yakla\u015f\u0131md\u0131r.</p>` +\n`<p class=\"dpara\">VIX Y\u00fckselince Ne Olur?</p>` +\n`<p class=\"dnote\">*EM: Emerging Markets / Geli\u015fmekte Olan Piyasalar</p>` +\n`<p class=\"dpara\">VIX Mean Reversion- Kriz Sonras\u0131 Ne Olur?</p>` +\n`<p class=\"dpara\">Mean reversion nedir: VIX'in en \u00f6nemli \u00f6zelliklerinden biri, zaman i\u00e7inde uzun vadeli ortalamas\u0131na d\u00f6nme e\u011filimidir. Bu \u00f6zellik \"mean reversion\" olarak bilinir. Piyasa ne kadar korksa da bu korku kal\u0131c\u0131 olmaz; er ya da ge\u00e7 sakinle\u015fir. VIX tarihsel ortalamas\u0131 15\u201325 aral\u0131\u011f\u0131ndad\u0131r ve a\u015f\u0131r\u0131 spike'lardan sonra bu b\u00f6lgeye geri d\u00f6ner.</p>` +\n`<p class=\"dpara\">Krizler aras\u0131ndaki kritik fark: Her spike ayn\u0131 de\u011fildir. A\u011fustos 2024'te yen carry trade \u00e7\u00f6z\u00fclmesinden kaynaklanan spike'ta VIX 65'e \u00e7\u0131kt\u0131, ama birka\u00e7 hafta i\u00e7inde 20'nin alt\u0131na geriledi. Buna kar\u015f\u0131n 2008 krizinde d\u00fc\u015f\u00fc\u015f aylar s\u00fcrd\u00fc. Aradaki fark \u015fu: makro bozulma varsa VIX uzun s\u00fcre y\u00fcksekte kal\u0131r, sadece duygu/teknik tetikleyici varsa h\u0131zla d\u00fc\u015fer. </p>` +\n`<p class=\"dpara\">Nisan 2025'te tarife a\u00e7\u0131klamalar\u0131n\u0131n ard\u0131ndan VIX 50'yi ge\u00e7ti, ancak bu dramatik art\u0131\u015f k\u0131sa \u00f6m\u00fcrl\u00fc oldu ve endeks zamanla daha tipik seviyelere d\u00f6nd\u00fc.</p>` +\n`<p class=\"dpara\">Yat\u0131r\u0131mc\u0131n\u0131n as\u0131l sorusu: \"VIX d\u00fc\u015f\u00fcnce S&P 500 ne yapar?\" \u2014 Ge\u00e7mi\u015f volatilite spike'lar\u0131na bak\u0131ld\u0131\u011f\u0131nda, piyasan\u0131n yeni bilgiyi sindirmesiyle birlikte volatilitenin genellikle azald\u0131\u011f\u0131 g\u00f6r\u00fcl\u00fcr. Uzun vadeli yat\u0131r\u0131mc\u0131lar i\u00e7in volatilite spike'lar\u0131na ba\u011fl\u0131 d\u00fc\u015f\u00fc\u015fler \u00e7o\u011funlukla panik nedeni de\u011fil, al\u0131m f\u0131rsat\u0131 olarak de\u011ferlendirilmi\u015ftir.</p>` +\n`<p class=\"dpara\">Pratikte en \u00f6nemli kural: VIX spike'\u0131n\u0131n \"h\u0131zl\u0131 m\u0131 yoksa yava\u015f m\u0131\" d\u00fc\u015fece\u011fini anlamak i\u00e7in MOVE endeksine bak\u0131l\u0131r. MOVE da y\u00fcksekse tahvil piyasas\u0131 da gergin demektir. Bu durumda toparlanma yava\u015f olur. MOVE sakinse spike muhtemelen k\u0131sa \u00f6m\u00fcrl\u00fcd\u00fcr ve Faz 3'e h\u0131zl\u0131 ge\u00e7ilir.</p>` +\n`<p class=\"dpara\">VIX-BIST ve TL\u2019ye Aktar\u0131m Mekanizmas\u0131:</p>` +\n`<p class=\"dpara\">VIX ile T\u00fcrkiye'ye y\u00f6nelik uluslararas\u0131 portf\u00f6y ak\u0131\u015flar\u0131 aras\u0131nda ters y\u00f6nl\u00fc bir ili\u015fki bulunuyor. K\u00fcresel risk i\u015ftah\u0131 artt\u0131k\u00e7a T\u00fcrkiye'ye sermaye giri\u015fi art\u0131yor, VIX y\u00fckselince ak\u0131m tersine d\u00f6n\u00fcyor.  Bu teorik bir \u00f6ng\u00f6r\u00fc de\u011fil, veriye dayal\u0131 bir bulgudur.</p>` +\n`<p class=\"dpara\">TL taraf\u0131ndaki asimetri: Ara\u015ft\u0131rma bulgular\u0131, TL'nin de\u011fer kayb\u0131na ili\u015fkin k\u00f6t\u00fc haberin BIST100 getiri volatilitesini iyi haberden \u00e7ok daha fazla art\u0131rd\u0131\u011f\u0131n\u0131 g\u00f6steriyor \u2014 yani k\u00f6t\u00fc haber k\u00f6t\u00fc haberi b\u00fcy\u00fct\u00fcr.  Pratik anlam\u0131 \u015fu: VIX y\u00fckseli\u015fi USD/TL'yi yukar\u0131 iterken bu TL bask\u0131s\u0131 ayr\u0131ca do\u011frudan BIST \u00fczerinde de ek bir a\u015fa\u011f\u0131 bask\u0131 olu\u015fturuyor. \u0130ki etki i\u00e7 i\u00e7e ge\u00e7iyor.</p>` +\n`<p class=\"dpara\">\u00d6zet kural seti olarak: VIX tek ba\u015f\u0131na BIST'i a\u00e7\u0131klamaz. Ama k\u00fcresel \"zemin\" i belirler. VIX d\u00fc\u015f\u00fckken yerel bozukluklar BIST'i a\u015fa\u011f\u0131 \u00e7ekebilir (2025 \u00f6rne\u011fi), VIX y\u00fcksekken ise yerel iyile\u015fmeler bile yabanc\u0131 \u00e7\u0131k\u0131\u015f\u0131n\u0131 durdurmayabilir. Bu y\u00fczden VIX'i her zaman CDS primleri ve TCMB faiz duru\u015fuyla birlikte okumak gerekiyor. Bunlar birbirini ya g\u00fc\u00e7lendiriyor ya da dengeliyor. </p>` +\n`<p class=\"dpara\">2025'te ne de\u011fi\u015fti: BIST 2025'in ilk \u00fc\u00e7 \u00e7eyre\u011finde dolar baz\u0131nda yakla\u015f\u0131k %4.7 de\u011fer kaybetti; MSCI geli\u015fmekte olan piyasalar endeksi %25, Latin Amerika %44 y\u00fckselirken T\u00fcrkiye t\u00fcm b\u00fcy\u00fck k\u00fcresel endekslerin gerisinde kald\u0131. Analistler bunu y\u00fcksek faiz, siyasi geli\u015fmeler ve s\u0131n\u0131rl\u0131 yabanc\u0131 sermaye giri\u015fine ba\u011fl\u0131yor.  Bu tablo VIX'in \u00f6tesinde yerel dinamiklerin ne kadar belirleyici oldu\u011funu g\u00f6steriyor.</p>` +\n`<p class=\"dpara\">Merrill Lynch Option Volatility Estimate (MOVE):  VIX'in tahvil piyasas\u0131 versiyonu. ABD devlet tahvili getirilerinin \u00f6n\u00fcm\u00fczdeki ay i\u00e7inde ne kadar sal\u0131nmas\u0131 beklendi\u011fini g\u00f6sterir. Yani Move ABD tahvillerinin ne kadar oynak oldu\u011funu s\u00f6yler. 2, 5, 10 ve 30 y\u0131ll\u0131k Hazine tahvili opsiyonlar\u0131ndan elde edilen verilerle olu\u015fturulur. Tek bir say\u0131 \u00fcretir \u2014 \u00f6rne\u011fin 100 de\u011feri, tahvil getirilerinin y\u0131ll\u0131k bazda 100 baz puan (1 y\u00fczde puan\u0131) oynayabilece\u011fini ifade eder. MOVE y\u00fckselirken VIX sakinse bu \"gizli stres\" sinyalidir; ikisi birlikte y\u00fckselirse ger\u00e7ek panik var demektir.</p>` +\n`<p class=\"dpara\">VIX\u2019ten en kritik fark\u0131 \u00f6nc\u00fc ve tepkisel olmas\u0131d\u0131r.Mart 2023'teki bankac\u0131l\u0131k sekt\u00f6r\u00fc krizinde MOVE endeksi, VIX'te kar\u015f\u0131l\u0131k gelen hareketlerden birka\u00e7 g\u00fcn \u00f6nce y\u00fckselmeye ba\u015flad\u0131.  Yani tahvil piyasas\u0131 stresi, hisse piyasas\u0131na genellikle \u00f6nc\u00fcl\u00fck eder. MOVE y\u00fckselirken VIX sakinse bu \"gizli stres\" i\u015faretidir. Hisse piyasas\u0131 tehlikeyi hen\u00fcz fiyatlamam\u0131\u015ft\u0131r.</p>` +\n`<p class=\"dpara\">Normal aral\u0131k 55\u2013130'dur. 60'\u0131n alt\u0131 sakin bir tahvil piyasas\u0131na, 120'nin \u00fcstesi ise a\u015f\u0131r\u0131 strese i\u015faret eder. </p>` +\n`<p class=\"dpara\">T\u00fcrkiye ekonomisinde \u015fu \u015fekilde kullanabiliriz; Hazine volatilitesi y\u00fckseldi\u011finde VIX de genellikle artar, ABD dolar\u0131 g\u00fc\u00e7lenir ve alt\u0131n y\u00fckselir; kredi spreadleri de geni\u015fler. .</p>` +\n`<p class=\"dpara\">DXY Yap\u0131s\u0131, Korelasyonlar\u0131 ve Pratik Kullan\u0131m\u0131</p>` +\n`<p class=\"dpara\">DXY'\u0131n yap\u0131s\u0131ndaki kritik n\u00fcans: DXY alt\u0131 para biriminden olu\u015fan a\u011f\u0131rl\u0131kl\u0131 bir endekstir. Euro, yen, sterlin, Kanada dolar\u0131, \u0130sve\u00e7 kronas\u0131 ve \u0130svi\u00e7re frang\u0131. Euro tek ba\u015f\u0131na %57.6 a\u011f\u0131rl\u0131k ta\u015f\u0131r. Bu \u015fu anlama gelir: Avrupa'dan gelen bir haber (se\u00e7im, ECB karar\u0131, b\u00fcy\u00fcme verisi)  ABD'den ba\u011f\u0131ms\u0131z olarak DXY'\u0131 do\u011frudan hareket ettirir. </p>` +\n`<p class=\"dpara\">Alt\u0131n ile ili\u015fkisi: Son on y\u0131lda DXY ile alt\u0131n aras\u0131ndaki korelasyon katsay\u0131s\u0131 yakla\u015f\u0131k -0.7 d\u00fczeyinde seyretmi\u015ftir.  2025'in ilk yar\u0131s\u0131nda dolar endeksi yakla\u015f\u0131k %10.8 geriledi; ayn\u0131 d\u00f6nemde merkez bankalar\u0131n\u0131n dolar de\u011fer kayb\u0131na kar\u015f\u0131 korunma amac\u0131yla alt\u0131n al\u0131mlar\u0131n\u0131 s\u00fcrd\u00fcrmesiyle alt\u0131n yeni rekorlar k\u0131rd\u0131.</p>` +\n`<p class=\"dnote\">*Korelasyon Say\u0131s\u0131: Korelasyon katsay\u0131s\u0131 -1 ile +1 aras\u0131nda bir say\u0131d\u0131r.</p>` +\n`<p class=\"dpara\">\u00dc\u00e7 temel durum var:</p>` +\n`<p class=\"dpara\">+1 \u2192 \u0130kisi her zaman ayn\u0131 y\u00f6nde hareket eder. Biri %5 y\u00fckselirse di\u011feri de %5 y\u00fckselir. M\u00fckemmel uyum.</p>` +\n`<p class=\"dpara\">0 \u2192 \u0130kisi aras\u0131nda hi\u00e7 ili\u015fki yok. Biri ne yaparsa yaps\u0131n di\u011ferini etkilemez. Tamamen ba\u011f\u0131ms\u0131z.</p>` +\n`<p class=\"dpara\">-1 \u2192 \u0130kisi her zaman z\u0131t y\u00f6nde hareket eder. Biri y\u00fckselince di\u011feri d\u00fc\u015fer, biri d\u00fc\u015f\u00fcnce di\u011feri y\u00fckselir. M\u00fckemmel ters uyum.</p>` +\n`<p class=\"dpara\">Peki, -0.7 ne demek? M\u00fckemmel -1 de\u011fil ama ona olduk\u00e7a yak\u0131n. Pratik anlam\u0131 \u015fu: DXY y\u00fckseldi\u011finde alt\u0131n \u00e7o\u011fu zaman d\u00fc\u015fer, DXY d\u00fc\u015ft\u00fc\u011f\u00fcnde alt\u0131n \u00e7o\u011fu zaman y\u00fckselir. \"Her zaman\" de\u011fil, \"zaman\u0131n yakla\u015f\u0131k %70\u201375'inde\" diyebiliriz. Geriye kalan %25\u201330'da ise ikisi birlikte hareket edebilir. Bunu a\u015fa\u011f\u0131daki 2025 \u00f6rne\u011finde g\u00f6rebilirsiniz. Tarife krizinde hem dolar d\u00fc\u015ft\u00fc hem alt\u0131n y\u00fckseldi ama ayn\u0131 zamanda ba\u015fka krizlerde her ikisi de birden y\u00fckselebilir.</p>` +\n`<p class=\"dpara\">\u00d6rneklendirmek gerekirse; Diyelim ki DXY bir ayda %5 y\u00fckseldi. -0.7 korelasyon size \u015funu s\u00f6yler: Alt\u0131n\u0131n b\u00fcy\u00fck ihtimalle d\u00fc\u015fece\u011fini, ama tam olarak ne kadar d\u00fc\u015fece\u011fini garanti etmez. Mekanik bir hesap makinesi de\u011fil, istatistiksel bir e\u011filimdir.</p>` +\n`<p class=\"dpara\">Bu y\u00fczden pratikte \u015f\u00f6yle kullan\u0131l\u0131r: DXY g\u00fc\u00e7l\u00fc y\u00fckseli\u015f trendindeyken alt\u0131n almak \"istatistiklere kar\u015f\u0131 oynamak\" demektir. Kazanabilirsiniz ama olas\u0131l\u0131klar aleyhinizedir. DXY d\u00fc\u015f\u00fc\u015f trendine girerken alt\u0131n almak ise olas\u0131l\u0131klar\u0131 lehinize \u00e7evirir. </p>` +\n`<p class=\"dpara\">2025'te bozulan kural: DXY'n\u0131n geleneksel korelasyonlar\u0131n\u0131n de\u011fi\u015fip de\u011fi\u015fmedi\u011fini anlamak i\u00e7in her zaman \"neden hareket ediyor?\" sorusunu sorman\u0131z gerekiyor. Risk-off pani\u011fi mi, Fed'in \u015fahin tonu mu, yoksa di\u011fer para birimlerinin zay\u0131fl\u0131\u011f\u0131ndan m\u0131 g\u00fc\u00e7leniyor \u2014 her birinin T\u00fcrkiye'ye etkisi farkl\u0131d\u0131r.  2025'te hem hisseler hem dolar birlikte d\u00fc\u015ft\u00fc. Bu ola\u011fand\u0131\u015f\u0131 bir korelasyon ve yat\u0131r\u0131mc\u0131lar\u0131n dolar\u0131n geleneksel g\u00fcvenli liman stat\u00fcs\u00fcne olan g\u00fcvenini sorgulad\u0131\u011f\u0131na i\u015faret ediyor.</p>` +\n`<p class=\"dnote\">*\u015eahin ton: Merkez bankas\u0131n\u0131n \"faizi y\u00fckseltirim veya y\u00fcksek tutar\u0131m\" mesaj\u0131 \u2014 DXY g\u00fc\u00e7lenir, alt\u0131n ve EM bask\u0131 alt\u0131na girer. G\u00fcvercin ton ise bunun tam tersidir.</p>` +\n`<p class=\"dpara\">T\u00fcrkiye ekonomisi i\u00e7in DXY tek ba\u015f\u0131na yeterli de\u011fil ama \u00e7ok g\u00fc\u00e7l\u00fc bir pusula. Alt\u0131n almay\u0131 d\u00fc\u015f\u00fcn\u00fcyorsan\u0131z DXY trend d\u00f6nd\u00fcrmeden girerseniz r\u00fczgara kar\u015f\u0131 y\u00fcr\u00fcrs\u00fcn\u00fcz. BIST i\u00e7in pozisyon a\u00e7may\u0131 d\u00fc\u015f\u00fcn\u00fcyorsan\u0131z DXY'\u0131n d\u00fc\u015f\u00fc\u015f trendinde olmas\u0131 EM i\u00e7in uygun zemin demektir. En pratik kullan\u0131m: DXY + VIX birlikte okunmas\u0131d\u0131r. \u0130kisi ayn\u0131 y\u00f6nde hareket ediyorsa o y\u00f6n \u00e7ok daha g\u00fc\u00e7l\u00fc bir sinyal verir.</p>` +\n`<p class=\"dpara\">A\u00e7\u0131klama:</p>` +\n`<p class=\"dpara\">Fed Funds Futures(FED) Nas\u0131l \u00c7al\u0131\u015f\u0131r ve Nas\u0131l Okunur?</p>` +\n`<p class=\"dpara\">Fed Funds Futures nedir: 30 g\u00fcnl\u00fck Fed Fon vadeli i\u015flem s\u00f6zle\u015fmeleri, k\u0131sa vadeli faiz oran\u0131 riskini y\u00f6netmek i\u00e7in en yayg\u0131n kullan\u0131lan ara\u00e7lardan biridir ve Fed'in para politikas\u0131 seyrine ili\u015fkin piyasan\u0131n kolektif g\u00f6r\u00fc\u015f\u00fcn\u00fc do\u011frudan yans\u0131t\u0131r.</p>` +\n`<p class=\"dpara\">Nas\u0131l Bak\u0131l\u0131r?: https://www.cmegroup.com/markets/interest-rates/cme-fedwatch-tool.html</p>` +\n`<p class=\"dpara\">Sayfaya girince yakla\u015fan FOMC toplant\u0131s\u0131n\u0131 se\u00e7iyorsunuz. Kar\u015f\u0131n\u0131za \u00fc\u00e7 olas\u0131l\u0131k \u00e7\u0131k\u0131yor: faiz de\u011fi\u015fmez, -25 bps indirim, -50 bps indirim. Her birinin y\u00fczde olas\u0131l\u0131\u011f\u0131 yaz\u0131yor.</p>` +\n`<p class=\"dpara\">Panele girece\u011finiz de\u011fer \"faiz indirim olas\u0131l\u0131\u011f\u0131 %\" alan\u0131 i\u00e7in \u015fu yakla\u015fan toplant\u0131daki toplam indirim olas\u0131l\u0131\u011f\u0131 \u2014 yani \"de\u011fi\u015fmez\" d\u0131\u015f\u0131ndaki t\u00fcm indirim senaryolar\u0131n\u0131n toplam\u0131.</p>` +\n`<p class=\"dpara\">Neden bu kadar \u00f6nemli: Fed'in faiz kararlar\u0131 piyasalar\u0131n tamam\u0131n\u0131 etkiler. Hisse, tahvil, d\u00f6viz fark etmez. Y\u00fcksek faiz beklentisi USD'yi g\u00fc\u00e7lendirirken risk varl\u0131klar\u0131n\u0131 bask\u0131 alt\u0131na al\u0131r.  Ama as\u0131l g\u00fc\u00e7 \u015furadan gelir: beklentinin kendisi de\u011fil, beklentinin de\u011fi\u015fmesi piyasalar\u0131 hareket ettirir.</p>` +\n`<p class=\"dpara\">Pratik kullan\u0131m ipucu: Mart 2023'te b\u00f6lgesel bankac\u0131l\u0131k krizi s\u0131ras\u0131nda vadeli i\u015flem fiyatlar\u0131 y\u0131l sonunda %4 faiz beklentisine i\u015faret ediyordu. Kriz yat\u0131\u015ft\u0131\u011f\u0131nda ve enflasyon y\u00fcksek kalmaya devam edince piyasa beklentileri h\u0131zla de\u011fi\u015fti. Y\u0131l sonunda faiz %5.33 oldu. Bu, uzak tarihli tahminlere \u00e7ok g\u00fcvenmemek gerekti\u011fini g\u00f6steriyor.</p>` +\n`<p class=\"dpara\">T\u00fcrkiye Ekonomisinde Nas\u0131l Kullan\u0131l\u0131r?: Her sabah FedWatch'a bir g\u00f6z at\u0131n ve bir \u00f6nceki g\u00fcne k\u0131yasla yakla\u015fan toplant\u0131n\u0131n olas\u0131l\u0131\u011f\u0131 b\u00fcy\u00fck de\u011fi\u015ftiyse nedenini ara\u015ft\u0131r\u0131n. Genellikle a\u00e7\u0131klanan bir enflasyon, istihdam ya da b\u00fcy\u00fcme verisi tetikleyicidir. Bu de\u011fi\u015fimi yakalamak, DXY ve alt\u0131ndaki hareketi \u00f6nceden g\u00f6rmek demektir.</p>` +\n`<p class=\"dpara\">ABD 2 Y\u0131ll\u0131k Tahvil Getirisi Ne S\u00f6yler , Nas\u0131l Okunur?</p>` +\n`<p class=\"dpara\">2Y neden Fed'in aynas\u0131: ABD Hazine getirileri Fed'in faiz art\u0131\u015flar\u0131ndan \u00f6nce y\u00fckselmeye ba\u015flad\u0131. 2022 ba\u015f\u0131ndan itibaren getiriler birbirine yak\u0131nsam\u0131\u015f ve genel olarak ayn\u0131 y\u00f6nde hareket etmi\u015ftir.  2Y tahvil Fed'in kararlar\u0131n\u0131 neredeyse anl\u0131k fiyatlar bir CPI verisi ya da Fed ba\u015fkan\u0131n\u0131n bir c\u00fcmlesi bile 2Y'yi 20\u201330 baz puan oynatabilir.</p>` +\n`<p class=\"dpara\">2025'te ne oldu: Fed faiz indirdik\u00e7e k\u0131sa vadeli getiriler d\u00fc\u015ferken uzun vadeli tahvil getirileri y\u00fcksek kalmaya devam ediyor. E\u011fri dikle\u015fiyor. Bu normal e\u011friye d\u00f6n\u00fc\u015ft\u00fcr. 2024 Eyl\u00fcl\u2013Ekim d\u00f6neminde enflasyon verileri beklentinin \u00fczerinde gelince 2Y getirisi h\u0131zla geri d\u00f6nd\u00fc.  Bu \"neden d\u00fc\u015ft\u00fc\u011f\u00fc\" sorusunu sormay\u0131 ne kadar kritik oldu\u011funu g\u00f6steriyor.</p>` +\n`<p class=\"dpara\">T\u00fcrk yat\u0131r\u0131mc\u0131s\u0131 i\u00e7in en pratik kural: 2Y'yi Fed Funds Futures ile birlikte okuyun. FedWatch'ta indirim olas\u0131l\u0131\u011f\u0131 art\u0131yorsa 2Y d\u00fc\u015fer \u2192 DXY zay\u0131flar \u2192 alt\u0131n y\u00fckselir \u2192 EM'ye para girer \u2192 BIST ve TL i\u00e7in elveri\u015fli zemin olu\u015fur. Zincir \u00e7ok tutarl\u0131 \u00e7al\u0131\u015f\u0131yor. Ama zincirin k\u0131r\u0131ld\u0131\u011f\u0131 an \u2014 yani 2Y d\u00fc\u015fmesine ra\u011fmen DXY g\u00fc\u00e7leniyorsa \u2014 o hareketin nedenini ara\u015ft\u0131rman\u0131z gerekiyor, \u00e7\u00fcnk\u00fc sistemde ba\u015fka bir dinamik devreye girmi\u015f demektir.</p>` +\n`<p class=\"dpara\">ABD 10Y Tahvil Getirisi- Alt\u0131n ve Borsa \u0130li\u015fkisi</p>` +\n`<p class=\"dpara\">10Y'nin alt\u0131nla ili\u015fkisinin \u00f6z\u00fc: PIMCO'nun ara\u015ft\u0131rmas\u0131na g\u00f6re alt\u0131n fiyatlar\u0131ndaki de\u011fi\u015fimlerin b\u00fcy\u00fck b\u00f6l\u00fcm\u00fcn\u00fc a\u00e7\u0131klayan tek fakt\u00f6r reel getiri de\u011fi\u015fimidir. 100 baz puanl\u0131k reel getiri art\u0131\u015f\u0131 tarihsel olarak alt\u0131n fiyat\u0131nda yakla\u015f\u0131k %18 d\u00fc\u015f\u00fc\u015fe yol a\u00e7m\u0131\u015ft\u0131r.  Reel getiri d\u00fc\u015ft\u00fc\u011f\u00fcnde alt\u0131n y\u00fckselir. Bu ili\u015fki enflasyonun neden alt\u0131n\u0131n en iyi dostu, faiz art\u0131\u015flar\u0131n\u0131n ise en k\u00f6t\u00fc d\u00fc\u015fman\u0131 oldu\u011funu a\u00e7\u0131klar. Alt\u0131n ne temett\u00fc ne faiz \u00f6der; reel getiri y\u00fcksekken onu tutman\u0131n f\u0131rsat maliyeti artar. </p>` +\n`<p class=\"dpara\">2025'te kural neden k\u0131r\u0131ld\u0131: Alt\u0131n\u0131n geleneksel ters korelasyonu 2025'te fiilen \u00e7\u00f6kt\u00fc. Metal yakla\u015f\u0131k %42 ralli yaparken 10Y getirisi ~%4.1 civar\u0131nda seyretti. Her ikisi de ayn\u0131 anda y\u00fcksek kald\u0131. Bu durum her iki varl\u0131\u011f\u0131n da mali belirsizli\u011fe ve politika g\u00fcvenilirli\u011fine tepki verdi\u011fini g\u00f6steriyor. Eyl\u00fcl 2024'te Fed faiz indirimine ba\u015flad\u0131ktan hemen sonra 10Y getirisi yakla\u015f\u0131k 115 baz puan y\u00fckseldi \u2014 Fed fonlar\u0131n\u0131n d\u00fc\u015f\u00fcr\u00fcld\u00fc\u011f\u00fc bir ortamda uzun vadeli getirilerin y\u00fckseldi\u011fi 1980/81'den bu yana ilk kez ya\u015fanan \"tahvil piyasas\u0131n\u0131n Fed'e isyan\u0131.\"</p>` +\n`<p class=\"dpara\">En kritik pratik kural: 10Y tek ba\u015f\u0131na yetmez. Her zaman \"neden hareket ediyor?\" sorusunu sorun. Ayn\u0131 10Y y\u00fckseli\u015fi \u00fc\u00e7 farkl\u0131 anlama gelebilir: b\u00fcy\u00fcme iyimserli\u011fi, enflasyon korkusu ya da ABD'ye g\u00fcven kayb\u0131. Her birinin alt\u0131na, borsaya ve BIST'e etkisi bamba\u015fka. Y\u00fckselen uzun vadeli getiriler Fed ba\u011f\u0131ms\u0131zl\u0131\u011f\u0131 ve artan bor\u00e7 y\u00fck\u00fc endi\u015feleriyle ba\u011flant\u0131l\u0131ysa bu durum Hazine bonolar\u0131n\u0131n g\u00fcvenli liman rol\u00fcn\u00fc zay\u0131flat\u0131r ve alt\u0131n\u0131n \u00e7ekicili\u011fini art\u0131r\u0131r.</p>` +\n`<p class=\"dpara\">10Y-2Y Getiri Fark\u0131 (Yieald Curve) Ne Anlama Gelir?</p>` +\n`<p class=\"dpara\">Yield curve neden bu kadar g\u00fcvenilir: Getiri e\u011frisinin e\u011fimi , uzun ve k\u0131sa vadeli faizler aras\u0131ndaki fark , ekonomik b\u00fcy\u00fcmeyi tahmin etmede \u00f6nemli bir g\u00f6sterge olarak \u00f6ne \u00e7\u0131kmaktad\u0131r. Genel kural \u015fudur: ters e\u011fri yakla\u015f\u0131k bir y\u0131l i\u00e7inde resesyona i\u015faret eder ve son sekiz resesyonun hepsinden \u00f6nce ters e\u011fri olu\u015fmu\u015ftur. Bu %87.5'lik do\u011fruluk oran\u0131 onu yat\u0131r\u0131mc\u0131lar\u0131n kullanabilece\u011fi en g\u00fcvenilir \u00f6nc\u00fc g\u00f6stergelerden biri yapmaktad\u0131r.</p>` +\n`<p class=\"dpara\">2022\u20132024 inversiyonu ve \u015fa\u015f\u0131rt\u0131c\u0131 sonu\u00e7: Ekim 2022'den Aral\u0131k 2024'e kadar s\u00fcren bu inversiyon, 45 y\u0131l\u0131n en uzun inversion d\u00f6nemi oldu. Ancak bu uzun s\u00fcre\u00e7 boyunca ekonomi beklenmedik g\u00fc\u00e7 sergiledi. 2023'te GDP %2.9, 2024'\u00fcn ikinci ve \u00fc\u00e7\u00fcnc\u00fc \u00e7eyre\u011finde %3 veya \u00fczerinde b\u00fcy\u00fcd\u00fc. Bu d\u00f6nem, en az 1978'den bu yana tarihin en uzun inversiyonu oldu. Ama dikkat \u00e7ekici bi\u00e7imde resesyon h\u00e2l\u00e2 gelmedi.</p>` +\n`<p class=\"dnote\">*GDP : Abd i\u00e7in Gayri Safi Yurt \u0130\u00e7i Has\u0131lay\u0131 ifade eder.</p>` +\n`<p class=\"dpara\">En kritik n\u00fcans \u2014 dis-inversiyon: E\u011fri inversiyon d\u00f6neminden \u00e7\u0131k\u0131p normalle\u015fmeye ba\u015flad\u0131\u011f\u0131nda resesyon riski azalmaz, tam tersine artar. Resesyonlar \u00e7o\u011funlukla inversiyon bitiminin hemen ard\u0131ndan ba\u015flar. Bu, pek \u00e7ok yat\u0131r\u0131mc\u0131n\u0131n atlad\u0131\u011f\u0131 ama en \u00f6nemli pratik bilgidir.</p>` +\n`<p class=\"dnote\">*Resesyon: \u0130ki \u00e7eyrek \u00fcst \u00fcste ekonominin k\u00fc\u00e7\u00fclmesidir \u2014 yani GDP'nin arka arkaya iki \u00e7eyrekte negatife d\u00f6nmesidir. </p>` +\n`<p class=\"dpara\">T\u00fcrkiye CDS Primleri</p>` +\n`<p class=\"dpara\">CDS'in BIST ile ili\u015fkisi akademik olarak kan\u0131tlanm\u0131\u015f: 2013\u20132024 verilerini inceleyen nedensellik analizine g\u00f6re CDS primlerinden BIST 100 endeksine do\u011fru tek y\u00f6nl\u00fc nedensellik ili\u015fkisi tespit edilmi\u015ftir. Yani CDS \u00f6nc\u00fc g\u00f6stergedir, BIST takip eder. Risk alg\u0131s\u0131n\u0131n azald\u0131\u011f\u0131, CDS oranlar\u0131n\u0131n d\u00fc\u015ft\u00fc\u011f\u00fc d\u00f6nemlerde BIST 100 endeksi y\u00fckseliyor. BIST'in risk alg\u0131s\u0131yla bu kadar paralel hareket etmesinde borsadaki yabanc\u0131 yat\u0131r\u0131mc\u0131 pay\u0131n\u0131n y\u00fcksekli\u011fi de belirleyici.</p>` +\n`<p class=\"dpara\">VIX ile otomatik ba\u011flant\u0131s\u0131: VIX gibi k\u00fcresel volatilite g\u00f6stergeleri ile geli\u015fmekte olan \u00fclke CDS'leri aras\u0131nda y\u00fcksek korelasyon vard\u0131r. VIX'in 20'nin \u00fczerine \u00e7\u0131kmas\u0131 T\u00fcrkiye gibi \u00fclkelerin CDS primlerinde otomatik art\u0131\u015fa yol a\u00e7ar. Fed'in faiz art\u0131r\u0131m d\u00f6ng\u00fcleri ise T\u00fcrkiye CDS'inde ortalama 100\u2013150 baz puan art\u0131\u015fa neden olmaktad\u0131r. </p>` +\n`<p class=\"dpara\">2025'te ya\u015fanan somut \u00f6rnekler: Mart 2025'te siyasi geli\u015fmelerin etkisiyle CDS haftada 66 baz puan artarak 328 bps'e ula\u015ft\u0131 \u2014 Mart 2024 yerel se\u00e7imlerinden bu yana en y\u00fcksek seviye.  Ard\u0131ndan Nisan 2025'te tarife kriziyle birlikte 372 baz puana \u00e7\u0131karak Kas\u0131m 2023'ten bu yana en y\u00fcksek seviyeyi g\u00f6rd\u00fc.  Sonras\u0131nda ise enflasyonun d\u00fc\u015fmesi ve ekonomik istikrar\u0131n g\u00fc\u00e7lenmesiyle birlikte Eyl\u00fcl 2025'te 241 baz puana inerek \u015eubat 2020'den bu yana en d\u00fc\u015f\u00fck seviyeye geriledi; o hafta BIST de yakla\u015f\u0131k %8 y\u00fckseli\u015f g\u00f6sterdi.</p>` +\n`<p class=\"dpara\">Tek c\u00fcmlelik pratik kural: CDS d\u00fc\u015fmeden s\u00fcrd\u00fcr\u00fclebilir BIST rallisi \u00e7ok zordur \u2014 CDS'i BIST'in \"izin belgesi\" gibi d\u00fc\u015f\u00fcnebilirsiniz.</p>` +\n`<p class=\"dpara\">ONS Alt\u0131n Yat\u0131r\u0131m Kararlar\u0131nda Nas\u0131l Kullan\u0131l\u0131r? </p>` +\n`<p class=\"dpara\">TL yat\u0131r\u0131mc\u0131s\u0131 i\u00e7in en pratik \u00f6zet: Alt\u0131n sizin i\u00e7in di\u011fer \u00fclke yat\u0131r\u0131mc\u0131lar\u0131ndan farkl\u0131 \u00e7al\u0131\u015f\u0131r \u2014 hem k\u00fcresel risklere hem kur riskine kar\u015f\u0131 \u00e7ift katmanl\u0131 koruma sa\u011flar. VIX y\u00fckseli\u015fi, DXY zay\u0131flamas\u0131 ve FedWatch'ta indirim olas\u0131l\u0131\u011f\u0131n\u0131n artmas\u0131 ayn\u0131 anda ger\u00e7ekle\u015fiyorsa bu \u00fc\u00e7\u00fcn\u00fcn kesi\u015fti\u011fi nokta alt\u0131n i\u00e7in en g\u00fc\u00e7l\u00fc giri\u015f sinyalidir.</p>` +\n`<p class=\"dpara\">Brent Petrol T\u00fcrkiye \u0130\u00e7in Neden Kritik ?</p>` +\n`<p class=\"dpara\">Neden bu kadar \u00f6nemli \u2014 rakamlarla: T\u00fcrkiye'nin ham petrol \u00fcretimi g\u00fcnde yakla\u015f\u0131k 127.000 varildir. Buna kar\u015f\u0131n \u00fclke g\u00fcnde yakla\u015f\u0131k 1 milyon varil ham petrol ve rafine \u00fcr\u00fcn ithal etmektedir. Bu ithalat\u0131n %56.4'\u00fc Rusya, %16's\u0131 Irak ve %10'u Kazakistan'dan kar\u015f\u0131lanmaktad\u0131r.  Yani T\u00fcrkiye, t\u00fcketti\u011fi petrol\u00fcn ezici \u00e7o\u011funlu\u011funu d\u0131\u015far\u0131dan almak zorunda.</p>` +\n`<p class=\"dpara\">Fiyat d\u00fc\u015f\u00fc\u015f\u00fc nas\u0131l rahatlama sa\u011fl\u0131yor: Brent'in 80'den yakla\u015f\u0131k $60'a gerilemesi T\u00fcrkiye'nin bu \u00fcr\u00fcnlere harcad\u0131\u011f\u0131 d\u00f6vizi azaltarak cari a\u00e7\u0131\u011f\u0131n daralmas\u0131na katk\u0131 sa\u011flayacak. H\u00fck\u00fcmetin orta vadeli program\u0131 2025 i\u00e7in 28,6 Mrd cari a\u00e7\u0131k \u00f6ng\u00f6r\u00fcyordu; ancak petrol d\u00fc\u015f\u00fck seyrederse bu rakam\u0131n 20 Mrd$'a gerileyebilece\u011fi tahmin ediliyor.</p>` +\n`<p class=\"dpara\">Enflasyona do\u011frudan etkisi: TCMB'nin Bayes VAR modeline g\u00f6re petrol fiyatlar\u0131nda %10'luk art\u0131\u015f, t\u00fcketici enflasyonunu yakla\u015f\u0131k 1 puan art\u0131r\u0131yor. Etkinin yakla\u015f\u0131k yar\u0131s\u0131 ilk \u00e7eyrekte ortaya \u00e7\u0131k\u0131yor ve bir y\u0131l sonunda toplam etki yakla\u015f\u0131k 0.8 puana ula\u015f\u0131yor.</p>` +\n`<p class=\"dpara\">\u015eu anki kritik durum: Ortado\u011fu sava\u015f\u0131 tarihi bir arz \u015foku yarat\u0131yor ve fiyatlar\u0131 yukar\u0131 itiyor; Brent $100'\u0131 a\u015fmak \u00fczere.  J.P. Morgan, ABD'nin \u0130ran'a y\u00f6nelik askeri harek\u00e2t yapmas\u0131 halinde bunu petrol \u00fcretim ve ihracat altyap\u0131s\u0131n\u0131 hedef almaktan ka\u00e7\u0131nan, s\u0131n\u0131rl\u0131 kapsaml\u0131 bir operasyon olarak \u00f6ng\u00f6r\u00fcyor. Bu nedenle kal\u0131c\u0131 arz kesintisi beklenmiyor. Ancak 1979 \u0130ran Devrimi'nden bu yana rejim de\u011fi\u015fikliklerinin petrol fiyatlar\u0131 \u00fczerinde nas\u0131l kal\u0131c\u0131 etkiler b\u0131rakt\u0131\u011f\u0131 g\u00f6z \u00f6n\u00fcnde bulunduruldu\u011funda, tarihin bizi uyard\u0131\u011f\u0131 net.</p>` +\n`<p class=\"dpara\">Tek c\u00fcmlelik \u00f6zet: Brent petrol T\u00fcrkiye i\u00e7in \"d\u0131\u015far\u0131dan gelen enflasyon ve cari a\u00e7\u0131k vergisi\" gibi \u00e7al\u0131\u015f\u0131r \u2014 y\u00fckselince TL, enflasyon ve BIST ayn\u0131 anda bask\u0131 alt\u0131na girer; d\u00fc\u015f\u00fcnce \u00fc\u00e7\u00fc birden nefes al\u0131r.</p>` +\n`<p class=\"dpara\">Neden bu kadar \u00f6nemli \u2014 rakamlarla: T\u00fcrkiye'nin ham petrol \u00fcretimi g\u00fcnde yakla\u015f\u0131k 127.000 varildir. Buna kar\u015f\u0131n \u00fclke g\u00fcnde yakla\u015f\u0131k 1 milyon varil ham petrol ve rafine \u00fcr\u00fcn ithal etmektedir. Bu ithalat\u0131n %56.4'\u00fc Rusya, %16's\u0131 Irak ve %10'u Kazakistan'dan kar\u015f\u0131lanmaktad\u0131r. Yani T\u00fcrkiye, t\u00fcketti\u011fi petrol\u00fcn ezici \u00e7o\u011funlu\u011funu d\u0131\u015far\u0131dan almak zorunda.</p>` +\n`<p class=\"dpara\">Tek c\u00fcmlelik \u00f6zet: Brent petrol T\u00fcrkiye i\u00e7in \"d\u0131\u015far\u0131dan gelen enflasyon ve cari a\u00e7\u0131k vergisi\" gibi \u00e7al\u0131\u015f\u0131r. Y\u00fckselince TL, enflasyon ve BIST ayn\u0131 anda bask\u0131 alt\u0131na girer; d\u00fc\u015f\u00fcnce \u00fc\u00e7\u00fc birden nefes al\u0131r.</p>` +\n`<p class=\"dpara\">USD/TL Yat\u0131r\u0131m Kararlar\u0131nda Nas\u0131l A\u011f\u0131rl\u0131kland\u0131r\u0131l\u0131r?</p>` +\n`<p class=\"dpara\">USD/TL'ye bakarken seviyeyi de\u011fil h\u0131z\u0131 izlenmeli. Ayl\u0131k %1\u20132 de\u011fer kayb\u0131 fiyatlanm\u0131\u015f ve normaldir. Pani\u011fe gerek yok. Ayl\u0131k %5\u20137+ de\u011fer kayb\u0131 kriz sinyalidir, CDS ve VIX'e hemen bak\u0131n. Bu ayr\u0131m\u0131 yapamazsan\u0131z her TL hareketi sizi yanl\u0131\u015f karara iter. \u00d6ng\u00f6r\u00fclemeyen olaylar piyasalar\u0131 her zaman s\u00fcrpriz yapabilir; ge\u00e7mi\u015f performans gelecekteki sonu\u00e7lar\u0131n g\u00fcvenilir g\u00f6stergesi de\u011fildir.</p>` +\n`<p class=\"dpara\">EUR/TL ve EUR/USD Birlikte Nas\u0131l Okunur?</p>` +\n`<p class=\"dpara\">Matematiksel ger\u00e7ek: EUR/TL = EUR/USD \u00d7 USD/TL. Bu basit form\u00fcl \u00e7ok \u00f6nemli bir ayr\u0131m\u0131 sa\u011flar: EUR/TL y\u00fckseldi\u011finde \"euro mu g\u00fc\u00e7lendi yoksa TL mi de\u011fer mi kaybetti?\" sorusunu EUR/USD'e bakarak saniyeler i\u00e7inde cevaplayabilirsiniz.</p>` +\n`<p class=\"dpara\">En pratik \u00f6zet: EUR/TL'yi USD/TL'den soyutlayarak bakarsan\u0131z yanl\u0131\u015f sinyal al\u0131rs\u0131n\u0131z. \u0130kisini her zaman birlikte okuyun: USD/TL sakinken EUR/TL y\u00fckseliyorsa sorun Avrupa'da; EUR/TL ve USD/TL ayn\u0131 anda y\u00fckseliyorsa sorun TL'de. Bu ayr\u0131m hem kur hedge stratejinizi hem BIST'teki sekt\u00f6r se\u00e7iminizi do\u011frudan etkiler.</p>` +\n`<p class=\"dpara\">Bak\u0131r/ Alt\u0131n Oran\u0131 (B\u00fcy\u00fcme Beklentisinin Termometresi)</p>` +\n`<p class=\"dpara\">Neden \"Dr. Copper\" deniyor: Bak\u0131r, in\u015faat, \u00fcretim, elektrik altyap\u0131s\u0131 ve ye\u015fil teknolojilerde kullan\u0131l\u0131r. Bak\u0131r fiyatlar\u0131ndaki y\u00fckseli\u015f \u00e7o\u011funlukla artan talebi yans\u0131t\u0131r ve ekonomik b\u00fcy\u00fcmeye i\u015faret eder. \"Doktor\" lakab\u0131, ekonomiyi \u00f6nceden te\u015fhis etme becerisinden geliyor.</p>` +\n`<p class=\"dpara\">\u015eu anki tarihi sinyal: Bug\u00fcnk\u00fc(17.03.2026) bak\u0131r/alt\u0131n oran\u0131 0.00100 seviyesinde. Ocak 2026'daki 0.00234 zirvesinden ve Nisan 2025'teki 0.00141 seviyesinden belirgin geriledi. Bu d\u00fc\u015f\u00fc\u015f zay\u0131flayan sanayi talebine i\u015faret ediyor; oran kritik 0.00100 e\u015fi\u011finin alt\u0131na inerek ekonomik daralma korkular\u0131n\u0131n artt\u0131\u011f\u0131n\u0131 g\u00f6steriyor.  Mevcut okumalar yakla\u015f\u0131k 0.00077'de \u2014 baz\u0131 \u00f6l\u00e7\u00fcmlere g\u00f6re 1850'den bu yana en d\u00fc\u015f\u00fck nokta. Ba\u011flam a\u00e7\u0131s\u0131ndan bu 2008 finansal krizini k\u00fc\u00e7\u00fck bir dalgalanmaya benzetiyor. Bak\u0131r \u00e7\u00f6km\u00fcyor aksine bu y\u0131l yakla\u015f\u0131k %10 y\u00fckseldi. Sorun alt\u0131n\u0131n adeta tutu\u015fmas\u0131: 2025'te %30'un \u00fczerinde y\u00fckseldi. </p>` +\n`<p class=\"dpara\">10Y tahvil ba\u011flant\u0131s\u0131: Bak\u0131r/alt\u0131n oran\u0131 10 y\u0131ll\u0131k Hazine getirileriyle yakla\u015f\u0131k 0.85 korelasyonda hareket ediyor ve faiz oranlar\u0131 ile ekonomik ko\u015fullar i\u00e7in \u00f6nc\u00fc g\u00f6sterge i\u015flevi g\u00f6r\u00fcyor. Cu/Au bunu 3\u20136 ay \u00f6nceden g\u00f6rmenizi sa\u011flar.</p>` +\n`<p class=\"dpara\">Nas\u0131l Bak\u0131l\u0131r?:  TradingView'de COMEX:HG1! / COMEX:GC1! veya HG1!/GC1! yaz\u0131p aratmak yeterli.</p>` +\n`<p class=\"dpara\">Referans seviyeler hat\u0131rlatmas\u0131:</p>` +\n`<p class=\"dpara\">0.0020+ \u2192 g\u00fc\u00e7l\u00fc b\u00fcy\u00fcme beklentisi</p>` +\n`<p class=\"dpara\">0.0013\u20130.0020 \u2192 normal b\u00f6lge</p>` +\n`<p class=\"dpara\">0.0008\u20130.0013 \u2192 yava\u015flama sinyali</p>` +\n`<p class=\"dpara\">0.0008 alt\u0131 \u2192 resesyon korkusu</p>` +\n`<p class=\"dpara\">BIST100 ve BIST30 Aras\u0131ndaki Fark\u0131 Nas\u0131l Kullan\u0131lmal\u0131?</p>` +\n`<p class=\"dpara\">Temel yap\u0131:</p>` +\n`<p class=\"dpara\">BIST 100, piyasa de\u011feri ve i\u015flem hacmine g\u00f6re se\u00e7ilen en b\u00fcy\u00fck 100 \u015firketi i\u00e7erir. BIST 30 ise bunlar\u0131n en likit, en b\u00fcy\u00fck 30'udur.  BIST 100'\u00fcn i\u00e7inde bir alt k\u00fcme. Yani BIST 30 her zaman BIST 100'\u00fcn par\u00e7as\u0131d\u0131r, tersi de\u011fil.</p>` +\n`<p class=\"dpara\">\u0130kisi aras\u0131ndaki pratik fark:</p>` +\n`<p class=\"dpara\">BIST 30, bankalar ve holding a\u011f\u0131rl\u0131kl\u0131d\u0131r \u2014 Garanti, \u0130\u015f Bankas\u0131, Akbank, Yap\u0131 Kredi, Ko\u00e7 Holding, Sabanc\u0131 gibi isimler endeksin b\u00fcy\u00fck b\u00f6l\u00fcm\u00fcn\u00fc olu\u015fturur. Bu \u015firketler yabanc\u0131 yat\u0131r\u0131mc\u0131n\u0131n \u00f6nce girip \u00f6nce \u00e7\u0131kt\u0131\u011f\u0131 yerdir. Bu y\u00fczden BIST 30, k\u00fcresel risk i\u015ftah\u0131na (VIX, DXY, CDS) \u00e7ok daha h\u0131zl\u0131 tepki verir.</p>` +\n`<p class=\"dpara\">BIST 100 ise sanayi, perakende, in\u015faat, teknoloji gibi daha geni\u015f sekt\u00f6rleri kapsar. Yerel dinamiklere \u2014 TCMB faizi, i\u00e7 t\u00fcketim, enflasyon \u2014 daha duyarl\u0131d\u0131r.</p>` +\n`<p class=\"dpara\">Nas\u0131l kullan\u0131rs\u0131n\u0131z:</p>` +\n`<p class=\"dpara\">VIX y\u00fckselince veya CDS geni\u015fleyince BIST 30 \u00f6nce d\u00fc\u015fer, BIST 100 biraz geride kal\u0131r. \u0130kisi aras\u0131ndaki fark a\u00e7\u0131l\u0131yorsa yabanc\u0131 BIST 30'dan \u00e7\u0131k\u0131yor demektir. Bu erken uyar\u0131 sinyali olarak kullan\u0131labilir.</p>` +\n`<p class=\"dpara\">Tersine, risk i\u015ftah\u0131 a\u00e7\u0131ld\u0131\u011f\u0131nda yabanc\u0131 \u00f6nce BIST 30'a girer \u2014 bu toparlanman\u0131n ilk i\u015faretidir. BIST 30 y\u00fckselirken BIST 100 yataysa toparlanma hen\u00fcz geni\u015flemiyor, sadece b\u00fcy\u00fck \u015firketler al\u0131n\u0131yor demektir.</p>` +\n`<p class=\"dpara\">Tek c\u00fcmlelik kural: BIST 30 k\u00fcresel havay\u0131, BIST 100 yerel havay\u0131 daha iyi yans\u0131t\u0131r. \u0130kisini birlikte izlenemli. Ayr\u0131\u015fma oldu\u011funda nedeni sormak sizi bir ad\u0131m \u00f6ne ta\u015f\u0131r.</p>` +\n`<p class=\"dpara\">S&P500 ile BIST Kolerasyon, Ayr\u0131\u015fma ve Pratik Kullan\u0131m\u0131</p>` +\n`<p class=\"dpara\">Korelasyonun en kritik \u00f6zelli\u011fi \u2014 krizde g\u00fc\u00e7lenir, rallide bozulur: S&P 500 hisse senetleri aras\u0131ndaki korelasyon 2025'te en d\u00fc\u015f\u00fck \u00fc\u00e7\u00fcnc\u00fc okumay\u0131 verdi. Yani piyasa i\u00e7inde b\u00fcy\u00fck ayr\u0131\u015fma var. VIX Nisan'da 52'yi a\u015farken implied dispersion t\u00fcm zamanlar\u0131n rekorunu k\u0131rd\u0131.  Bu BIST i\u00e7in \u015funu s\u00f6yler: panik d\u00f6neminde her \u015fey birlikte d\u00fc\u015fer, sakin d\u00f6nemde ise yerel hikayeler belirleyici olur.</p>` +\n`<p class=\"dpara\">2025'teki b\u00fcy\u00fck ayr\u0131\u015fma: Piyasalar 2025'te \"her \u015feyin rallisi\"ni ya\u015fad\u0131: alt\u0131n +%26, geli\u015fmekte olan piyasalar +%23, S&P 500 +%16 y\u00fckseldi. Dolar yakla\u015f\u0131k %8 geriledi \u2014 ABD b\u00fcy\u00fcme beklentilerinin yumu\u015famas\u0131, faiz farklar\u0131n\u0131n daralmas\u0131 ve yurt d\u0131\u015f\u0131nda g\u00fc\u00e7lenen ekonomik aktivite yans\u0131d\u0131. Ama BIST bu tablodan nasibini almad\u0131. Dolar baz\u0131nda -%4.7 ile t\u00fcm b\u00fcy\u00fck EM'lerin gerisinde kald\u0131.</p>` +\n`<p class=\"dpara\">Uzun vade perspektifi: 1998 sonundan bu yana S&P 500 y\u0131ll\u0131k bazda %7.55 getiri sa\u011flarken geli\u015fmekte olan piyasalar %7.83 getirdi. Yat\u0131r\u0131mc\u0131lar EM'de tarihsel olarak cazip performansa ra\u011fmen EM'i h\u00e2l\u00e2 eksik a\u011f\u0131rl\u0131kl\u0131 tutuyor ve 2024 itibar\u0131yla pozisyonlar\u0131n\u0131 hafifletmeye devam ediyor. </p>` +\n`<p class=\"dnote\">*Implied \u2014 \"ima edilen, fiyatlanan\" demektir. Opsiyon fiyatlar\u0131ndan hesaplanan, piyasan\u0131n beklentisini yans\u0131tan bir de\u011fer. VIX da \"implied volatility\" yani ima edilen volatilitedir \u2014 geriye d\u00f6n\u00fck de\u011fil, ileriye d\u00f6n\u00fck beklenti.</p>` +\n`<p class=\"dpara\">Dispersion \u2014 \"da\u011f\u0131l\u0131m, sa\u00e7\u0131lma\" demektir. Hisse senetlerinin birbirinden ne kadar farkl\u0131 hareket etti\u011fini \u00f6l\u00e7er.</p>` +\n`<p class=\"dpara\">Birle\u015fince ne anlama gelir:Piyasadaki hisselerin gelecekte ne kadar farkl\u0131 y\u00f6nlerde hareket edece\u011fine dair beklenti. Y\u00fcksek implied dispersion \u015fu demektir: \"Piyasa toplamda sakin g\u00f6r\u00fcnebilir ama i\u00e7indeki hisseler birbirinden \u00e7ok farkl\u0131 hareket edecek \u2014 baz\u0131lar\u0131 \u00e7ok y\u00fckselecek, baz\u0131lar\u0131 \u00e7ok d\u00fc\u015fecek.\"</p>` +\n`<p class=\"dpara\">VIX ile fark\u0131 nerede:VIX t\u00fcm piyasan\u0131n toplam volatilitesini \u00f6l\u00e7er. Implied dispersion ise bireysel hisselerin birbirinden ne kadar ayr\u0131\u015faca\u011f\u0131n\u0131 \u00f6l\u00e7er.</p>` +\n`<p class=\"dpara\">Bunu \u015f\u00f6yle d\u00fc\u015f\u00fcn\u00fcn: bir s\u0131n\u0131fta 30 \u00f6\u011frenci var. VIX s\u0131n\u0131f\u0131n ortalama notunun ne kadar oynad\u0131\u011f\u0131n\u0131 s\u00f6yler. Implied dispersion ise \u00f6\u011frencilerin notlar\u0131n\u0131n birbirinden ne kadar farkl\u0131la\u015faca\u011f\u0131n\u0131 s\u00f6yler.</p>` +\n`<p class=\"dpara\">MSCI Geli\u015fmekte Olan Piyasalar</p>` +\n`<p class=\"dpara\">MSCI EM'in yap\u0131s\u0131: MSCI EM, 24 geli\u015fmekte olan \u00fclkeyi kapsar ve her \u00fclkedeki yat\u0131r\u0131labilir piyasan\u0131n yakla\u015f\u0131k %99'unu temsil eder. T\u00fcrkiye bu 24 \u00fclke aras\u0131ndad\u0131r. T\u00fcrkiye'nin mevcut a\u011f\u0131rl\u0131\u011f\u0131 yakla\u015f\u0131k %1. Bu rakam 2011\u20132014 d\u00f6nemindeki %3.5 zirvenin \u00e7ok alt\u0131nda.</p>` +\n`<p class=\"dpara\">2025'in kritik dersi: 2025 y\u0131l\u0131nda MSCI EM %33.57 getiri sa\u011flad\u0131. S&P 500'\u00fcn %22.34'\u00fcn\u00fc ve MSCI World'\u00fcn %21.09'unu belirgin \u015fekilde geride b\u0131rakt\u0131. Ama BIST bu tablonun tam d\u0131\u015f\u0131nda kald\u0131, dolar baz\u0131nda -%4.7 ile t\u00fcm b\u00fcy\u00fck EM endekslerinin gerisinde kald\u0131.</p>` +\n`<p class=\"dpara\">Pasif para mekanizmas\u0131: MSCI EM'i izleyen ETF ve fonlarda yakla\u015f\u0131k 2.4 trilyon dolar varl\u0131k var. T\u00fcrkiye'nin %1 a\u011f\u0131rl\u0131\u011f\u0131 yakla\u015f\u0131k 24 milyar dolarl\u0131k pasif paran\u0131n T\u00fcrkiye'ye kilitli oldu\u011fu anlam\u0131na gelir. MSCI her \u00e7eyrekte g\u00fcncelleme yapt\u0131\u011f\u0131nda bu para otomatik akar veya \u00e7\u0131kar. Fon y\u00f6neticisi karar vermez. MSCI, 2026 y\u0131l\u0131nda da endeks kapsam\u0131na yeni \u00fclkeler ekleyerek g\u00fcncellemeye devam ediyor. Rebalancing tarihlerini (\u015eubat, May\u0131s, A\u011fustos, Kas\u0131m) takviminize ekleyin.</p>` +\n`<p class=\"dpara\">MSCI her y\u0131l d\u00f6rt kez endeks bile\u015fenlerini g\u00fcnceller \u2014 buna rebalancing denir. Tarihler her \u00e7eyre\u011fin sonunda a\u00e7\u0131klan\u0131r, y\u00fcr\u00fcrl\u00fck genellikle ay sonunda olur. MSCI'\u0131n kendi sitesinde msci.com/index-announcements adresinde her g\u00fcncelleme \u00f6ncesinde duyurulur. Dikkat etmeniz gereken \u015fey \u015fu: bir MSCI haberi \u00e7\u0131kt\u0131\u011f\u0131nda, mesela \"T\u00fcrkiye a\u011f\u0131rl\u0131\u011f\u0131 art\u0131r\u0131ld\u0131\" veya \"azalt\u0131ld\u0131\" duyurusu geldi\u011finde, bu haberin BIST \u00fczerindeki etkisini anlayabilmek. Art\u0131r\u0131m haberi yabanc\u0131 al\u0131m\u0131 demektir, azalt\u0131m haberi mekanik sat\u0131\u015f demektir. G\u00fcnl\u00fck rutininize eklemeniz gereken tek \u015fey: her Kas\u0131m ay\u0131nda MSCI'\u0131n y\u0131ll\u0131k g\u00fcncellemesini bloomberg.com veya Reuters \u00fczerinden takip etmek yeterli. Di\u011fer \u00e7eyrekler genellikle k\u00fc\u00e7\u00fck de\u011fi\u015fiklikler i\u00e7erir ve b\u00fcy\u00fck etki yaratmaz.</p>` +\n`<p class=\"dpara\">Tek c\u00fcmlelik pratik kural: MSCI EM d\u00fc\u015f\u00fcyorsa BIST'e girme. Gerekli ko\u015ful sa\u011flanmam\u0131\u015f. MSCI EM y\u00fckseliyorsa BIST i\u00e7in zemin olu\u015fuyor ama bu tek ba\u015f\u0131na yetmez. CDS, TCMB ve siyasi ortam\u0131 da onaylamas\u0131 gerekiyor. \u0130kisi birlikte ye\u015fil \u0131\u015f\u0131k verdi\u011finde en g\u00fc\u00e7l\u00fc giri\u015f sinyali olu\u015fur.</p>` +\n`<p class=\"dpara\">TCMB Faiz Karar\u0131  ve BIST (Mekanizma, Sekt\u00f6rler)</p>` +\n`<p class=\"dpara\">En kritik pratik kural: TCMB karar\u0131ndan \u00e7ok karar\u0131n tonu \u00f6nemlidir. \"Faiz indirdik ama enflasyon riski devam ediyor, dikkatli olaca\u011f\u0131z\" ile \"enflasyon g\u00fcven verici \u015fekilde d\u00fc\u015f\u00fcyor, indirim d\u00f6ng\u00fcs\u00fc devam edecek\" tamamen farkl\u0131 BIST tepkilerine yol a\u00e7ar. Karar kadar PPK metnini okuyun \u2014 be\u015f g\u00fcn sonra yay\u0131nlanan \u00f6zet metinde oylar\u0131n da\u011f\u0131l\u0131m\u0131na bak\u0131n.</p>` +\n`<p class=\"dpara\">G\u00f6sterge Tahvil Nedir \u2014 Neden T\u00fcrkiye'de 2 y\u0131ll\u0131k:</p>` +\n`<p class=\"dpara\">T\u00fcrkiye gibi enflasyon ve faizlerin de\u011fi\u015fken, risk alg\u0131s\u0131n\u0131n y\u00fcksek oldu\u011fu ekonomilerde yat\u0131r\u0131mc\u0131lar 10 y\u0131l gibi uzun vadeli risk \u00fcstlenmek istemedikleri i\u00e7in T\u00fcrkiye'de vadesine 2 y\u0131l kalan, ikincil piyasada en \u00e7ok i\u015flem g\u00f6ren ve likiditesi en y\u00fcksek olan devlet tahvili g\u00f6sterge tahvildir. ABD'de g\u00f6sterge 10 y\u0131ll\u0131k \u2014 T\u00fcrkiye'de 2 y\u0131ll\u0131k. Fark buradan geliyor.</p>` +\n`<p class=\"dpara\">BIST ile ili\u015fkisi:</p>` +\n`<p class=\"dpara\">G\u00f6sterge tahvil faizi d\u00fc\u015f\u00fcnce iki \u015fey olur: birincisi, mevduat ve tahvil alternatifi zay\u0131flad\u0131\u011f\u0131 i\u00e7in yat\u0131r\u0131mc\u0131 BIST'e y\u00f6nelir. \u0130kincisi, \u015firketlerin iskonto oran\u0131 d\u00fc\u015ft\u00fc\u011f\u00fc i\u00e7in hisse de\u011ferlemeleri y\u00fckselir. Tahvil faizi y\u00fckselince tam tersi \u2014 \"risksiz getiri\" cazip hale gelince BIST sat\u0131l\u0131r.</p>` +\n`<p class=\"dpara\">Nas\u0131l takip edilir:</p>` +\n`<p class=\"dpara\">BloombergHT'de \"g\u00f6sterge tahvil\" veya TradingView'de TVC:TR2Y sembol\u00fcyle \u00fccretsiz ger\u00e7ek zamanl\u0131 takip m\u00fcmk\u00fcn. T\u00fcrkiye 10Y tahvil getirisi de Mart 2026'da hareketli seyrediyor \u2014 ge\u00e7ti\u011fimiz ay getiri 4.37 puan art\u0131\u015f kaydetti. Sabah rutininizde hem 2Y g\u00f6sterge hem 10Y tahvile bakman\u0131z yararl\u0131 \u2014 ikisi aras\u0131ndaki fark T\u00fcrkiye'nin kendi yield curve'\u00fcn\u00fc g\u00f6sterir.</p>` +\n`<p class=\"dpara\">Tek c\u00fcmleyle pratik kural: G\u00f6sterge tahvil faizi TCMB'yi takip eder ama bazen \u00f6nc\u00fcl\u00fck de eder \u2014 piyasa TCMB'den \u00f6nce indirim bekliyorsa tahvil faizi d\u00fc\u015fmeye ba\u015flar. Bu d\u00fc\u015f\u00fc\u015f BIST i\u00e7in erken ye\u015fil \u0131\u015f\u0131kt\u0131r; y\u00fckseli\u015f ise erken uyar\u0131d\u0131r.</p>";
+const DOC2_HTML = "<p class=\"dpara\">Yat\u0131r\u0131m Karar Form\u00fclleri \u2014 G\u00f6sterge Kombinasyon Tablolar\u0131</p><p class=\"dpara\">VIX \u00b7 MOVE \u00b7 DXY \u00b7 CDS \u00b7 Fed Funds Futures \u00b7 Yield Curve \u00b7 Cu/Au \u00b7 Brent \u00b7 USD/TL \u00b7 EUR/TL \u00b7 BIST \u00b7 MSCI EM \u00b7 Alt\u0131n</p><h2 class=\"dh1\">1. Hisse Senedi (BIST) \u2014 Giri\u015f Ko\u015fullar\u0131</h2><p class=\"dpara\">T\u00fcm g\u00f6stergeler ayn\u0131 anda m\u00fckemmel olmayabilir. En az 5\u20136 tanesi ye\u015fil ise giri\u015f i\u00e7in elveri\u015fli zemin var demektir.</p><table class=\"dtable\"><thead><tr><th>G\u00f6sterge</th><th>Ko\u015ful</th><th>Ne anlama gelir?</th></tr></thead><tbody><tr><td class=\"dcell-key\">VIX</td><td class=\"dcell-val\">20 alt\u0131 ve d\u00fc\u015f\u00fcyor</td><td class=\"dcell-desc\">Piyasa sakin, korku yok</td></tr><tr><td class=\"dcell-key\">TR CDS</td><td class=\"dcell-val\">D\u00fc\u015f\u00fcyor / 300 alt\u0131</td><td class=\"dcell-desc\">T\u00fcrkiye'ye g\u00fcven art\u0131yor, yabanc\u0131 giriyor</td></tr><tr><td class=\"dcell-key\">MSCI EM</td><td class=\"dcell-val\">Y\u00fckseliyor</td><td class=\"dcell-desc\">EM'e para ak\u0131yor, T\u00fcrkiye dahil</td></tr><tr><td class=\"dcell-key\">DXY</td><td class=\"dcell-val\">Zay\u0131fl\u0131yor / d\u00fc\u015f\u00fcyor</td><td class=\"dcell-desc\">Dolar zay\u0131flar \u2192 EM'e para girer \u2192 TL g\u00f6rece g\u00fc\u00e7lenir</td></tr><tr><td class=\"dcell-key\">USD/TL h\u0131z\u0131</td><td class=\"dcell-val\">Yatay ya da yava\u015f art\u0131\u015f (%1\u20132/ay)</td><td class=\"dcell-desc\">Kontroll\u00fc deval\u00fcasyon, kriz yok</td></tr><tr><td class=\"dcell-key\">TCMB faizi</td><td class=\"dcell-val\">\u0130ndirim d\u00f6ng\u00fcs\u00fcnde</td><td class=\"dcell-desc\">\u0130skonto oran\u0131 d\u00fc\u015fer \u2192 hisse de\u011ferlemeleri y\u00fckselir</td></tr><tr><td class=\"dcell-key\">10Y\u20132Y spread</td><td class=\"dcell-val\">Pozitif ve a\u00e7\u0131l\u0131yor</td><td class=\"dcell-desc\">Normal yield curve \u2192 b\u00fcy\u00fcme beklentisi iyi</td></tr><tr><td class=\"dcell-key\">Brent Petrol</td><td class=\"dcell-val\">60\u201375$ band\u0131</td><td class=\"dcell-desc\">Cari a\u00e7\u0131k bask\u0131s\u0131 s\u0131n\u0131rl\u0131, enflasyon kontroll\u00fc</td></tr></tbody></table><p class=\"dnote\">Not: Optimum giri\u015f: VIX d\u00fc\u015f\u00fck + CDS d\u00fc\u015f\u00fcyor + MSCI EM y\u00fckseliyor + DXY zay\u0131fl\u0131yor + USD/TL sakin + TCMB indirim d\u00f6ng\u00fcs\u00fcnde</p><h3 class=\"dh2\">\u00c7\u0131k\u0131\u015f / Dikkat Sinyalleri</h3><table class=\"dtable\"><thead><tr><th>G\u00f6sterge</th><th>Ko\u015ful</th><th>Ne anlama gelir?</th></tr></thead><tbody><tr><td class=\"dcell-key\">VIX</td><td class=\"dcell-val\">30 \u00fczeri ve y\u00fckseliyor</td><td class=\"dcell-desc\">Panik \u2014 EM'den sermaye ka\u00e7\u0131\u015f\u0131 ba\u015flar</td></tr><tr><td class=\"dcell-key\">TR CDS</td><td class=\"dcell-val\">300 \u00fczeri / h\u0131zl\u0131 y\u00fckseli\u015f</td><td class=\"dcell-desc\">T\u00fcrkiye riski art\u0131yor, yabanc\u0131 \u00e7\u0131k\u0131yor</td></tr><tr><td class=\"dcell-key\">MSCI EM</td><td class=\"dcell-val\">D\u00fc\u015f\u00fcyor</td><td class=\"dcell-desc\">EM genelinden para \u00e7\u0131k\u0131\u015f\u0131 var</td></tr><tr><td class=\"dcell-key\">DXY</td><td class=\"dcell-val\">G\u00fc\u00e7l\u00fc y\u00fckseliyor</td><td class=\"dcell-desc\">G\u00fcvenli limana ka\u00e7\u0131\u015f \u2192 TL bask\u0131 \u2192 BIST d\u00fc\u015fer</td></tr><tr><td class=\"dcell-key\">USD/TL h\u0131z\u0131</td><td class=\"dcell-val\">%5+ ayl\u0131k s\u0131\u00e7rama</td><td class=\"dcell-desc\">Kriz sinyali \u2014 panik sat\u0131\u015f\u0131 ba\u015flam\u0131\u015f olabilir</td></tr><tr><td class=\"dcell-key\">Brent Petrol</td><td class=\"dcell-val\">90$ \u00fczeri ve y\u00fckseliyor</td><td class=\"dcell-desc\">Cari a\u00e7\u0131k geni\u015fler \u2192 enflasyon \u2192 TCMB indiremez</td></tr></tbody></table><p class=\"dnote\">Not: VIX 30+ VE CDS 300+ ayn\u0131 anda ger\u00e7ekle\u015fiyorsa bu en g\u00fc\u00e7l\u00fc \u00e7\u0131k\u0131\u015f sinyalidir.</p><h2 class=\"dh1\">2. Ons Alt\u0131n \u2014 Giri\u015f Ko\u015fullar\u0131</h2><table class=\"dtable\"><thead><tr><th>G\u00f6sterge</th><th>Ko\u015ful</th><th>Ne anlama gelir?</th></tr></thead><tbody><tr><td class=\"dcell-key\">DXY</td><td class=\"dcell-val\">Zay\u0131fl\u0131yor / d\u00fc\u015f\u00fcyor</td><td class=\"dcell-desc\">Dolar zay\u0131flar \u2192 alt\u0131n y\u00fckselir (~\u22120.7 korelasyon)</td></tr><tr><td class=\"dcell-key\">10Y reel getiri</td><td class=\"dcell-val\">S\u0131f\u0131ra yak\u0131n ya da negatif</td><td class=\"dcell-desc\">Tahvil cazibesini yitirir \u2192 alt\u0131n g\u00fc\u00e7l\u00fc destek bulur</td></tr><tr><td class=\"dcell-key\">VIX</td><td class=\"dcell-val\">25 \u00fczeri ve y\u00fckseliyor</td><td class=\"dcell-desc\">G\u00fcvenli liman talebi artar \u2192 alt\u0131na ak\u0131\u015f</td></tr><tr><td class=\"dcell-key\">Fed Funds Futures</td><td class=\"dcell-val\">\u0130ndirim beklentisi art\u0131yor</td><td class=\"dcell-desc\">Reel getiri d\u00fc\u015fece\u011fi beklentisi \u2192 alt\u0131n erken y\u00fckselir</td></tr><tr><td class=\"dcell-key\">MOVE endeksi</td><td class=\"dcell-val\">Y\u00fckseliyor (tahvil stresi)</td><td class=\"dcell-desc\">Makroekonomik belirsizlik art\u0131yor \u2192 alt\u0131na talep g\u00fc\u00e7l\u00fc</td></tr><tr><td class=\"dcell-key\">Cu/Au oran\u0131</td><td class=\"dcell-val\">D\u00fc\u015f\u00fcyor (alt\u0131n bak\u0131rdan h\u0131zl\u0131)</td><td class=\"dcell-desc\">B\u00fcy\u00fcme endi\u015fesi \u2192 g\u00fcvenli limana ka\u00e7\u0131\u015f \u2192 alt\u0131n destekli</td></tr></tbody></table><p class=\"dnote\">Not: En g\u00fc\u00e7l\u00fc giri\u015f: DXY d\u00fc\u015f\u00fcyor + 10Y reel getiri s\u0131f\u0131ra yak\u0131n + Fed indirim beklentisi art\u0131yor \u2014 \u00fc\u00e7\u00fc ayn\u0131 anda nadiren olu\u015fur.</p><h3 class=\"dh2\">Bekle / Dikkatli Ol</h3><table class=\"dtable\"><thead><tr><th>G\u00f6sterge</th><th>Ko\u015ful</th><th>Ne anlama gelir?</th></tr></thead><tbody><tr><td class=\"dcell-key\">DXY</td><td class=\"dcell-val\">G\u00fc\u00e7l\u00fc y\u00fckseliyor</td><td class=\"dcell-desc\">Klasik bask\u0131 \u2014 alt\u0131n zorlan\u0131r. R\u00fczgara kar\u015f\u0131 y\u00fcr\u00fcmek</td></tr><tr><td class=\"dcell-key\">10Y reel getiri</td><td class=\"dcell-val\">Y\u00fckseliyor (%1.5+)</td><td class=\"dcell-desc\">Tahvil cazip hale gelir \u2192 alt\u0131n sat\u0131l\u0131r</td></tr><tr><td class=\"dcell-key\">Fed Funds Futures</td><td class=\"dcell-val\">\u0130ndirim beklentisi d\u00fc\u015f\u00fcyor</td><td class=\"dcell-desc\">\u015eahin bask\u0131 \u2192 dolar g\u00fc\u00e7lenir \u2192 alt\u0131n bask\u0131</td></tr></tbody></table><p class=\"dnote\">Not: DXY g\u00fc\u00e7l\u00fc y\u00fckseliyor ama alt\u0131n da y\u00fckseliyorsa bu dolar g\u00fcven krizi sinyalidir \u2014 korelasyon k\u0131r\u0131lm\u0131\u015ft\u0131r, makro tabloyu yeniden de\u011ferlendirin.</p><h2 class=\"dh1\">3. D\u00f6viz (USD/TL) \u2014 Portf\u00f6y Koruma Sinyalleri</h2><p class=\"dpara\">Bu g\u00f6stergeler 'dolar sat' de\u011fil 'd\u00f6vizli varl\u0131k tut' sinyali olarak okunmal\u0131d\u0131r.</p><table class=\"dtable\"><thead><tr><th>G\u00f6sterge</th><th>Ko\u015ful</th><th>Ne anlama gelir?</th></tr></thead><tbody><tr><td class=\"dcell-key\">VIX</td><td class=\"dcell-val\">30 \u00fczeri</td><td class=\"dcell-desc\">D\u00f6viz (USD/TL) portf\u00f6y korumas\u0131 \u2014 TL bask\u0131 alt\u0131nda</td></tr><tr><td class=\"dcell-key\">DXY</td><td class=\"dcell-val\">Y\u00fckseliyor</td><td class=\"dcell-desc\">K\u00fcresel dolar g\u00fc\u00e7leniyor \u2192 EM kurlar\u0131 bask\u0131 alt\u0131nda</td></tr><tr><td class=\"dcell-key\">TR CDS</td><td class=\"dcell-val\">300 \u00fczeri / y\u00fckseliyor</td><td class=\"dcell-desc\">Yabanc\u0131 \u00e7\u0131k\u0131yor \u2192 TL sat\u0131\u015f\u0131 \u2192 USD/TL y\u00fckselir</td></tr><tr><td class=\"dcell-key\">Brent Petrol</td><td class=\"dcell-val\">90$ \u00fczeri</td><td class=\"dcell-desc\">Enerji faturas\u0131 b\u00fcy\u00fcr \u2192 cari a\u00e7\u0131k \u2192 TL de\u011fer kaybeder</td></tr><tr><td class=\"dcell-key\">USD/TL h\u0131z\u0131</td><td class=\"dcell-val\">%3\u20135+/ay</td><td class=\"dcell-desc\">Normal de\u011fer kayb\u0131 h\u0131z\u0131n\u0131 a\u015f\u0131yor \u2014 neden sorun?</td></tr></tbody></table><p class=\"dnote\">Not: TL yat\u0131r\u0131mc\u0131s\u0131 i\u00e7in d\u00f6viz \u00e7ift koruma sa\u011flar: hem k\u00fcresel risk hem kur riski kar\u015f\u0131s\u0131nda tampon. VIX 40+ ise alt\u0131n + d\u00f6viz kombinasyonu en g\u00fc\u00e7l\u00fc koruma.</p><h2 class=\"dh1\">4. Tahvil / G\u00f6sterge Faiz \u2014 F\u0131rsat ve Risk</h2><table class=\"dtable\"><thead><tr><th>G\u00f6sterge</th><th>Ko\u015ful</th><th>Ne anlama gelir?</th></tr></thead><tbody><tr><td class=\"dcell-key\">VIX</td><td class=\"dcell-val\">D\u00fc\u015f\u00fck ve sakin</td><td class=\"dcell-desc\">Risk i\u015ftah\u0131 a\u00e7\u0131k \u2192 tahvil talep g\u00f6rebilir</td></tr><tr><td class=\"dcell-key\">TR CDS</td><td class=\"dcell-val\">D\u00fc\u015f\u00fcyor</td><td class=\"dcell-desc\">\u00dclke riski azal\u0131yor \u2192 tahvil spread'i daral\u0131r</td></tr><tr><td class=\"dcell-key\">TCMB faizi</td><td class=\"dcell-val\">\u0130ndirim d\u00f6ng\u00fcs\u00fcnde</td><td class=\"dcell-desc\">Getiriler d\u00fc\u015fece\u011fi i\u00e7in tahvil fiyat\u0131 y\u00fckselir</td></tr><tr><td class=\"dcell-key\">Enflasyon</td><td class=\"dcell-val\">D\u00fc\u015f\u00fc\u015f trendinde</td><td class=\"dcell-desc\">Reel getiri iyile\u015fir \u2192 tahvil cazip hale gelir</td></tr><tr><td class=\"dcell-key\">MOVE endeksi</td><td class=\"dcell-val\">120 \u00fczeri</td><td class=\"dcell-desc\">Tahvil volatilitesi y\u00fcksek \u2192 giri\u015f i\u00e7in erken</td></tr></tbody></table><p class=\"dnote\">Not: G\u00f6sterge 2Y tahvil faizi d\u00fc\u015ferken BIST'e girmek \u00e7ift onay demektir: hem de\u011ferleme hem para ak\u0131\u015f\u0131 destekli.</p><h2 class=\"dh1\">5. Erken Uyar\u0131 Kombinasyonlar\u0131 \u2014 \u0130stisna Sinyaller</h2><p class=\"dpara\">Bu kombinasyonlar 'normal' kurallar\u0131 bozar. G\u00f6rd\u00fc\u011f\u00fcn\u00fczde hemen ara\u015ft\u0131r\u0131n.</p><table class=\"dtable\"><thead><tr><th>Kombinasyon</th><th>Sinyal</th><th>Ne yapmal\u0131?</th></tr></thead><tbody><tr><td class=\"dcell-key\">MOVE \u2191 + VIX sakin</td><td class=\"dcell-val\">Gizli stres</td><td class=\"dcell-desc\">Tahvil piyasas\u0131 gergin ama hisseler hen\u00fcz fark etmedi. En tehlikeli kombinasyon.</td></tr><tr><td class=\"dcell-key\">CDS \u2191 + VIX sakin</td><td class=\"dcell-val\">T\u00fcrkiye'ye \u00f6zg\u00fc risk</td><td class=\"dcell-desc\">K\u00fcresel sorun yok ama yerel bir \u015fey var. Haberi ara\u015ft\u0131r.</td></tr><tr><td class=\"dcell-key\">DXY \u2191 + Alt\u0131n da \u2191</td><td class=\"dcell-val\">Dolar g\u00fcven krizi</td><td class=\"dcell-desc\">Eski korelasyon k\u0131r\u0131ld\u0131. ABD'ye g\u00fcven sorgulan\u0131yor. 2025 senaryosu.</td></tr><tr><td class=\"dcell-key\">Yield curve dis-inversiyonu</td><td class=\"dcell-val\">Resesyon kap\u0131da?</td><td class=\"dcell-desc\">\u0130nversiyon bitmesi 'tehlike ge\u00e7ti' de\u011fil \u2014 resesyon genellikle bu noktada ba\u015flar.</td></tr><tr><td class=\"dcell-key\">S&P \u2191 + MSCI EM \u2193</td><td class=\"dcell-val\">ABD istisnac\u0131l\u0131\u011f\u0131</td><td class=\"dcell-desc\">Para EM'den ABD'ye ak\u0131yor. BIST bu ralliye kat\u0131lamaz.</td></tr><tr><td class=\"dcell-key\">Cu/Au oran\u0131 rekor d\u00fc\u015f\u00fck</td><td class=\"dcell-val\">Tarihi b\u00fcy\u00fcme endi\u015fesi</td><td class=\"dcell-desc\">Resesyon korkusu \u00e7ok y\u00fcksek. Savunmac\u0131 pozisyon, alt\u0131n ve dolar a\u011f\u0131rl\u0131kl\u0131 portf\u00f6y.</td></tr></tbody></table><h2 class=\"dh1\">6. Sabah 5 Dakika Kontrol Rutini</h2><p class=\"dlist\">1.  VIX \u2014 d\u00fc\u015f\u00fcyor mu, y\u00fckseliyor mu? 25 \u00fcst\u00fc ise dikkat modu.</p><p class=\"dlist\">2.  TR CDS \u2014 bir \u00f6nceki g\u00fcne g\u00f6re 20+ bps hareket var m\u0131? Varsa nedenini ara\u015ft\u0131r.</p><p class=\"dlist\">3.  DXY \u2014 trend ne y\u00f6nde? Dolar g\u00fc\u00e7leniyor mu zay\u0131fl\u0131yor mu?</p><p class=\"dlist\">4.  Ons Alt\u0131n \u2014 DXY ile ayn\u0131 y\u00f6nde mi, ters y\u00f6nde mi? Ayn\u0131 y\u00f6ndeyse korelasyon k\u0131r\u0131lm\u0131\u015f.</p><p class=\"dlist\">5.  MSCI EM (EEM/VWO) \u2014 y\u00fckseliyor mu d\u00fc\u015f\u00fcyor mu? BIST i\u00e7in zemin haz\u0131r m\u0131?</p><p class=\"dlist\">6.  Brent Petrol \u2014 90$ k\u0131r\u0131ld\u0131 m\u0131? K\u0131r\u0131ld\u0131ysa TL ve enflasyon i\u00e7in alarm.</p><p class=\"dlist\">7.  FedWatch \u2014 yakla\u015fan toplant\u0131 olas\u0131l\u0131\u011f\u0131 d\u00fcnden b\u00fcy\u00fck de\u011fi\u015ftiyse nedenini bul.</p><p class=\"dpara\">Kaynak: Bu tablolar kapsaml\u0131 sohbet analizi ve piyasa verileri temel al\u0131narak haz\u0131rlanm\u0131\u015ft\u0131r. Yat\u0131r\u0131m tavsiyesi de\u011fildir.</p>";
+
+// ── MODAL ──
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModalDirect(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModal(e, id) {
+  if (e.target === e.currentTarget) closeModalDirect(id);
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.open').forEach(m => {
+      m.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  }
+});
+
+// Inject doc content lazily
+function initDocs() {
+  document.getElementById('body-gostergeler').innerHTML = DOC1_HTML;
+  document.getElementById('body-kombinasyon').innerHTML = DOC2_HTML;
+}
+
+
+</script>
+
+<script>
+// ── OTOMATİK VERİ YÜKLEME ──
+const REPO = 'senozorkun/Sinyal-Paneli';
+const WORKFLOW_ID = 'guncelle.yml';
+// GitHub Personal Access Token - kullanıcı kendi tokenını buraya yazar
+const GH_TOKEN = localStorage.getItem('gh_token') || '';
+
+function setInput(id, val) {
+  if (val === null || val === undefined || val === '') return;
+  var el = document.getElementById(id);
+  if (el) { el.value = val; el.dispatchEvent(new Event('input', {bubbles:true})); }
+}
+function setSelect(id, val) {
+  if (!val) return;
+  var el = document.getElementById(id);
+  if (el) { el.value = val; el.dispatchEvent(new Event('change', {bubbles:true})); }
+}
+
+function setStatus(msg, color) {
+  var el = document.getElementById('status-text');
+  if (el) { el.textContent = msg; el.style.color = color || 'var(--text3)'; }
+}
+
+async function veriYukle() {
+  try {
+    setStatus('yükleniyor...', 'var(--blue)');
+    const url = 'https://raw.githubusercontent.com/' + REPO + '/main/data.json?t=' + Date.now();
+    const r = await fetch(url);
+    if (!r.ok) { setStatus('veri yok — guncelle butonuna bas', 'var(--amber)'); return; }
+    const v = await r.json();
+
+    setInput('vix', v.vix);
+    setInput('move', v.move);
+    setInput('dxy', v.dxy);
+    setInput('usdtl_change', v.usdtl_change);
+    setInput('us10y', v.us10y);
+    setInput('spread', v.spread);
+    setInput('fed_cut', v.fed_cut);
+    setInput('cds', v.cds);
+    setInput('tcmb', v.tcmb);
+    setSelect('tcmb_dir', v.tcmb_dir);
+    setInput('gold', v.gold);
+    setInput('brent', v.brent);
+    setInput('cuau', v.cuau);
+    setSelect('msci_dir', v.msci_dir);
+    setSelect('sp500_dir', v.sp500_dir);
+    setSelect('sp500_ma', v.sp500_ma);
+    setInput('unemployment', v.unemployment);
+    setInput('us_cpi', v.us_cpi);
+
+    setStatus('🤖 ' + (v.guncelleme || ''), 'var(--green)');
+
+    // Haberleri render et
+    if (v.haberler && v.haberler.length > 0) {
+      renderHaberler(v.haberler, v.guncelleme || '');
+    }
+
+    setTimeout(function() {
+      if (typeof analyze === 'function') analyze();
+    }, 400);
+  } catch(e) {
+    setStatus('bağlantı hatası', 'var(--red)');
+  }
+}
+
+
+function renderHaberler(haberler, guncelleme) {
+  // Ticker
+  var track = document.getElementById('ticker-track');
+  var wrap  = document.getElementById('ticker-wrap');
+  if (track && haberler.length > 0) {
+    var items = haberler.map(function(h) {
+      return '<span class="ticker-item" onclick="window.open(\'' + h.link.replace(/'/g, '') + '\', \'_blank\')">' +
+             '<span class="ticker-dot"></span>' + h.baslik + '</span>';
+    }).join('');
+    // İkiye katla - smooth loop için
+    track.innerHTML = items + items;
+    wrap.style.display = 'block';
+  }
+
+  // Haber listesi
+  var liste = document.getElementById('haberler-liste');
+  var panel = document.getElementById('haberler-panel');
+  var gunEl = document.getElementById('haber-guncelleme');
+  if (liste && haberler.length > 0) {
+    if (gunEl) gunEl.textContent = guncelleme;
+    liste.innerHTML = haberler.map(function(h) {
+      return '<a class="haber-item" href="' + h.link + '" target="_blank" rel="noopener">' +
+             '<div><div class="haber-kategori">' + h.kategori + '</div></div>' +
+             '<div><div class="haber-baslik">' + h.baslik + '</div>' +
+             '<div class="haber-kaynak">' + h.kaynak + '</div></div>' +
+             '</a>';
+    }).join('');
+    panel.style.display = 'block';
+  }
+}
+
+async function guncelleTetikle() {
+  var token = localStorage.getItem('gh_token');
+  if (!token) {
+    token = prompt('GitHub Personal Access Token girin (Actions: Read and Write izni gerekli)');
+    if (!token) return;
+    localStorage.setItem('gh_token', token);
+  }
+
+  var btn = document.getElementById('refresh-btn');
+  btn.textContent = '⏳ Çalışıyor...';
+  btn.style.opacity = '0.6';
+  btn.disabled = true;
+  setStatus('güncelleme başlatıldı...', 'var(--amber)');
+
+  try {
+    var r = await fetch('https://api.github.com/repos/' + REPO + '/actions/workflows/' + WORKFLOW_ID + '/dispatches', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github+json'
+      },
+      body: JSON.stringify({ ref: 'main' })
+    });
+
+    if (r.status === 204) {
+      setStatus('⏳ çekiliyor (~45sn)...', 'var(--amber)');
+      // 50 saniye sonra verileri yeniden yükle
+      setTimeout(async function() {
+        await veriYukle();
+        btn.textContent = '🔄 GÜNCELLE';
+        btn.style.opacity = '1';
+        btn.disabled = false;
+      }, 50000);
+    } else if (r.status === 401) {
+      localStorage.removeItem('gh_token');
+      setStatus('token geçersiz — tekrar dene', 'var(--red)');
+      btn.textContent = '🔄 GÜNCELLE';
+      btn.style.opacity = '1';
+      btn.disabled = false;
+    } else {
+      setStatus('hata: ' + r.status, 'var(--red)');
+      btn.textContent = '🔄 GÜNCELLE';
+      btn.style.opacity = '1';
+      btn.disabled = false;
+    }
+  } catch(e) {
+    setStatus('bağlantı hatası', 'var(--red)');
+    btn.textContent = '🔄 GÜNCELLE';
+    btn.style.opacity = '1';
+    btn.disabled = false;
+  }
+}
+
+// Sayfa açılınca mevcut veriyi yükle
+window.addEventListener('load', function() {
+  setTimeout(veriYukle, 300);
+});
+</script>
+
+</body>
+</html>
