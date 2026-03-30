@@ -217,7 +217,7 @@
   }
   .ticker-track {
     display:flex; gap:60px; white-space:nowrap;
-    animation: ticker-scroll 60s linear infinite;
+    animation: ticker-scroll 80s linear infinite;
   }
   .ticker-wrap:hover .ticker-track { animation-play-state: paused; }
   @keyframes ticker-scroll {
@@ -254,18 +254,17 @@
   .haber-kategori {
     font-size:8px; font-family:var(--mono); letter-spacing:1px;
     text-transform:uppercase; color:var(--blue);
-    white-space:nowrap; margin-top:2px; flex-shrink:0; min-width:80px;
+    white-space:nowrap; margin-top:2px; flex-shrink:0; min-width:90px;
   }
   .haber-baslik {
-    font-size:12px; color:var(--text); line-height:1.5;
-    flex:1;
+    font-size:12px; color:var(--text); line-height:1.5; flex:1;
   }
   .haber-kaynak {
-    font-size:9px; font-family:var(--mono); color:var(--text3);
-    margin-top:3px;
+    font-size:9px; font-family:var(--mono); color:var(--text3); margin-top:3px;
   }
 
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 </head>
 <body>
 <div class="container">
@@ -279,6 +278,7 @@
     <div class="doc-btns">
       <button class="doc-btn doc-btn-blue" onclick="initDocs();openModal('modal-gostergeler')">📖 Göstergeler</button>
       <button class="doc-btn doc-btn-green" onclick="initDocs();openModal('modal-kombinasyon')">📋 Formüller</button>
+      <button class="doc-btn" onclick="openModal('modal-fon')" style="background:var(--purple-dim);border-color:var(--purple)44;color:var(--purple);">🧮 Fon Hesap</button>
     </div>
       <button id="refresh-btn" onclick="guncelleTetikle()" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.5px;cursor:pointer;text-transform:uppercase;background:var(--green-dim);border:1px solid var(--green);color:var(--green);transition:all .2s;">🔄 GÜNCELLE</button>
       <div class="pulse" id="status-pulse"></div>
@@ -517,17 +517,7 @@
     </div>
   </div>
 
-
-      <!-- HABER LİSTESİ -->
-      <div class="haberler-panel" id="haberler-panel" style="display:none;">
-        <div class="haberler-header">
-          <span>📰 PİYASA HABERLERİ</span>
-          <span id="haber-guncelleme" style="color:var(--text3);font-size:9px;"></span>
-        </div>
-        <div class="haberler-liste" id="haberler-liste"></div>
-      </div>
-
-  </div>
+</div>
 </div>
 
 <script>
@@ -906,8 +896,6 @@ function initDocs() {
 // ── OTOMATİK VERİ YÜKLEME ──
 const REPO = 'senozorkun/Sinyal-Paneli';
 const WORKFLOW_ID = 'guncelle.yml';
-// GitHub Personal Access Token - kullanıcı kendi tokenını buraya yazar
-const GH_TOKEN = localStorage.getItem('gh_token') || '';
 
 function setInput(id, val) {
   if (val === null || val === undefined || val === '') return;
@@ -919,64 +907,20 @@ function setSelect(id, val) {
   var el = document.getElementById(id);
   if (el) { el.value = val; el.dispatchEvent(new Event('change', {bubbles:true})); }
 }
-
 function setStatus(msg, color) {
   var el = document.getElementById('status-text');
   if (el) { el.textContent = msg; el.style.color = color || 'var(--text3)'; }
 }
 
-async function veriYukle() {
-  try {
-    setStatus('yükleniyor...', 'var(--blue)');
-    const url = 'https://raw.githubusercontent.com/' + REPO + '/main/data.json?t=' + Date.now();
-    const r = await fetch(url);
-    if (!r.ok) { setStatus('veri yok — guncelle butonuna bas', 'var(--amber)'); return; }
-    const v = await r.json();
-
-    setInput('vix', v.vix);
-    setInput('move', v.move);
-    setInput('dxy', v.dxy);
-    setInput('usdtl_change', v.usdtl_change);
-    setInput('us10y', v.us10y);
-    setInput('spread', v.spread);
-    setInput('fed_cut', v.fed_cut);
-    setInput('cds', v.cds);
-    setInput('tcmb', v.tcmb);
-    setSelect('tcmb_dir', v.tcmb_dir);
-    setInput('gold', v.gold);
-    setInput('brent', v.brent);
-    setInput('cuau', v.cuau);
-    setSelect('msci_dir', v.msci_dir);
-    setSelect('sp500_dir', v.sp500_dir);
-    setSelect('sp500_ma', v.sp500_ma);
-    setInput('unemployment', v.unemployment);
-    setInput('us_cpi', v.us_cpi);
-
-    setStatus('🤖 ' + (v.guncelleme || ''), 'var(--green)');
-
-    // Haberleri render et
-    if (v.haberler && v.haberler.length > 0) {
-      renderHaberler(v.haberler, v.guncelleme || '');
-    }
-
-    setTimeout(function() {
-      if (typeof analyze === 'function') analyze();
-    }, 400);
-  } catch(e) {
-    setStatus('bağlantı hatası', 'var(--red)');
-  }
-}
-
-
 function renderHaberler(haberler, guncelleme) {
   if (!haberler || haberler.length === 0) return;
 
-  // ── Ticker ──
+  // Ticker
   var track = document.getElementById('ticker-track');
   var wrap  = document.getElementById('ticker-wrap');
   if (track && wrap) {
     var tickerItems = haberler.map(function(h) {
-      var safeLink = (h.link || '').replace(/"/g, '');
+      var safeLink  = (h.link  || '').replace(/"/g, '');
       var safeTitle = (h.baslik || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       return '<span class="ticker-item" onclick="window.open(\"' + safeLink + '\", \"_blank\")">' +
              '<span class="ticker-dot"></span>' + safeTitle + '</span>';
@@ -985,17 +929,16 @@ function renderHaberler(haberler, guncelleme) {
     wrap.style.display = 'block';
   }
 
-  // ── Haber listesi ──
+  // Haber listesi
   var liste = document.getElementById('haberler-liste');
   var panel = document.getElementById('haberler-panel');
   var gunEl = document.getElementById('haber-guncelleme');
-
   if (liste && panel) {
     if (gunEl) gunEl.textContent = guncelleme;
     liste.innerHTML = haberler.map(function(h) {
-      var safeLink  = (h.link  || '#').replace(/"/g, '');
-      var safeTitle = (h.baslik || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      var safeKaynak = (h.kaynak || h.kategori || '').replace(/</g, '&lt;');
+      var safeLink     = (h.link     || '#').replace(/"/g, '');
+      var safeTitle    = (h.baslik   || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      var safeKaynak   = (h.kaynak   || '').replace(/</g, '&lt;');
       var safeKategori = (h.kategori || '').replace(/</g, '&lt;');
       return '<a class="haber-item" href="' + safeLink + '" target="_blank" rel="noopener noreferrer">' +
              '<div style="min-width:90px"><div class="haber-kategori">' + safeKategori + '</div></div>' +
@@ -1004,6 +947,47 @@ function renderHaberler(haberler, guncelleme) {
              '</a>';
     }).join('');
     panel.style.display = 'block';
+  }
+}
+
+async function veriYukle() {
+  try {
+    setStatus('yükleniyor...', 'var(--blue)');
+    var url = 'https://raw.githubusercontent.com/' + REPO + '/main/data.json?t=' + Date.now();
+    var r = await fetch(url);
+    if (!r.ok) { setStatus('guncelle butonuna bas', 'var(--amber)'); return; }
+    var v = await r.json();
+
+    setInput('vix',          v.vix);
+    setInput('move',         v.move);
+    setInput('dxy',          v.dxy);
+    setInput('usdtl_change', v.usdtl_change);
+    setInput('us10y',        v.us10y);
+    setInput('spread',       v.spread);
+    setInput('fed_cut',      v.fed_cut);
+    setInput('cds',          v.cds);
+    setInput('tcmb',         v.tcmb);
+    setSelect('tcmb_dir',    v.tcmb_dir);
+    setInput('gold',         v.gold);
+    setInput('brent',        v.brent);
+    setInput('cuau',         v.cuau);
+    setSelect('msci_dir',    v.msci_dir);
+    setSelect('sp500_dir',   v.sp500_dir);
+    setSelect('sp500_ma',    v.sp500_ma);
+    setInput('unemployment', v.unemployment);
+    setInput('us_cpi',       v.us_cpi);
+
+    setStatus('🤖 ' + (v.guncelleme || ''), 'var(--green)');
+
+    if (v.haberler && v.haberler.length > 0) {
+      renderHaberler(v.haberler, v.guncelleme || '');
+    }
+
+    setTimeout(function() {
+      if (typeof analyze === 'function') analyze();
+    }, 400);
+  } catch(e) {
+    setStatus('baglanti hatasi', 'var(--red)');
   }
 }
 
@@ -1016,10 +1000,10 @@ async function guncelleTetikle() {
   }
 
   var btn = document.getElementById('refresh-btn');
-  btn.textContent = '⏳ Çalışıyor...';
+  btn.textContent = 'bekle...';
   btn.style.opacity = '0.6';
   btn.disabled = true;
-  setStatus('güncelleme başlatıldı...', 'var(--amber)');
+  setStatus('guncelleniyor...', 'var(--amber)');
 
   try {
     var r = await fetch('https://api.github.com/repos/' + REPO + '/actions/workflows/' + WORKFLOW_ID + '/dispatches', {
@@ -1033,8 +1017,7 @@ async function guncelleTetikle() {
     });
 
     if (r.status === 204) {
-      setStatus('⏳ çekiliyor (~45sn)...', 'var(--amber)');
-      // 50 saniye sonra verileri yeniden yükle
+      setStatus('cekiliyor (~45sn)...', 'var(--amber)');
       setTimeout(async function() {
         await veriYukle();
         btn.textContent = '🔄 GÜNCELLE';
@@ -1043,7 +1026,7 @@ async function guncelleTetikle() {
       }, 50000);
     } else if (r.status === 401) {
       localStorage.removeItem('gh_token');
-      setStatus('token geçersiz — tekrar dene', 'var(--red)');
+      setStatus('token gecersiz', 'var(--red)');
       btn.textContent = '🔄 GÜNCELLE';
       btn.style.opacity = '1';
       btn.disabled = false;
@@ -1054,14 +1037,13 @@ async function guncelleTetikle() {
       btn.disabled = false;
     }
   } catch(e) {
-    setStatus('bağlantı hatası', 'var(--red)');
+    setStatus('baglanti hatasi', 'var(--red)');
     btn.textContent = '🔄 GÜNCELLE';
     btn.style.opacity = '1';
     btn.disabled = false;
   }
 }
 
-// Sayfa açılınca mevcut veriyi yükle
 window.addEventListener('load', function() {
   setTimeout(veriYukle, 300);
 });

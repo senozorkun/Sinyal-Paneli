@@ -55,23 +55,54 @@ def sp500_ma200():
         return ""
 
 def yield_spread_bps():
+    """
+    ABD 10Y - 2Y spread (basis points).
+    ^TNX = 10Y Treasury yield (yfinance'dan /10 normalize gerekir)
+    ^IRX = 13-week T-bill (2Y proxy değil - kullanma)
+    Doğru 2Y: FRED CSV'den çek
+    """
     try:
-        # ^TNX = 10Y (değer /10 normalize gerekir, örn 43.4 = %4.34)
-        # ^TYX = 30Y, ^FVX = 5Y, ^IRX = 13-week
-        # 2Y için doğrudan yfinance ticker: "^IRX" değil "2YY=F" veya TNX normalize
+        # 10Y yield - ^TNX
         h10 = yf.Ticker("^TNX").history(period="5d")
-        h2  = yf.Ticker("^IRX").history(period="5d")
-        if h10.empty or h2.empty:
+        if h10.empty:
             return None
         y10 = float(h10["Close"].iloc[-1])
-        y2  = float(h2["Close"].iloc[-1])
-        # TNX ve IRX yfinance'dan *10 büyük gelir (ör. 43.4 = %4.34)
-        # Normalize et
-        if y10 > 20: y10 = y10 / 10
-        if y2  > 20: y2  = y2  / 10
+        if y10 > 20:
+            y10 = y10 / 10  # normalize: 43.4 -> 4.34
+
+        # 2Y yield - FRED'den doğrudan çek (en güvenilir)
+        y2 = None
+        try:
+            r = requests.get(
+                "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS2",
+                headers=HEADERS, timeout=10
+            )
+            if r.status_code == 200:
+                lines = r.text.strip().split("\n")[1:]
+                for line in reversed(lines):
+                    parts = line.split(",")
+                    if len(parts) == 2 and parts[1].strip() not in (".", ""):
+                        y2 = float(parts[1].strip())
+                        break
+        except:
+            pass
+
+        # FRED olmadıysa ^IRX kullan ama normalize et (13-week proxy)
+        if y2 is None:
+            h2 = yf.Ticker("^IRX").history(period="5d")
+            if not h2.empty:
+                y2 = float(h2["Close"].iloc[-1])
+                if y2 > 20:
+                    y2 = y2 / 10
+
+        if y2 is None:
+            return None
+
         spread_bps = round((y10 - y2) * 100, 1)
+        print(f"  10Y: {y10:.2f}%  2Y: {y2:.2f}%  Spread: {spread_bps} bps")
         return spread_bps
-    except:
+    except Exception as e:
+        print(f"  Spread hata: {e}")
         return None
 
 def bakir_altin_orani():
@@ -224,21 +255,19 @@ def haber_cek():
     haberler = []
 
     feeds = [
-        # CNBC - lxml ile çalışır
+        # Türkçe kaynaklar - öncelikli
+        ("Ekonomi",    "https://www.bloomberght.com/rss"),
+        ("Borsa TR",   "https://www.kap.org.tr/tr/rss/duyurular"),
+        ("Borsa TR2",  "https://bigpara.hurriyet.com.tr/rss/ekonomi/"),
+        ("Ekonomi2",   "https://www.haberturk.com/rss/ekonomi.xml"),
+        ("Ekonomi3",   "https://www.milliyet.com.tr/rss/rssNew/ekonomiRss.xml"),
+        ("Ekonomi4",   "https://www.sabah.com.tr/rss/ekonomi.xml"),
+        ("Dunya",      "https://www.dunya.com/rss"),
+        ("BorsaGundem","https://www.borsagundem.com/feed"),
+        # Yedek İngilizce - Türkçe bulunamazsa
         ("CNBC Markets",  "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10000664"),
         ("CNBC Economy",  "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=20910258"),
-        ("CNBC World",    "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114"),
-        # MarketWatch
         ("MarketWatch",   "https://feeds.marketwatch.com/marketwatch/topstories/"),
-        ("MarketWatch FX","https://feeds.marketwatch.com/marketwatch/marketpulse/"),
-        # FT
-        ("FT Markets",    "https://www.ft.com/rss/home/uk"),
-        # Investing.com
-        ("Investing",     "https://www.investing.com/rss/news.rss"),
-        ("Investing EM",  "https://www.investing.com/rss/news_285.rss"),
-        ("Investing Emtia","https://www.investing.com/rss/news_14.rss"),
-        # Yahoo Finance
-        ("Yahoo Finance", "https://finance.yahoo.com/news/rssindex"),
     ]
 
     for kategori, url in feeds:
