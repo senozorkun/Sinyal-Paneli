@@ -55,31 +55,25 @@ def sp500_ma200():
         return ""
 
 def yield_spread_bps():
-    """
-    ABD 10Y - 2Y spread (basis points).
-    ^TNX = 10Y Treasury yield (yfinance'dan /10 normalize gerekir)
-    ^IRX = 13-week T-bill (2Y proxy değil - kullanma)
-    Doğru 2Y: FRED CSV'den çek
-    """
+    """10Y - 2Y spread bps. 10Y=^TNX, 2Y=FRED DGS2"""
     try:
-        # 10Y yield - ^TNX
+        # 10Y
         h10 = yf.Ticker("^TNX").history(period="5d")
         if h10.empty:
             return None
         y10 = float(h10["Close"].iloc[-1])
         if y10 > 20:
-            y10 = y10 / 10  # normalize: 43.4 -> 4.34
+            y10 = y10 / 10
 
-        # 2Y yield - FRED'den doğrudan çek (en güvenilir)
+        # 2Y - FRED DGS2 (en güvenilir kaynak)
         y2 = None
         try:
-            r = requests.get(
+            r2 = requests.get(
                 "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS2",
                 headers=HEADERS, timeout=10
             )
-            if r.status_code == 200:
-                lines = r.text.strip().split("\n")[1:]
-                for line in reversed(lines):
+            if r2.status_code == 200:
+                for line in reversed(r2.text.strip().split("\n")[1:]):
                     parts = line.split(",")
                     if len(parts) == 2 and parts[1].strip() not in (".", ""):
                         y2 = float(parts[1].strip())
@@ -87,7 +81,7 @@ def yield_spread_bps():
         except:
             pass
 
-        # FRED olmadıysa ^IRX kullan ama normalize et (13-week proxy)
+        # Yedek: ^IRX normalize
         if y2 is None:
             h2 = yf.Ticker("^IRX").history(period="5d")
             if not h2.empty:
@@ -98,12 +92,13 @@ def yield_spread_bps():
         if y2 is None:
             return None
 
-        spread_bps = round((y10 - y2) * 100, 1)
-        print(f"  10Y: {y10:.2f}%  2Y: {y2:.2f}%  Spread: {spread_bps} bps")
-        return spread_bps
+        spread = round((y10 - y2) * 100, 1)
+        print(f"    10Y={y10:.2f}%  2Y={y2:.2f}%  Spread={spread}bps")
+        return spread
     except Exception as e:
-        print(f"  Spread hata: {e}")
+        print(f"    Spread hata: {e}")
         return None
+
 
 def bakir_altin_orani():
     try:
@@ -256,18 +251,16 @@ def haber_cek():
 
     feeds = [
         # Türkçe kaynaklar - öncelikli
-        ("Ekonomi",    "https://www.bloomberght.com/rss"),
-        ("Borsa TR",   "https://www.kap.org.tr/tr/rss/duyurular"),
-        ("Borsa TR2",  "https://bigpara.hurriyet.com.tr/rss/ekonomi/"),
-        ("Ekonomi2",   "https://www.haberturk.com/rss/ekonomi.xml"),
-        ("Ekonomi3",   "https://www.milliyet.com.tr/rss/rssNew/ekonomiRss.xml"),
-        ("Ekonomi4",   "https://www.sabah.com.tr/rss/ekonomi.xml"),
-        ("Dunya",      "https://www.dunya.com/rss"),
-        ("BorsaGundem","https://www.borsagundem.com/feed"),
-        # Yedek İngilizce - Türkçe bulunamazsa
-        ("CNBC Markets",  "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10000664"),
-        ("CNBC Economy",  "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=20910258"),
-        ("MarketWatch",   "https://feeds.marketwatch.com/marketwatch/topstories/"),
+        ("BloombergHT",  "https://www.bloomberght.com/rss"),
+        ("Haberturk",    "https://www.haberturk.com/rss/ekonomi.xml"),
+        ("Milliyet",     "https://www.milliyet.com.tr/rss/rssNew/ekonomiRss.xml"),
+        ("Sabah",        "https://www.sabah.com.tr/rss/ekonomi.xml"),
+        ("BorsaGundem",  "https://www.borsagundem.com/feed"),
+        ("Dunya",        "https://www.dunya.com/rss"),
+        # Yedek İngilizce
+        ("CNBC Markets", "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10000664"),
+        ("CNBC Economy", "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=20910258"),
+        ("MarketWatch",  "https://feeds.marketwatch.com/marketwatch/topstories/"),
     ]
 
     for kategori, url in feeds:
