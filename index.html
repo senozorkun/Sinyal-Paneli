@@ -857,7 +857,7 @@ async function veriYukle() {
     setStatus('yükleniyor...', 'var(--blue)');
     const url = 'https://raw.githubusercontent.com/' + REPO + '/main/data.json?t=' + Date.now();
     const r = await fetch(url);
-    if (!r.ok) { setStatus('veri yok — güncelle'ye bas', 'var(--amber)'); return; }
+    if (!r.ok) { setStatus('veri yok — guncelle butonuna bas', 'var(--amber)'); return; }
     const v = await r.json();
 
     setInput('vix', v.vix);
@@ -892,10 +892,7 @@ async function veriYukle() {
 async function guncelleTetikle() {
   var token = localStorage.getItem('gh_token');
   if (!token) {
-    token = prompt('GitHub Personal Access Token giriniz:
-(github.com → Settings → Developer settings → Personal access tokens → Fine-grained → New token)
-
-Gerekli izin: Actions (Read & Write)');
+    token = prompt('GitHub Personal Access Token girin (Actions: Read and Write izni gerekli)');
     if (!token) return;
     localStorage.setItem('gh_token', token);
   }
