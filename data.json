@@ -1,7 +1,7 @@
 {
-  "vix": 30.61,
+  "vix": 30.55,
   "move": 111.9,
-  "dxy": 100.3,
+  "dxy": 100.32,
   "usdtl_change": 1.16,
   "us10y": 4.44,
   "spread": 83.3,
@@ -9,15 +9,15 @@
   "cds": null,
   "tcmb": null,
   "tcmb_dir": "sabit",
-  "gold": 4589.6,
-  "brent": 107.2,
-  "cuau": 0.001205,
+  "gold": 4590.2,
+  "brent": 107.6,
+  "cuau": 0.001202,
   "msci_dir": "dusus",
   "sp500_dir": "dusus",
   "sp500_ma": "altinda",
   "unemployment": 4.4,
   "us_cpi": 2.4,
   "haberler": [],
-  "guncelleme": "30.03.2026 15:19",
-  "timestamp": "2026-03-30T15:19:34.608240+03:00"
+  "guncelleme": "30.03.2026 15:20",
+  "timestamp": "2026-03-30T15:20:58.629145+03:00"
 }
