@@ -1,7 +1,7 @@
 {
-  "vix": 28.91,
+  "vix": 28.6,
   "move": 108.3,
-  "dxy": 100.5,
+  "dxy": 100.49,
   "usdtl_change": 1.2,
   "us10y": 4.34,
   "spread": 74.4,
@@ -9,9 +9,9 @@
   "cds": null,
   "tcmb": null,
   "tcmb_dir": "sabit",
-  "gold": 4577.6,
-  "brent": 107.7,
-  "cuau": 0.001207,
+  "gold": 4603.2,
+  "brent": 107.4,
+  "cuau": 0.001202,
   "msci_dir": "dusus",
   "sp500_dir": "dusus",
   "sp500_ma": "altinda",
@@ -19,35 +19,35 @@
   "us_cpi": 2.4,
   "haberler": [
     {
-      "baslik": "<![CDATA[Almanya'nÄ±n kamu borcunda hÄ±zlÄ± artÄ±Å]]>",
+      "baslik": "Almanya'nÄ±n kamu borcunda hÄ±zlÄ± artÄ±Å",
       "link": "https://www.bloomberght.com/almanya-nin-kamu-borcunda-hizli-artis-3773333",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "<![CDATA[Airbnb Ã¶zel araÃ§la karÅÄ±lama hizmeti baÅlatÄ±yor]]>",
+      "baslik": "Airbnb Ã¶zel araÃ§la karÅÄ±lama hizmeti baÅlatÄ±yor",
       "link": "https://www.bloomberght.com/airbnb-ozel-aracla-karsilama-hizmeti-baslatiyor-3773332",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "<![CDATA[TÃ¼rk-Ä°Å gÄ±da enflasyonu Mart'ta yÃ¼zde 1,32 oldu]]>",
+      "baslik": "TÃ¼rk-Ä°Å gÄ±da enflasyonu Mart'ta yÃ¼zde 1,32 oldu",
       "link": "https://www.bloomberght.com/turk-is-gida-enflasyonu-mart-ta-yuzde-1-32-oldu-3773329",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "<![CDATA[Euro BÃ¶lgesi'nde 2022'den beri en hÄ±zlÄ± enflasyon artÄ±ÅÄ±]]>",
+      "baslik": "Euro BÃ¶lgesi'nde 2022'den beri en hÄ±zlÄ± enflasyon artÄ±ÅÄ±",
       "link": "https://www.bloomberght.com/euro-bolgesi-nde-2022-den-beri-en-hizli-enflasyon-artisi-3773319",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "<![CDATA[Her 10 Alman Åirketinden dokuzu savaÅtan etkilendi]]>",
+      "baslik": "Her 10 Alman Åirketinden dokuzu savaÅtan etkilendi",
       "link": "https://www.bloomberght.com/her-10-alman-sirketinden-dokuzu-savastan-etkilendi-3773318",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
@@ -89,76 +89,76 @@
       "tarih": ""
     },
     {
-      "baslik": "<![CDATA[Dışişleri Bakanı Hakan Fidan, Filistin Devlet Başkanı Yardımcısı Şeyh ile bir araya geldi]]>",
+      "baslik": "Dışişleri Bakanı Hakan Fidan, Filistin Devlet Başkanı Yardımcısı Şeyh ile bir araya geldi",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "<![CDATA[Kraliyet duyurdu: Prenses, askere gidiyor! '11 ay eğitim alacak']]>",
+      "baslik": "Kraliyet duyurdu: Prenses, askere gidiyor! '11 ay eğitim alacak'",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "<![CDATA[SON DAKİKA SAVAŞ HABERLERİ: ABD-İsrail-İran savaşının 32. günü: Körfez'de 4 ülke kara harekatı istedi! 'Tahran yeterince zayıflatılmadı']]>",
+      "baslik": "SON DAKİKA SAVAŞ HABERLERİ: ABD-İsrail-İran savaşının 32. günü: Körfez'de 4 ülke kara harekatı istedi! 'Tahran yeterince zayıflatılmadı'",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "<![CDATA[İtalya'dan dikkat çeken ABD hamlesi! 'İzin verilmedi']]>",
+      "baslik": "İtalya'dan dikkat çeken ABD hamlesi! 'İzin verilmedi'",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "<![CDATA[Körfez ülkelerinden ABD'ye 'saldırılara devam' baskısı! BAE ve Suudi Arabistan öncülük ediyor: İran yeterince zayıflatılmadı]]>",
+      "baslik": "Körfez ülkelerinden ABD'ye 'saldırılara devam' baskısı! BAE ve Suudi Arabistan öncülük ediyor: İran yeterince zayıflatılmadı",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "<![CDATA[Cevdet Yılmaz'dan kritik değerlendirme: İşsizlik oranı tek haneli rakamlardaki seyrini sürdürüyor]]>",
+      "baslik": "Bankacılık sektörünün şubat karı 82,1 milyar TL’ye ulaştı",
+      "link": "https://www.sabah.com.tr/ekonomi/bankacilik-sektorunun-subat-kari-821-milyar-tlye-ulasti-7554101",
+      "kaynak": "Sabah",
+      "kategori": "Sabah",
+      "tarih": ""
+    },
+    {
+      "baslik": "Cevdet Yılmaz'dan kritik değerlendirme: İşsizlik oranı tek haneli rakamlardaki seyrini sürdürüyor",
       "link": "https://www.sabah.com.tr/ekonomi/cevdet-yilmazdan-kritik-degerlendirme-issizlik-orani-tek-haneli-rakamlardaki-seyrini-surduruyor-7554083",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     },
     {
-      "baslik": "<![CDATA[Bakan Kacır: Milli gelirimizi 1,6 trilyon dolara taşıdık]]>",
+      "baslik": "Bakan Kacır: Milli gelirimizi 1,6 trilyon dolara taşıdık",
       "link": "https://www.sabah.com.tr/ekonomi/bakan-kacir-milli-gelirimizi-16-trilyon-dolara-tasidik-7554080",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     },
     {
-      "baslik": "<![CDATA[Türkiye'den Hürmüz'e karşı kritik hamle! Suudi Arabistan ile transit geçiş vizesi anlaşması yapıldı]]>",
+      "baslik": "Türkiye'den Hürmüz'e karşı kritik hamle! Suudi Arabistan ile transit geçiş vizesi anlaşması yapıldı",
       "link": "https://www.sabah.com.tr/ekonomi/turkiyeden-hurmuze-karsi-kritik-hamle-suudi-arabistan-ile-transit-gecis-vizesi-anlasmasi-yapildi-7554069",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     },
     {
-      "baslik": "<![CDATA[Hazine ve Maliye Bakanlığı borç stoku verilerini açıkladı]]>",
+      "baslik": "Hazine ve Maliye Bakanlığı borç stoku verilerini açıkladı",
       "link": "https://www.sabah.com.tr/ekonomi/bakanlik-borc-stoku-verilerini-acikladi-7554062",
-      "kaynak": "Sabah",
-      "kategori": "Sabah",
-      "tarih": ""
-    },
-    {
-      "baslik": "<![CDATA[Başvurular bugün bitiyor! Ulusal Staj Programı için İŞKUR'dan öğrencilere son çağrı]]>",
-      "link": "https://www.sabah.com.tr/ekonomi/basvurular-bugun-bitiyor-ulusal-staj-programi-icin-iskurdan-ogrencilere-son-cagri-7554046",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     }
   ],
-  "guncelleme": "31.03.2026 14:21",
-  "timestamp": "2026-03-31T14:21:43.569574+03:00"
+  "guncelleme": "31.03.2026 14:30",
+  "timestamp": "2026-03-31T14:30:46.906947+03:00"
 }
