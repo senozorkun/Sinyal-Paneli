@@ -271,6 +271,11 @@ def haber_cek():
             if r.status_code != 200:
                 print(f"  [{kategori}] HTTP {r.status_code}")
                 continue
+            # Encoding düzelt - Türkçe karakterler için
+            if r.encoding and r.encoding.lower() in ('iso-8859-1', 'latin-1', 'windows-1252'):
+                r.encoding = 'utf-8'
+            elif not r.encoding:
+                r.encoding = 'utf-8'
             # Önce lxml-xml dene, yoksa html.parser
             try:
                 soup = BeautifulSoup(r.text, "lxml-xml")

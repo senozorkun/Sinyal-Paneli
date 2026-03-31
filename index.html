@@ -850,18 +850,16 @@ function initDocs() {
 
 </script>
 
-  <!-- Ticker ve haberler results-panel dışında, container içinde -->
-  <div style="max-width:1440px;margin:0 auto;padding:0 24px 24px;">
+  <div style="max-width:1440px;margin:0 auto;padding:0 24px 40px;">
     <div class="haberler-panel" id="haberler-panel" style="display:none;">
       <div class="haberler-header">
         <span>📰 PİYASA HABERLERİ</span>
-        <span id="haber-guncelleme" style="font-size:9px;color:var(--text3);"></span>
+        <span id="haber-guncelleme" style="font-size:9px;"></span>
       </div>
       <div class="haberler-liste" id="haberler-liste"></div>
     </div>
   </div>
 
-  <!-- Fon Modal -->
   <div class="modal-overlay" id="modal-fon" onclick="closeModal(event,'modal-fon')">
     <div class="modal-box" style="max-width:820px;">
       <div class="modal-header">
@@ -1506,39 +1504,68 @@ document.addEventListener('keydown', (e) => {
   function renderHaberler(haberler, guncelleme) {
     if (!haberler || haberler.length === 0) return;
 
-    // Ticker
+    // Ticker - textContent kullan, innerHTML değil (encoding sorununu önler)
     var track = document.getElementById('ticker-track');
     var wrap  = document.getElementById('ticker-wrap');
     if (track && wrap) {
-      var tickerHTML = '';
-      haberler.forEach(function(h) {
-        var link  = h.link  || '';
-        var title = h.baslik || '';
-        tickerHTML += '<span class="ticker-item" onclick="window.open(' + "'" + link + "'" + ', ' + "'" + '_blank' + "'" + ')">' +
-                      '<span class="ticker-dot"></span>' + title + '</span>';
+      track.innerHTML = '';
+      var fragment = document.createDocumentFragment();
+      var allItems = haberler.concat(haberler); // smooth loop için ikiye katla
+      allItems.forEach(function(h) {
+        var span = document.createElement('span');
+        span.className = 'ticker-item';
+        span.addEventListener('click', function() {
+          window.open(h.link, '_blank');
+        });
+        var dot = document.createElement('span');
+        dot.className = 'ticker-dot';
+        span.appendChild(dot);
+        var txt = document.createTextNode(' ' + (h.baslik || ''));
+        span.appendChild(txt);
+        fragment.appendChild(span);
       });
-      track.innerHTML = tickerHTML + tickerHTML;
+      track.appendChild(fragment);
       wrap.style.display = 'block';
     }
 
-    // Liste
+    // Liste - createElement kullan
     var liste = document.getElementById('haberler-liste');
     var panel = document.getElementById('haberler-panel');
     var gunEl = document.getElementById('haber-guncelleme');
     if (liste && panel) {
       if (gunEl) gunEl.textContent = guncelleme;
-      var listeHTML = '';
+      liste.innerHTML = '';
+      var listFrag = document.createDocumentFragment();
       haberler.forEach(function(h) {
-        var link     = h.link     || '#';
-        var title    = h.baslik   || '';
-        var kaynak   = h.kaynak   || '';
-        var kategori = h.kategori || '';
-        listeHTML += '<a class="haber-item" href="' + link + '" target="_blank" rel="noopener noreferrer">' +
-                     '<div style="min-width:80px"><div class="haber-kategori">' + kategori + '</div></div>' +
-                     '<div style="flex:1"><div class="haber-baslik">' + title + '</div>' +
-                     '<div class="haber-kaynak">' + kaynak + '</div></div></a>';
+        var a = document.createElement('a');
+        a.className = 'haber-item';
+        a.href = h.link || '#';
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+
+        var katDiv = document.createElement('div');
+        katDiv.style.minWidth = '80px';
+        var katSpan = document.createElement('div');
+        katSpan.className = 'haber-kategori';
+        katSpan.textContent = h.kategori || '';
+        katDiv.appendChild(katSpan);
+
+        var infoDiv = document.createElement('div');
+        infoDiv.style.flex = '1';
+        var baslikDiv = document.createElement('div');
+        baslikDiv.className = 'haber-baslik';
+        baslikDiv.textContent = h.baslik || '';
+        var kaynakDiv = document.createElement('div');
+        kaynakDiv.className = 'haber-kaynak';
+        kaynakDiv.textContent = h.kaynak || '';
+        infoDiv.appendChild(baslikDiv);
+        infoDiv.appendChild(kaynakDiv);
+
+        a.appendChild(katDiv);
+        a.appendChild(infoDiv);
+        listFrag.appendChild(a);
       });
-      liste.innerHTML = listeHTML;
+      liste.appendChild(listFrag);
       panel.style.display = 'block';
     }
   }
@@ -1549,32 +1576,19 @@ document.addEventListener('keydown', (e) => {
       var r = await fetch('https://raw.githubusercontent.com/' + REPO + '/main/data.json?t=' + Date.now());
       if (!r.ok) { setStatus('guncelle butonuna bas', 'var(--amber)'); return; }
       var v = await r.json();
-      setInput('vix', v.vix);
-      setInput('move', v.move);
-      setInput('dxy', v.dxy);
-      setInput('usdtl_change', v.usdtl_change);
-      setInput('us10y', v.us10y);
-      setInput('spread', v.spread);
-      setInput('fed_cut', v.fed_cut);
-      setInput('cds', v.cds);
-      setInput('tcmb', v.tcmb);
+      setInput('vix', v.vix); setInput('move', v.move); setInput('dxy', v.dxy);
+      setInput('usdtl_change', v.usdtl_change); setInput('us10y', v.us10y);
+      setInput('spread', v.spread); setInput('fed_cut', v.fed_cut);
+      setInput('cds', v.cds); setInput('tcmb', v.tcmb);
       setSelect('tcmb_dir', v.tcmb_dir);
-      setInput('gold', v.gold);
-      setInput('brent', v.brent);
-      setInput('cuau', v.cuau);
-      setSelect('msci_dir', v.msci_dir);
-      setSelect('sp500_dir', v.sp500_dir);
+      setInput('gold', v.gold); setInput('brent', v.brent); setInput('cuau', v.cuau);
+      setSelect('msci_dir', v.msci_dir); setSelect('sp500_dir', v.sp500_dir);
       setSelect('sp500_ma', v.sp500_ma);
-      setInput('unemployment', v.unemployment);
-      setInput('us_cpi', v.us_cpi);
+      setInput('unemployment', v.unemployment); setInput('us_cpi', v.us_cpi);
       setStatus('🤖 ' + (v.guncelleme || ''), 'var(--green)');
-      if (v.haberler && v.haberler.length > 0) {
-        renderHaberler(v.haberler, v.guncelleme || '');
-      }
+      if (v.haberler && v.haberler.length > 0) renderHaberler(v.haberler, v.guncelleme || '');
       setTimeout(function() { if (typeof analyze === 'function') analyze(); }, 400);
-    } catch(e) {
-      setStatus('baglanti hatasi', 'var(--red)');
-    }
+    } catch(e) { setStatus('baglanti hatasi', 'var(--red)'); }
   }
 
   async function guncelleTetikle() {
@@ -1585,45 +1599,31 @@ document.addEventListener('keydown', (e) => {
       localStorage.setItem('gh_token', token);
     }
     var btn = document.getElementById('refresh-btn');
-    btn.textContent = '⏳ bekle...';
-    btn.style.opacity = '0.6';
-    btn.disabled = true;
+    btn.textContent = '⏳ bekle...'; btn.style.opacity = '0.6'; btn.disabled = true;
     setStatus('guncelleniyor...', 'var(--amber)');
     try {
       var r = await fetch('https://api.github.com/repos/' + REPO + '/actions/workflows/' + WORKFLOW_ID + '/dispatches', {
         method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ' + token,
-          'Content-Type': 'application/json',
-          'Accept': 'application/vnd.github+json'
-        },
+        headers: {'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github+json'},
         body: JSON.stringify({ref: 'main'})
       });
       if (r.status === 204) {
         setStatus('cekiliyor (~45sn)...', 'var(--amber)');
         setTimeout(async function() {
           await veriYukle();
-          btn.textContent = '🔄 GÜNCELLE';
-          btn.style.opacity = '1';
-          btn.disabled = false;
+          btn.textContent = '🔄 GÜNCELLE'; btn.style.opacity = '1'; btn.disabled = false;
         }, 50000);
       } else if (r.status === 401) {
         localStorage.removeItem('gh_token');
         setStatus('token gecersiz', 'var(--red)');
-        btn.textContent = '🔄 GÜNCELLE';
-        btn.style.opacity = '1';
-        btn.disabled = false;
+        btn.textContent = '🔄 GÜNCELLE'; btn.style.opacity = '1'; btn.disabled = false;
       } else {
         setStatus('hata: ' + r.status, 'var(--red)');
-        btn.textContent = '🔄 GÜNCELLE';
-        btn.style.opacity = '1';
-        btn.disabled = false;
+        btn.textContent = '🔄 GÜNCELLE'; btn.style.opacity = '1'; btn.disabled = false;
       }
     } catch(e) {
       setStatus('baglanti hatasi', 'var(--red)');
-      btn.textContent = '🔄 GÜNCELLE';
-      btn.style.opacity = '1';
-      btn.disabled = false;
+      btn.textContent = '🔄 GÜNCELLE'; btn.style.opacity = '1'; btn.disabled = false;
     }
   }
 
