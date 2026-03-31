@@ -1,17 +1,17 @@
 {
-  "vix": 28.64,
+  "vix": 26.55,
   "move": 108.3,
-  "dxy": 100.42,
-  "usdtl_change": 1.2,
-  "us10y": 4.34,
-  "spread": 74.4,
+  "dxy": 100.03,
+  "usdtl_change": 1.19,
+  "us10y": 4.3,
+  "spread": 70.1,
   "fed_cut": null,
   "cds": null,
   "tcmb": null,
   "tcmb_dir": "sabit",
-  "gold": 4609.0,
-  "brent": 107.6,
-  "cuau": 0.0012,
+  "gold": 4668.5,
+  "brent": 105.1,
+  "cuau": 0.001202,
   "msci_dir": "dusus",
   "sp500_dir": "dusus",
   "sp500_ma": "altinda",
@@ -19,146 +19,139 @@
   "us_cpi": 2.4,
   "haberler": [
     {
-      "baslik": "Türkiye'nin Hazine garantili borç stoku 19, 1 milyar dolar oldu",
-      "link": "https://www.bloomberght.com/turkiye-nin-hazine-garantili-borc-stoku-19-1-milyar-dolar-oldu-3773338",
+      "baslik": "GİB'den gayrimenkul ilan fiyatlarına inceleme",
+      "link": "https://www.bloomberght.com/gib-den-gayrimenkul-ilan-fiyatlarina-inceleme-3773383",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "Trump'tan müttefiklerine sert tepki: Gidin jet yakıtınızı Hürmüz'den alın",
-      "link": "https://www.bloomberght.com/trump-tan-muttefiklerine-sert-tepki-gidin-jet-yakitinizi-hurmuz-den-alin-3773337",
+      "baslik": "KİT'lerin borcu 1,5 trilyon lirayı aştı",
+      "link": "https://www.bloomberght.com/kit-lerin-borcu-1-5-trilyon-lirayi-asti-3773380",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "Apple, “E-Postamı Gizle” özelliği emniyet güçlerine karşı açık",
-      "link": "https://www.bloomberght.com/apple-e-postami-gizle-ozelligi-emniyet-guclerine-karsi-acik-3773334",
+      "baslik": "İran'dan Dünya Kupası açıklaması",
+      "link": "https://www.bloomberght.com/iran-dan-dunya-kupasi-aciklamasi-3773379",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "Almanya'nın kamu borcunda hızlı artış",
-      "link": "https://www.bloomberght.com/almanya-nin-kamu-borcunda-hizli-artis-3773333",
+      "baslik": "ABD'de açık iş sayısı azaldı, işe alımlar belirgin şekilde yavaşladı",
+      "link": "https://www.bloomberght.com/abd-de-acik-is-sayisi-azaldi-ise-alimlar-belirgin-sekilde-yavasladi-3773376",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "Airbnb özel araçla karşılama hizmeti başlatıyor",
-      "link": "https://www.bloomberght.com/airbnb-ozel-aracla-karsilama-hizmeti-baslatiyor-3773332",
+      "baslik": "ABD'de tüketici güveninde beklenmedik artış",
+      "link": "https://www.bloomberght.com/abd-de-tuketici-guveninde-beklenmedik-artis-3773375",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "Hürmüz Boğazı'na Türkiye'den çözüm",
-      "link": "https://www.haberturk.com/bakan-bolat-duyurdu-hurmuz-bogazi-na-turkiye-den-cozum-3873702-ekonomi",
+      "baslik": "Piyasalarda gün sonu: 31 Mart 2026 Salı Borsa İstanbul, dolar, altın ve kripto paralarda son durum",
+      "link": "https://www.haberturk.com/piyasalarda-gun-sonu-31-mart-2026-sali-borsa-istanbul-dolar-altin-ve-kripto-paralarda-son-durum-fai-3873795-ekonomi",
       "kaynak": "Haberturk",
       "kategori": "Haberturk",
       "tarih": ""
     },
     {
-      "baslik": "Vodafone Türkiye’de üst düzey atama",
-      "link": "https://www.haberturk.com/vodafone-turkiyede-ust-duzey-atama-3873706-teknoloji",
+      "baslik": "İstanbul'un en pahalı caddesi artık daha sessiz",
+      "link": "https://www.haberturk.com/nisantasi-nda-ziyaretci-sayisi-yariya-indi-3873688-ekonomi",
       "kaynak": "Haberturk",
       "kategori": "Haberturk",
       "tarih": ""
     },
     {
-      "baslik": "AVM'de 18 yaş altına yasak",
-      "link": "https://www.haberturk.com/avm-de-18-yas-altina-yasak-3873693-ekonomi",
+      "baslik": "\"Türkiye, değişen küresel dengelerde yeni fırsatların merkezinde yer alabilir\"",
+      "link": "https://www.haberturk.com/sabanci-holding-yonetim-kurulu-baskani-culhaci-turkiye-yeni-firsatlarin-merkezinde-yer-alabilir-3873773-ekonomi",
       "kaynak": "Haberturk",
       "kategori": "Haberturk",
       "tarih": ""
     },
     {
-      "baslik": "Yıldız Holding’de üst düzey atamalar",
-      "link": "https://www.haberturk.com/yildiz-holdingde-ust-duzey-atama-3873652-ekonomi",
+      "baslik": "Türkiye 5G'ye geçti",
+      "link": "https://www.haberturk.com/cumhurbaskani-erdogan-kulliye-de-5g-icin-dugmeye-basiyor-3873715-teknoloji",
       "kaynak": "Haberturk",
       "kategori": "Haberturk",
       "tarih": ""
     },
     {
-      "baslik": "APP plakalar için son gün",
-      "link": "https://www.haberturk.com/arac-sahipleri-dikkat-app-plakalar-icin-son-gun-3873685-ekonomi",
+      "baslik": "Enerji ve Tabii Kaynaklar Bakanlığı ve Sıfır Atık Vakfı arasında iş birliği",
+      "link": "https://www.haberturk.com/enerji-ve-tabii-kaynaklar-bakanligi-ve-sifir-atik-vakfi-arasinda-is-birligi-3873757-ekonomi",
       "kaynak": "Haberturk",
       "kategori": "Haberturk",
       "tarih": ""
     },
     {
-      "baslik": "Dışişleri Bakanı Hakan Fidan, Filistin Devlet Başkanı Yardımcısı Şeyh ile bir araya geldi",
+      "baslik": "Pakistan ve Çin, Orta Doğu'da barışı yeniden sağlamak için '5 maddelik ortak girişim' yayımladı",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "Kraliyet duyurdu: Prenses, askere gidiyor! '11 ay eğitim alacak'",
+      "baslik": "Trump'ın restinin ardından kritik gelişme! İngiltere Kralı Charles ve Kraliçe Camilla, ABD'yi ziyaret edecek",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "SON DAKİKA SAVAŞ HABERLERİ: ABD-İsrail-İran savaşının 32. günü: Trump'tan NATO'ya rest! İran'a saldırmayı reddeden İngiltere'ye bir önerim var",
+      "baslik": "Hürmüz Boğazı yakınlarındaki Keşm Adası hedef alındı iddiası!",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "İtalya'dan dikkat çeken ABD hamlesi! 'İzin verilmedi'",
+      "baslik": "İran görüntüleri paylaştı! ABD üretimi İHA'lar böyle vuruldu",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "Körfez ülkelerinden ABD'ye 'saldırılara devam' baskısı! BAE ve Suudi Arabistan öncülük ediyor: İran yeterince zayıflatılmadı",
+      "baslik": "Dışişleri Bakanlığı’ndan UNFIL’e yönelik saldırıya kınama: Faillerin adalet önünde hesap vermesi sağlanmalıdır",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "Evsizlere Konaklama Projesi'nin süresi uzadı",
-      "link": "https://www.sabah.com.tr/ekonomi/evsizlere-konaklama-projesinin-suresi-uzadi-7554104",
+      "baslik": "SGK duyurdu: Borçlar 7 Nisan’a kadar ödenebilecek!",
+      "link": "https://www.sabah.com.tr/ekonomi/sgk-duyurdu-borclar-7-nisana-kadar-odenebilecek-7554281",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     },
     {
-      "baslik": "Bankacılık sektörünün şubat karı 82,1 milyar TL’ye ulaştı",
-      "link": "https://www.sabah.com.tr/ekonomi/bankacilik-sektorunun-subat-kari-821-milyar-tlye-ulasti-7554101",
+      "baslik": "Türk Telekom CEO'su Ebubekir Şahin: Herkes için 5G deneyimini sunmaya hazırız",
+      "link": "https://www.sabah.com.tr/ekonomi/turk-telekom-ceosu-ebubekir-sahin-herkes-icin-5g-deneyimini-sunmaya-haziriz-7554247",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     },
     {
-      "baslik": "Cevdet Yılmaz'dan kritik değerlendirme: İşsizlik oranı tek haneli rakamlardaki seyrini sürdürüyor",
-      "link": "https://www.sabah.com.tr/ekonomi/cevdet-yilmazdan-kritik-degerlendirme-issizlik-orani-tek-haneli-rakamlardaki-seyrini-surduruyor-7554083",
+      "baslik": "5G Türkiye'yi dijital merkez yapacak! Uraloğlu: 81 ilin dört bir köşesine yayılacak",
+      "link": "https://www.sabah.com.tr/ekonomi/turkiyede-5g-donemi-resmen-basladi-uraloglu-2-yilda-81-ilin-dort-bir-kosesine-yayilacak-7554149",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     },
     {
-      "baslik": "Bakan Kacır: Milli gelirimizi 1,6 trilyon dolara taşıdık",
-      "link": "https://www.sabah.com.tr/ekonomi/bakan-kacir-milli-gelirimizi-16-trilyon-dolara-tasidik-7554080",
-      "kaynak": "Sabah",
-      "kategori": "Sabah",
-      "tarih": ""
-    },
-    {
-      "baslik": "Türkiye'den Hürmüz'e karşı kritik hamle! Suudi Arabistan ile transit geçiş vizesi anlaşması yapıldı",
-      "link": "https://www.sabah.com.tr/ekonomi/turkiyeden-hurmuze-karsi-kritik-hamle-suudi-arabistan-ile-transit-gecis-vizesi-anlasmasi-yapildi-7554069",
+      "baslik": "DDKKM bakiyesi 40 milyon dolara geriledi",
+      "link": "https://www.sabah.com.tr/ekonomi/ddkkm-bakiyesi-40-milyon-dolara-geriledi-7554141",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     }
   ],
-  "guncelleme": "31.03.2026 14:44",
-  "timestamp": "2026-03-31T14:44:37.390352+03:00"
+  "guncelleme": "31.03.2026 20:02",
+  "timestamp": "2026-03-31T20:02:35.952199+03:00"
 }
