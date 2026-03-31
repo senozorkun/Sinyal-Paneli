@@ -302,8 +302,18 @@ def haber_cek():
                         sib = link.next_sibling
                         if sib:
                             link_url = str(sib).strip()
+                # CDATA ve HTML entity temizle
+                import html as html_lib
+                baslik_temiz = html_lib.unescape(baslik)
+                # CDATA varsa temizle
+                if baslik_temiz.startswith('<![CDATA['):
+                    baslik_temiz = baslik_temiz[9:]
+                    if baslik_temiz.endswith(']]>'):
+                        baslik_temiz = baslik_temiz[:-3]
+                baslik_temiz = baslik_temiz.strip()
+
                 haberler.append({
-                    "baslik":   baslik,
+                    "baslik":   baslik_temiz,
                     "link":     link_url,
                     "kaynak":   source.text.strip() if source else kategori,
                     "kategori": kategori,
