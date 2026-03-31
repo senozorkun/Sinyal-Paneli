@@ -1,7 +1,7 @@
 {
-  "vix": 28.6,
+  "vix": 28.64,
   "move": 108.3,
-  "dxy": 100.49,
+  "dxy": 100.42,
   "usdtl_change": 1.2,
   "us10y": 4.34,
   "spread": 74.4,
@@ -9,9 +9,9 @@
   "cds": null,
   "tcmb": null,
   "tcmb_dir": "sabit",
-  "gold": 4603.2,
-  "brent": 107.4,
-  "cuau": 0.001202,
+  "gold": 4609.0,
+  "brent": 107.6,
+  "cuau": 0.0012,
   "msci_dir": "dusus",
   "sp500_dir": "dusus",
   "sp500_ma": "altinda",
@@ -19,36 +19,36 @@
   "us_cpi": 2.4,
   "haberler": [
     {
-      "baslik": "Almanya'nÄ±n kamu borcunda hÄ±zlÄ± artÄ±Å",
+      "baslik": "Türkiye'nin Hazine garantili borç stoku 19, 1 milyar dolar oldu",
+      "link": "https://www.bloomberght.com/turkiye-nin-hazine-garantili-borc-stoku-19-1-milyar-dolar-oldu-3773338",
+      "kaynak": "BloombergHT",
+      "kategori": "BloombergHT",
+      "tarih": ""
+    },
+    {
+      "baslik": "Trump'tan müttefiklerine sert tepki: Gidin jet yakıtınızı Hürmüz'den alın",
+      "link": "https://www.bloomberght.com/trump-tan-muttefiklerine-sert-tepki-gidin-jet-yakitinizi-hurmuz-den-alin-3773337",
+      "kaynak": "BloombergHT",
+      "kategori": "BloombergHT",
+      "tarih": ""
+    },
+    {
+      "baslik": "Apple, “E-Postamı Gizle” özelliği emniyet güçlerine karşı açık",
+      "link": "https://www.bloomberght.com/apple-e-postami-gizle-ozelligi-emniyet-guclerine-karsi-acik-3773334",
+      "kaynak": "BloombergHT",
+      "kategori": "BloombergHT",
+      "tarih": ""
+    },
+    {
+      "baslik": "Almanya'nın kamu borcunda hızlı artış",
       "link": "https://www.bloomberght.com/almanya-nin-kamu-borcunda-hizli-artis-3773333",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "Airbnb Ã¶zel araÃ§la karÅÄ±lama hizmeti baÅlatÄ±yor",
+      "baslik": "Airbnb özel araçla karşılama hizmeti başlatıyor",
       "link": "https://www.bloomberght.com/airbnb-ozel-aracla-karsilama-hizmeti-baslatiyor-3773332",
-      "kaynak": "BloombergHT",
-      "kategori": "BloombergHT",
-      "tarih": ""
-    },
-    {
-      "baslik": "TÃ¼rk-Ä°Å gÄ±da enflasyonu Mart'ta yÃ¼zde 1,32 oldu",
-      "link": "https://www.bloomberght.com/turk-is-gida-enflasyonu-mart-ta-yuzde-1-32-oldu-3773329",
-      "kaynak": "BloombergHT",
-      "kategori": "BloombergHT",
-      "tarih": ""
-    },
-    {
-      "baslik": "Euro BÃ¶lgesi'nde 2022'den beri en hÄ±zlÄ± enflasyon artÄ±ÅÄ±",
-      "link": "https://www.bloomberght.com/euro-bolgesi-nde-2022-den-beri-en-hizli-enflasyon-artisi-3773319",
-      "kaynak": "BloombergHT",
-      "kategori": "BloombergHT",
-      "tarih": ""
-    },
-    {
-      "baslik": "Her 10 Alman Åirketinden dokuzu savaÅtan etkilendi",
-      "link": "https://www.bloomberght.com/her-10-alman-sirketinden-dokuzu-savastan-etkilendi-3773318",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
@@ -103,7 +103,7 @@
       "tarih": ""
     },
     {
-      "baslik": "SON DAKİKA SAVAŞ HABERLERİ: ABD-İsrail-İran savaşının 32. günü: Körfez'de 4 ülke kara harekatı istedi! 'Tahran yeterince zayıflatılmadı'",
+      "baslik": "SON DAKİKA SAVAŞ HABERLERİ: ABD-İsrail-İran savaşının 32. günü: Trump'tan NATO'ya rest! İran'a saldırmayı reddeden İngiltere'ye bir önerim var",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
@@ -121,6 +121,13 @@
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
+      "tarih": ""
+    },
+    {
+      "baslik": "Evsizlere Konaklama Projesi'nin süresi uzadı",
+      "link": "https://www.sabah.com.tr/ekonomi/evsizlere-konaklama-projesinin-suresi-uzadi-7554104",
+      "kaynak": "Sabah",
+      "kategori": "Sabah",
       "tarih": ""
     },
     {
@@ -150,15 +157,8 @@
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
-    },
-    {
-      "baslik": "Hazine ve Maliye Bakanlığı borç stoku verilerini açıkladı",
-      "link": "https://www.sabah.com.tr/ekonomi/bakanlik-borc-stoku-verilerini-acikladi-7554062",
-      "kaynak": "Sabah",
-      "kategori": "Sabah",
-      "tarih": ""
     }
   ],
-  "guncelleme": "31.03.2026 14:30",
-  "timestamp": "2026-03-31T14:30:46.906947+03:00"
+  "guncelleme": "31.03.2026 14:44",
+  "timestamp": "2026-03-31T14:44:37.390352+03:00"
 }
