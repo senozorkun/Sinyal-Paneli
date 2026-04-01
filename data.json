@@ -1,17 +1,17 @@
 {
-  "vix": 25.25,
+  "vix": 25.03,
   "move": 96.1,
-  "dxy": 99.8,
-  "usdtl_change": 1.13,
+  "dxy": 99.62,
+  "usdtl_change": 1.17,
   "us10y": 4.31,
   "spread": 71.1,
   "fed_cut": null,
   "cds": null,
   "tcmb": null,
   "tcmb_dir": "sabit",
-  "gold": 4733.4,
-  "brent": 105.1,
-  "cuau": 0.001192,
+  "gold": 4743.2,
+  "brent": 103.0,
+  "cuau": 0.001186,
   "msci_dir": "dusus",
   "sp500_dir": "dusus",
   "sp500_ma": "altinda",
@@ -19,146 +19,146 @@
   "us_cpi": 2.4,
   "haberler": [
     {
-      "baslik": "Resmi Gazete'de bugün (01.04.2026)",
-      "link": "https://www.bloomberght.com/resmi-gazete-de-bugun-01042026-3773391",
+      "baslik": "İstanbul'da Mart ayı enflasyonu yüzde 2,97",
+      "link": "https://www.bloomberght.com/istanbul-da-mart-ayi-enflasyonu-yuzde-2-97-3773443",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "WSJ: ABD üçüncü uçak gemisini Orta Doğu'ya gönderdi",
-      "link": "https://www.bloomberght.com/wsj-abd-ucuncu-ucak-gemisini-orta-dogu-ya-gonderdi-3773390",
+      "baslik": "Assan Alüminyum, Batı Virginia’daki folyo tesisini satın aldı",
+      "link": "https://www.bloomberght.com/assan-aluminyum-bati-virginiadaki-folyo-tesisini-satin-aldi-3773434",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "İran: Her türlü kara harekâtına karşı koymaya hazırız",
-      "link": "https://www.bloomberght.com/iran-her-turlu-kara-harektina-karsi-koymaya-haziriz-3773389",
+      "baslik": "Samsung'dan 25 yılın en iyi günlük performansı",
+      "link": "https://www.bloomberght.com/samsung-dan-25-yilin-en-iyi-gunluk-performansi-3773432",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "Pezeşkiyan: Güvenceler sağlanırsa savaşı bitirmek için gerekli irademiz var",
-      "link": "https://www.bloomberght.com/pezeskiyan-guvenceler-saglanirsa-savasi-bitirmek-icin-gerekli-irademiz-var-3773387",
+      "baslik": "Commerzbank: Savaş TL üzerindeki baskıyı artırıyor",
+      "link": "https://www.bloomberght.com/commerzbank-savas-tl-uzerindeki-baskiyi-artiriyor-3773431",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "Orta Doğu kriziyle AB'nin enerji faturası 14 milyar euro arttı",
-      "link": "https://www.bloomberght.com/orta-dogu-kriziyle-ab-nin-enerji-faturasi-14-milyar-euro-artti-3773386",
+      "baslik": "Bakan Şimşek Londra'da yatırımcılara seslendi",
+      "link": "https://www.bloomberght.com/simsek-turkiye-kuresel-sermaye-icin-yeniden-cekim-merkezi-haline-geliyor-3773430",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "GİB’den dijital ilanlara sıkı takip",
-      "link": "https://www.haberturk.com/gibden-dijital-ilanlara-siki-takip-3873860-ekonomi",
+      "baslik": "Türkiye, turizmde \"güven adası\" konumunda",
+      "link": "https://www.haberturk.com/turkiye-orta-dogu-daki-turizm-trafiginde-guven-adasi-olarak-konumlaniyor-3873988-ekonomi",
       "kaynak": "Haberturk",
       "kategori": "Haberturk",
       "tarih": ""
     },
     {
-      "baslik": "SGK, ödeme tarihlerini uzattı",
-      "link": "https://www.haberturk.com/sgk-odeme-tarihlerini-uzatti-3873849-ekonomi",
+      "baslik": "Bakan Uraloğlu'ndan Hürmüz Boğazı açıklaması",
+      "link": "https://www.haberturk.com/bakan-uraloglu-ndan-hurmuz-bogazi-aciklamasi-3873973-ekonomi",
       "kaynak": "Haberturk",
       "kategori": "Haberturk",
       "tarih": ""
     },
     {
-      "baslik": "TMO yeni hasat sezonu öncesi hububat satış politikası belirledi",
-      "link": "https://www.haberturk.com/tmo-yeni-hasat-sezonu-oncesi-hububat-satis-politikasi-belirledi-3873821-ekonomi",
+      "baslik": "İstanbul Kuzey Demir Yolu Geçişi Projesi'ne 1,67 milyar Euro finansman",
+      "link": "https://www.haberturk.com/istanbul-kuzey-demir-yolu-gecisi-projesi-ne-1-67-milyar-euro-finansman-3873970-ekonomi",
       "kaynak": "Haberturk",
       "kategori": "Haberturk",
       "tarih": ""
     },
     {
-      "baslik": "Piyasalarda gün sonu: 31 Mart 2026 Salı Borsa İstanbul, dolar, altın ve kripto paralarda son durum",
-      "link": "https://www.haberturk.com/piyasalarda-gun-sonu-31-mart-2026-sali-borsa-istanbul-dolar-altin-ve-kripto-paralarda-son-durum-fai-3873795-ekonomi",
+      "baslik": "\"Vodafone'un dünyada yaptığı en büyük 5G lansmanını gerçekleştirdik\"",
+      "link": "https://www.haberturk.com/vodafone-un-dunyada-yaptigi-en-buyuk-5g-lansmanini-gerceklestirdik-3873969-teknoloji",
       "kaynak": "Haberturk",
       "kategori": "Haberturk",
       "tarih": ""
     },
     {
-      "baslik": "İstanbul'un en pahalı caddesi artık daha sessiz",
-      "link": "https://www.haberturk.com/nisantasi-nda-ziyaretci-sayisi-yariya-indi-3873688-ekonomi",
+      "baslik": "Ekmek fiyatlarına zam",
+      "link": "https://www.haberturk.com/ekmek-fiyatlarina-zam-3873963-ekonomi",
       "kaynak": "Haberturk",
       "kategori": "Haberturk",
       "tarih": ""
     },
     {
-      "baslik": "Fransız Senatosu kabul etti: 15 yaşından küçüklere kısmi sosyal medya yasağı",
+      "baslik": "Eski İsrail Başbakanı'ndan Netanyahu'ya sert sözler! 'Ülkeyi içeriden parçalıyor'",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "İran Dışişleri Bakanı Erakçi: 'Ateşkesi kabul etmeyeceğiz'",
+      "baslik": "ABD Başkanı Trump'tan son dakika açıklaması! 'NATO'dan çıkabiliriz'",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "SON DAKİKA SAVAŞ HABERLERİ: ABD-İsrail-İran savaşının 32. günü: Kara harekatı olacak mı? '15 farklı yol var'",
+      "baslik": "Putin, Hürmüz Boğazı'nın kapanmasına ilişkin konuştu! 'Güvenli güzergahı Rusya sunabilir'",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "Pakistan ve Çin, Orta Doğu'da barışı yeniden sağlamak için '5 maddelik ortak girişim' yayımladı",
+      "baslik": "ABD basınından flaş iddia! 'Bir ülke daha savaşa katılıyor'",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "Trump'ın restinin ardından kritik gelişme! İngiltere Kralı Charles ve Kraliçe Camilla, ABD'yi ziyaret edecek",
+      "baslik": "Erbil'de yağ deposunun vurulma anı ortaya çıktı! Bölgeden alevler yükseliyor",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "Bakan Bayraktar \"2026 bizim için milat\" diyerek duyurdu: Yeni bir müjde vermeyi istiyoruz",
-      "link": "https://www.sabah.com.tr/ekonomi/bakan-bayraktar-2026-bizim-icin-milat-diyerek-duyurdu-yeni-bir-mujde-vermeyi-istiyoruz-7554305",
+      "baslik": "Türkiye Fırıncılar Federasyonu açıkladı! Ekmek fiyatlarına zam geldi",
+      "link": "https://www.sabah.com.tr/ekonomi/turkiye-firincilar-federasyonu-acikladi-ekmek-fiyatlarina-zam-geldi-7554721",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     },
     {
-      "baslik": "SGK duyurdu: Borçlar 7 Nisan’a kadar ödenebilecek!",
-      "link": "https://www.sabah.com.tr/ekonomi/sgk-duyurdu-borclar-7-nisana-kadar-odenebilecek-7554281",
+      "baslik": "Altın ve petrolde ateşkes senaryosu! Gram altın kaç TL olacak? Uzman isim kritik seviyeleri açıkladı",
+      "link": "https://www.sabah.com.tr/ekonomi/piyasalarda-savas-sonrasi-senaryolar-ons-altin-kac-tl-olacak-petrolde-yeni-normal-seviye-kac-dolar-7554720",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     },
     {
-      "baslik": "Türk Telekom CEO'su Ebubekir Şahin: Herkes için 5G deneyimini sunmaya hazırız",
-      "link": "https://www.sabah.com.tr/ekonomi/turk-telekom-ceosu-ebubekir-sahin-herkes-icin-5g-deneyimini-sunmaya-haziriz-7554247",
+      "baslik": "\"Programımızı kararlılıkla uyguluyoruz\" Bakan Şimşek: Türkiye, güçlü bir üretim üssü",
+      "link": "https://www.sabah.com.tr/ekonomi/programimizi-kararlilikla-uyguluyoruz-bakan-simsek-turkiye-guclu-bir-uretim-ussu-7554657",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     },
     {
-      "baslik": "Enerji ve Tabii Kaynaklar Bakanlığı ve Sıfır Atık Vakfı arasında iş birliği",
-      "link": "https://www.sabah.com.tr/ekonomi/enerji-ve-tabii-kaynaklar-bakanligi-ve-sifir-atik-vakfi-arasinda-is-birligi-7554165",
+      "baslik": "Kanser, MS, ITP, diyabet ve kolesterol... 72 ilaç geri ödeme listesine alındı",
+      "link": "https://www.sabah.com.tr/ekonomi/kanser-ms-itp-diyabet-ve-kolesterol-72-ilac-geri-odeme-listesine-alindi-7554650",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     },
     {
-      "baslik": "5G Türkiye'yi dijital merkez yapacak! Uraloğlu: 81 ilin dört bir köşesine yayılacak",
-      "link": "https://www.sabah.com.tr/ekonomi/turkiyede-5g-donemi-resmen-basladi-uraloglu-2-yilda-81-ilin-dort-bir-kosesine-yayilacak-7554149",
+      "baslik": "AB'den enerjide krizi uyarısı! Barış gelse bile normale dönüş yıllar sürecek",
+      "link": "https://www.sabah.com.tr/ekonomi/abden-enerjide-krizi-uyarisi-baris-gelse-bile-normale-donus-yillar-surecek-7554635",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     }
   ],
-  "guncelleme": "01.04.2026 04:40",
-  "timestamp": "2026-04-01T04:40:42.817791+03:00"
+  "guncelleme": "01.04.2026 12:44",
+  "timestamp": "2026-04-01T12:44:07.990727+03:00"
 }
