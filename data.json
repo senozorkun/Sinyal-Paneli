@@ -1,17 +1,17 @@
 {
-  "vix": 26.55,
-  "move": 108.3,
-  "dxy": 100.03,
-  "usdtl_change": 1.19,
-  "us10y": 4.3,
-  "spread": 70.1,
+  "vix": 25.25,
+  "move": 96.1,
+  "dxy": 99.8,
+  "usdtl_change": 1.13,
+  "us10y": 4.31,
+  "spread": 71.1,
   "fed_cut": null,
   "cds": null,
   "tcmb": null,
   "tcmb_dir": "sabit",
-  "gold": 4668.5,
+  "gold": 4733.4,
   "brent": 105.1,
-  "cuau": 0.001202,
+  "cuau": 0.001192,
   "msci_dir": "dusus",
   "sp500_dir": "dusus",
   "sp500_ma": "altinda",
@@ -19,38 +19,59 @@
   "us_cpi": 2.4,
   "haberler": [
     {
-      "baslik": "GİB'den gayrimenkul ilan fiyatlarına inceleme",
-      "link": "https://www.bloomberght.com/gib-den-gayrimenkul-ilan-fiyatlarina-inceleme-3773383",
+      "baslik": "Resmi Gazete'de bugün (01.04.2026)",
+      "link": "https://www.bloomberght.com/resmi-gazete-de-bugun-01042026-3773391",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "KİT'lerin borcu 1,5 trilyon lirayı aştı",
-      "link": "https://www.bloomberght.com/kit-lerin-borcu-1-5-trilyon-lirayi-asti-3773380",
+      "baslik": "WSJ: ABD üçüncü uçak gemisini Orta Doğu'ya gönderdi",
+      "link": "https://www.bloomberght.com/wsj-abd-ucuncu-ucak-gemisini-orta-dogu-ya-gonderdi-3773390",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "İran'dan Dünya Kupası açıklaması",
-      "link": "https://www.bloomberght.com/iran-dan-dunya-kupasi-aciklamasi-3773379",
+      "baslik": "İran: Her türlü kara harekâtına karşı koymaya hazırız",
+      "link": "https://www.bloomberght.com/iran-her-turlu-kara-harektina-karsi-koymaya-haziriz-3773389",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "ABD'de açık iş sayısı azaldı, işe alımlar belirgin şekilde yavaşladı",
-      "link": "https://www.bloomberght.com/abd-de-acik-is-sayisi-azaldi-ise-alimlar-belirgin-sekilde-yavasladi-3773376",
+      "baslik": "Pezeşkiyan: Güvenceler sağlanırsa savaşı bitirmek için gerekli irademiz var",
+      "link": "https://www.bloomberght.com/pezeskiyan-guvenceler-saglanirsa-savasi-bitirmek-icin-gerekli-irademiz-var-3773387",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "ABD'de tüketici güveninde beklenmedik artış",
-      "link": "https://www.bloomberght.com/abd-de-tuketici-guveninde-beklenmedik-artis-3773375",
+      "baslik": "Orta Doğu kriziyle AB'nin enerji faturası 14 milyar euro arttı",
+      "link": "https://www.bloomberght.com/orta-dogu-kriziyle-ab-nin-enerji-faturasi-14-milyar-euro-artti-3773386",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
+      "tarih": ""
+    },
+    {
+      "baslik": "GİB’den dijital ilanlara sıkı takip",
+      "link": "https://www.haberturk.com/gibden-dijital-ilanlara-siki-takip-3873860-ekonomi",
+      "kaynak": "Haberturk",
+      "kategori": "Haberturk",
+      "tarih": ""
+    },
+    {
+      "baslik": "SGK, ödeme tarihlerini uzattı",
+      "link": "https://www.haberturk.com/sgk-odeme-tarihlerini-uzatti-3873849-ekonomi",
+      "kaynak": "Haberturk",
+      "kategori": "Haberturk",
+      "tarih": ""
+    },
+    {
+      "baslik": "TMO yeni hasat sezonu öncesi hububat satış politikası belirledi",
+      "link": "https://www.haberturk.com/tmo-yeni-hasat-sezonu-oncesi-hububat-satis-politikasi-belirledi-3873821-ekonomi",
+      "kaynak": "Haberturk",
+      "kategori": "Haberturk",
       "tarih": ""
     },
     {
@@ -68,24 +89,24 @@
       "tarih": ""
     },
     {
-      "baslik": "\"Türkiye, değişen küresel dengelerde yeni fırsatların merkezinde yer alabilir\"",
-      "link": "https://www.haberturk.com/sabanci-holding-yonetim-kurulu-baskani-culhaci-turkiye-yeni-firsatlarin-merkezinde-yer-alabilir-3873773-ekonomi",
-      "kaynak": "Haberturk",
-      "kategori": "Haberturk",
+      "baslik": "Fransız Senatosu kabul etti: 15 yaşından küçüklere kısmi sosyal medya yasağı",
+      "link": "",
+      "kaynak": "Milliyet",
+      "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "Türkiye 5G'ye geçti",
-      "link": "https://www.haberturk.com/cumhurbaskani-erdogan-kulliye-de-5g-icin-dugmeye-basiyor-3873715-teknoloji",
-      "kaynak": "Haberturk",
-      "kategori": "Haberturk",
+      "baslik": "İran Dışişleri Bakanı Erakçi: 'Ateşkesi kabul etmeyeceğiz'",
+      "link": "",
+      "kaynak": "Milliyet",
+      "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "Enerji ve Tabii Kaynaklar Bakanlığı ve Sıfır Atık Vakfı arasında iş birliği",
-      "link": "https://www.haberturk.com/enerji-ve-tabii-kaynaklar-bakanligi-ve-sifir-atik-vakfi-arasinda-is-birligi-3873757-ekonomi",
-      "kaynak": "Haberturk",
-      "kategori": "Haberturk",
+      "baslik": "SON DAKİKA SAVAŞ HABERLERİ: ABD-İsrail-İran savaşının 32. günü: Kara harekatı olacak mı? '15 farklı yol var'",
+      "link": "",
+      "kaynak": "Milliyet",
+      "kategori": "Milliyet",
       "tarih": ""
     },
     {
@@ -103,24 +124,10 @@
       "tarih": ""
     },
     {
-      "baslik": "Hürmüz Boğazı yakınlarındaki Keşm Adası hedef alındı iddiası!",
-      "link": "",
-      "kaynak": "Milliyet",
-      "kategori": "Milliyet",
-      "tarih": ""
-    },
-    {
-      "baslik": "İran görüntüleri paylaştı! ABD üretimi İHA'lar böyle vuruldu",
-      "link": "",
-      "kaynak": "Milliyet",
-      "kategori": "Milliyet",
-      "tarih": ""
-    },
-    {
-      "baslik": "Dışişleri Bakanlığı’ndan UNFIL’e yönelik saldırıya kınama: Faillerin adalet önünde hesap vermesi sağlanmalıdır",
-      "link": "",
-      "kaynak": "Milliyet",
-      "kategori": "Milliyet",
+      "baslik": "Bakan Bayraktar \"2026 bizim için milat\" diyerek duyurdu: Yeni bir müjde vermeyi istiyoruz",
+      "link": "https://www.sabah.com.tr/ekonomi/bakan-bayraktar-2026-bizim-icin-milat-diyerek-duyurdu-yeni-bir-mujde-vermeyi-istiyoruz-7554305",
+      "kaynak": "Sabah",
+      "kategori": "Sabah",
       "tarih": ""
     },
     {
@@ -138,20 +145,20 @@
       "tarih": ""
     },
     {
-      "baslik": "5G Türkiye'yi dijital merkez yapacak! Uraloğlu: 81 ilin dört bir köşesine yayılacak",
-      "link": "https://www.sabah.com.tr/ekonomi/turkiyede-5g-donemi-resmen-basladi-uraloglu-2-yilda-81-ilin-dort-bir-kosesine-yayilacak-7554149",
+      "baslik": "Enerji ve Tabii Kaynaklar Bakanlığı ve Sıfır Atık Vakfı arasında iş birliği",
+      "link": "https://www.sabah.com.tr/ekonomi/enerji-ve-tabii-kaynaklar-bakanligi-ve-sifir-atik-vakfi-arasinda-is-birligi-7554165",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     },
     {
-      "baslik": "DDKKM bakiyesi 40 milyon dolara geriledi",
-      "link": "https://www.sabah.com.tr/ekonomi/ddkkm-bakiyesi-40-milyon-dolara-geriledi-7554141",
+      "baslik": "5G Türkiye'yi dijital merkez yapacak! Uraloğlu: 81 ilin dört bir köşesine yayılacak",
+      "link": "https://www.sabah.com.tr/ekonomi/turkiyede-5g-donemi-resmen-basladi-uraloglu-2-yilda-81-ilin-dort-bir-kosesine-yayilacak-7554149",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     }
   ],
-  "guncelleme": "31.03.2026 20:02",
-  "timestamp": "2026-03-31T20:02:35.952199+03:00"
+  "guncelleme": "01.04.2026 04:40",
+  "timestamp": "2026-04-01T04:40:42.817791+03:00"
 }
