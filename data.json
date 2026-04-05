@@ -1,164 +1,164 @@
 {
-  "vix": 24.54,
-  "move": 90.2,
-  "dxy": 99.55,
-  "usdtl_change": 1.22,
-  "us10y": 4.32,
-  "spread": 71.4,
+  "vix": 23.87,
+  "move": 81.8,
+  "dxy": 100.03,
+  "usdtl_change": 1.21,
+  "us10y": 4.31,
+  "spread": 70.6,
   "fed_cut": null,
   "cds": null,
   "tcmb": null,
   "tcmb_dir": "sabit",
-  "gold": 4818.9,
-  "brent": 100.5,
-  "cuau": 0.001168,
-  "msci_dir": "yatay",
+  "gold": 4702.7,
+  "brent": 109.1,
+  "cuau": 0.001208,
+  "msci_dir": "dusus",
   "sp500_dir": "dusus",
   "sp500_ma": "altinda",
-  "unemployment": 4.4,
+  "unemployment": 4.3,
   "us_cpi": 2.4,
   "haberler": [
     {
-      "baslik": "WSJ: Trump, çelik ve alüminyum tarifelerini değiştiriyor",
-      "link": "https://www.bloomberght.com/wsj-trump-celik-ve-aluminyum-tarifelerinde-degisiklik-planliyor-3773533",
+      "baslik": "OPEC+’tan kritik uyarı",
+      "link": "https://www.bloomberght.com/opectan-kritik-uyari-enerji-altyapisina-saldirilar-arzi-tehdit-ediyor-3773805",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "Resmi Gazete'de bugün (02.04.2026)",
-      "link": "https://www.bloomberght.com/resmi-gazete-de-bugun-02042026-3773532",
+      "baslik": "İran'dan Babul Mendeb Boğazı'nın da kapatılabileceği uyarısı",
+      "link": "https://www.bloomberght.com/iran-dan-trump-in-tehditlerine-karsi-babul-mendeb-bogazi-nin-da-kapatilabilecegi-uyarisi-3773804",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "97 ülkeden BM'ye üç ayda 1,43 milyar dolarlık katkı",
-      "link": "https://www.bloomberght.com/97-ulkeden-bm-ye-uc-ayda-1-43-milyar-dolarlik-katki-3773531",
+      "baslik": "NYT: ABD, İran'ın füze kapasitesinin ne kadarını yok ettiğinden emin olamıyor",
+      "link": "https://www.bloomberght.com/nyt-abd-iran-in-fuze-kapasitesinin-ne-kadarini-yok-ettiginden-emin-olamiyor-3773803",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "S&P: Petrol şokunda Türkiye en kırılgan ülkelerden biri",
-      "link": "https://www.bloomberght.com/s-p-petrol-sokunda-turkiye-en-kirilgan-ulkelerden-biri-3773530",
+      "baslik": "Umman ile İran, Hürmüz Boğazı'ndan geçişleri görüştü",
+      "link": "https://www.bloomberght.com/umman-ile-iran-hurmuz-bogazi-ndan-gecisleri-gorustu-3773802",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "Pezeşkiyan'dan ABD halkına açık mektup",
-      "link": "https://www.bloomberght.com/pezeskiyan-dan-abd-halkina-acik-mektup-3773527",
+      "baslik": "Alüminyumda yaklaşık 2 yılın en hızlı aylık fiyat yükselişi görüldü",
+      "link": "https://www.bloomberght.com/aluminyumda-yaklasik-2-yilin-en-hizli-aylik-fiyat-yukselisi-goruldu-3773800",
       "kaynak": "BloombergHT",
       "kategori": "BloombergHT",
       "tarih": ""
     },
     {
-      "baslik": "NASA, 50 yıl sonra Ay'a insanlı uçuş",
-      "link": "https://www.haberturk.com/nasa-50-yil-sonra-ay-a-insanli-ucus-yapacak-3874143-teknoloji",
+      "baslik": "Haluk Görgün: Amacımız savunma sanayi çalışanını en üst düzey yetkinliklerle donatmak",
+      "link": "https://www.haberturk.com/haluk-gorgun-amacimiz-savunma-sanayi-calisanini-en-ust-duzey-yetkinliklerle-donatmak-3875001-ekonomi",
       "kaynak": "Haberturk",
       "kategori": "Haberturk",
       "tarih": ""
     },
     {
-      "baslik": "TEKNOFEST başvuruları uzatıldı",
-      "link": "https://www.haberturk.com/teknofest-2026-teknoloji-yarismalarina-basvurular-uzatildi-3874111-teknoloji",
+      "baslik": "Telegram'dan Rusya'ya engelleme iddiası",
+      "link": "https://www.haberturk.com/telegram-kurucusu-pavel-durov-rusyanin-vpn-engelleme-girisimi-odeme-sistemini-cokertti-3874970-teknoloji",
       "kaynak": "Haberturk",
       "kategori": "Haberturk",
       "tarih": ""
     },
     {
-      "baslik": "Borsa günü yükselişle tamamladı",
-      "link": "https://www.haberturk.com/borsa-gunu-yukselisle-tamamladi-3874109-ekonomi",
+      "baslik": "Kurumlar vergisinde indirim gündemde",
+      "link": "https://www.haberturk.com/kurumlar-vergisinde-indirim-gundemde-3874961-ekonomi",
       "kaynak": "Haberturk",
       "kategori": "Haberturk",
       "tarih": ""
     },
     {
-      "baslik": "Yıllık yüzde 81 büyüme",
-      "link": "https://www.haberturk.com/bes-te-yuzde-20-devlet-katkisi-psikolojik-sinir-3874045-ekonomi",
+      "baslik": "Ankara–İstanbul YHT seferleri kısalacak",
+      "link": "https://www.haberturk.com/ankaraistanbul-yht-seferleri-kisalacak-3874926-ekonomi",
       "kaynak": "Haberturk",
       "kategori": "Haberturk",
       "tarih": ""
     },
     {
-      "baslik": "Sigorta Birliği'nde başkanlık yarışı",
-      "link": "https://www.haberturk.com/erol-ozturkoglu-tsb-baskanligina-adayligini-acikladi-3874093-ekonomi",
+      "baslik": "'Faiz politikası' haberlerine yalanlama",
+      "link": "https://www.haberturk.com/faiz-politikasi-haberlerine-yalanlama-3874922-ekonomi",
       "kaynak": "Haberturk",
       "kategori": "Haberturk",
       "tarih": ""
     },
     {
-      "baslik": "54 yılın ardından bir ilk! NASA Orion uzay aracını Ay'a fırlattı",
+      "baslik": "SON DAKİKA HABERLER: Dünyayı bekleyen yeni kriz! İran'dan 'tek hamlede durdururuz' açıklaması",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "Yunanistan’da film sahnelerini aratmayan görüntü! Gökyüzü kırmızıya büründü",
+      "baslik": "TürkAkım’a sabotaj girişimi! Vucic: Açıklayamayacağım bazı izler mevcut",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "İran Cumhurbaşkanı Pezeşkiyan’dan ABD halkına açık mektup: Düşman değiliz",
+      "baslik": "Demir kubbe bir kez daha delindi! İran füzesi İsrail’i vurdu… Yaralılar var",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "İsrail'de büyük panik! Sirenler susmuyor, halk sığınaklardan çıkamıyor",
+      "baslik": "Trump, İran'a anlaşma süresini 8 Nisan'a uzattı",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "Güney Kıbrıs Rum Yönetimi tarafından çirkin saldırı",
+      "baslik": "ABD basını duyurdu! İşte İran'da pilot kurtarma operasyonunda imha edilen uçakların fiyatı",
       "link": "",
       "kaynak": "Milliyet",
       "kategori": "Milliyet",
       "tarih": ""
     },
     {
-      "baslik": "Bakan Memişoğlu'ndan SGK geri ödeme listesine dahil edilen ilaçlara ilişkin paylaşım!",
-      "link": "https://www.sabah.com.tr/ekonomi/bakan-memisoglu-sgk-geri-odeme-listesine-dahil-edilen-ilaclara-iliskin-paylasim-7555022",
+      "baslik": "Trump’tan Hürmüz tehdidi: Salı günü cehennemi yaşayacaksınız",
+      "link": "https://www.sabah.com.tr/ekonomi/trumptan-hurmuz-yeni-tehdidi-sali-gunu-cehennemi-yasayacaksiniz-7557484",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     },
     {
-      "baslik": "Bakan Yumaklı: \"150 bin küçükbaş dağıtılacak\"",
-      "link": "https://www.sabah.com.tr/ekonomi/bakan-yumakli-150-bin-kucukbas-dagitilacak-7554921",
+      "baslik": "Bakan Yumaklı: Martta 112 bin 770 gıda denetimi gerçekleştirdik",
+      "link": "https://www.sabah.com.tr/ekonomi/bakan-yumakli-martta-112-bin-770-gida-denetimi-gerceklestirdik-7557469",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     },
     {
-      "baslik": "Tera Holding’den Finlandiya hamlesi: Helsinki’de stratejik temas",
-      "link": "https://www.sabah.com.tr/ekonomi/tera-holdingden-finlandiya-hamlesi-helsinkide-stratejik-temas-7554916",
+      "baslik": "Bakan Kurum açıkladı: Doğayı mercanlarla onarıyoruz",
+      "link": "https://www.sabah.com.tr/ekonomi/bakan-kurum-acikladi-dogayi-mercanlarla-onariyoruz-7557465",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     },
     {
-      "baslik": "Kütüphane ve Teknoloji Festivali 2 Nisan'da başlıyor",
-      "link": "https://www.sabah.com.tr/ekonomi/kutuphane-ve-teknoloji-festivali-2-nisanda-basliyor-7554875",
+      "baslik": "23 yılda teknopark sayısı 114'e çıktı",
+      "link": "https://www.sabah.com.tr/ekonomi/23-yilda-teknopark-sayisi-114e-cikti-7557445",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     },
     {
-      "baslik": "AJet'in gençleşen uçak filosuna 18. Boeing'i kattı",
-      "link": "https://www.sabah.com.tr/ekonomi/ajetin-genclesen-ucak-filosuna-18-boeingi-katti-7554867",
+      "baslik": "TBMM'de yoğun gündem: Doğum izni ve sosyal medya düzenlemesi masada",
+      "link": "https://www.sabah.com.tr/ekonomi/tbmmde-yogun-gundem-dogum-izni-ve-sosyal-medya-duzenlemesi-masada-7557413",
       "kaynak": "Sabah",
       "kategori": "Sabah",
       "tarih": ""
     }
   ],
-  "guncelleme": "02.04.2026 02:51",
-  "timestamp": "2026-04-02T02:51:50.304148+03:00"
+  "guncelleme": "06.04.2026 00:45",
+  "timestamp": "2026-04-06T00:45:54.154706+03:00"
 }
